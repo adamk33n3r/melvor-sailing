@@ -1,0 +1,26 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "sailingData.json",
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "data": {
+            "$ref": "#/$defs/SailingData"
+        }
+    },
+    "$defs": {
+        "SailingData": {
+            "description": "Sailing data",
+            "type": "object",
+            "properties": {
+                "equipmentSlots": {
+                    "description": "equipment slots",
+                    "type": "array"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

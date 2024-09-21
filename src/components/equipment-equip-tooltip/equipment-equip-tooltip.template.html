@@ -1,0 +1,13 @@
+<template id="equipment-equip-tooltip-template">
+  <div class="text-center font-size-xs" @vue:mounted="mounted($el)">
+    <lang-string lang-id="MENU_TEXT_QUICK_EQUIP"></lang-string>
+    <ul class="nav-main nav-main-horizontal nav-main-horizontal-override font-w400 font-size-sm" ref="button-container">
+      <button class="btn btn-sm m-1" ref="equip" @click="equip(button)" v-for="button in buttons">
+        <img class="skill-icon-md-alt" ref="image" :src="button.image">
+      </button>
+      <div class="btn-group-vertical m-1">
+        <button class="btn btn-sm btn-outline-danger" ref="unequip-button" @click="unequip">X</button>
+      </div>
+    </ul>
+  </div>
+</template>

@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Melvor",
+            "type": "nwjs",
+            "request": "launch",
+            "runtimeExecutable": "D:\\SteamLibrary\\steamapps\\common\\Melvor Idle\\Melvor Idle.exe",
+            "webRoot": "D:\\SteamLibrary\\steamapps\\common\\Melvor Idle\\package.nw",
+            "runtimeArgs": [
+                "${workspaceFolder}",
+                "--remote-debugging-port=9222"
+            ],
+            "sourceMaps": true,
+            "nwjsVersion": "0.54.0",
+            "port": 9222
+        }
+    ]
+}

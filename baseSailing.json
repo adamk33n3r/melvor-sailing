@@ -1,0 +1,14 @@
+{
+    "$schema": "https://melvoridle.com/assets/schema/gameData.json",
+    "data": {
+        "items": [
+            {
+                "id": "WoodenOar",
+                "name": "Wooden Oar",
+                "type": "Equipment",
+                "itemType": "Oar",
+                "category": "Sailing"
+            }
+        ]
+    }
+}

@@ -1,0 +1,7 @@
+<template id="sail-equipment-icon-template">
+    <div class="overlay-container overlay-bottom" @vue:mounted="mounted($el)">
+        <img class="sailing-equip-img combat-equip-img border border-2x border-rounded-equip border-combat-outline p-1 pointer-enabled" :src="imgSrc">
+        <span class="overlay-item text-size-sm font-w600 badge badge-danger">{{ quantity }}</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary m-1 w-100" @click="console.log('d', $el, $refs)">afsdf</button>
+    </div>
+</template>

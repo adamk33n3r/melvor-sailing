@@ -1,0 +1,299 @@
+{
+  "$schema": "https://melvoridle.com/assets/schema/gameData.json",
+  "namespace": "sailing",
+  "modifications": {
+    "combatAreaCategories": [
+      {
+        "id": "melvorD:Dungeons",
+        "areas": {
+          "add": [{"insertAt": "Start", "ids": ["sailing:pirateCove"] }]
+        }
+      }
+    ]
+  },
+  "data": {
+    "dungeons": [
+      {
+        "id": "pirateCove",
+        "name": "Pirate Cove",
+        "media": "img/icon.png",
+        "difficulty": [
+          2
+        ],
+        "monsterIDs": [
+          "melvorD:Seagull",
+          "melvorD:Pirate",
+          "melvorD:PirateCaptain"
+        ],
+        "entryRequirements": [],
+        "rewardItemIDs": [
+          "melvorD:Steel_Boots"
+        ],
+        "dropBones": true,
+        "pet": {
+          "petID": "sailing:Kraken",
+          "weight": 1
+        },
+        "floors": [4, 2, 1],
+        "fixedPetClears": false,
+        "pauseOnBosses": false
+      }
+    ],
+    "pets": [
+      {
+        "id": "Kraken",
+        "name": "Kraken",
+        "media": "img/icon.png",
+        "scaleChanceWithMasteryPool": false,
+        "modifiers": {
+          "skillXP": 100
+        },
+        "ignoreCompletion": false,
+        "activeInRaid": false,
+        "hint": "Find this where Pirates roam."
+      }
+    ],
+    "combatAreas": [
+      {
+        "id": "Beach",
+        "name": "Beach",
+        "media": "img/icon.png",
+        "difficulty": [
+          0
+        ],
+        "monsterIDs": [
+          "melvorD:Seagull",
+          "melvorD:GiantCrab"
+        ],
+        "entryRequirements": [
+          {
+            "type": "SkillLevel",
+            "skillID": "sailing:Sailing",
+            "level": 1
+          }
+        ]
+      }
+    ],
+    "combatAreaCategories": [
+      {
+        "id": "Sailing",
+        "name": "Sailing",
+        "media": "img/icon.png",
+        "areas": [
+          "sailing:Beach"
+        ]
+      }
+    ],
+    "combatAreaCategoryOrder": [
+      {
+        "insertAt": "Before",
+        "beforeID": "melvorD:Dungeons",
+        "ids": [
+          "sailing:Sailing"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "Mastery_Token_Sailing",
+        "name": "Mastery Token (Sailing)",
+        "category": "Mastery",
+        "type": "Token",
+        "media": "img/icon.png",
+        "ignoreCompletion": true,
+        "obtainFromItemLog": false,
+        "golbinRaidExclusive": false,
+        "sellsFor": 1500,
+        "itemType": "MasteryToken",
+        "skill": "sailing:Sailing",
+        "realm": "melvorD:Melvor",
+        "percent": 0.1
+      },
+      {
+        "id": "woodenOar",
+        "name": "Wooden Oar",
+        "category": "Sailing",
+        "type": "Oar",
+        "media": "img/icon.png",
+        "ignoreCompletion": false,
+        "obtainFromItemLog": false,
+        "golbinRaidExclusive": false,
+        "sellsFor": 0,
+        "tier": "wooden",
+        "validSlots": ["sailing:Oar", "sailing:Rudder", "sailing:Cannons"],
+        "occupiesSlots": [],
+        "equipRequirements": [
+          {
+            "type": "SkillLevel",
+            "skillID": "sailing:Sailing",
+            "level": 1
+          },
+          {
+            "type": "MasteryLevel",
+            "actionID": "sailing:sailingMastery1",
+            "level": 1,
+            "skillID": "sailing:Sailing"
+          }
+        ],
+        "equipmentStats": [],
+        "itemType": "Equipment"
+      }
+    ],
+    "equipmentSlots": [
+      {
+        "id": "Oar",
+        "emptyMedia": "img/icon.png",
+        "emptyName": "Oar",
+        "requirements": [],
+        "providesEquipStats": false,
+        "allowQuantity": false,
+        "gridPosition": {
+          "col": 2,
+          "row": 18
+        }
+      },
+      {
+        "id": "Sail",
+        "emptyMedia": "img/icon.png",
+        "emptyName": "Sail",
+        "requirements": [],
+        "providesEquipStats": false,
+        "allowQuantity": false,
+        "gridPosition": {
+          "col": 0,
+          "row": 18
+        }
+      },
+      {
+        "id": "Rudder",
+        "emptyMedia": "img/icon.png",
+        "emptyName": "Rudder",
+        "requirements": [],
+        "providesEquipStats": false,
+        "allowQuantity": false,
+        "gridPosition": {
+          "col": 1,
+          "row": 18
+        }
+      },
+      {
+        "id": "Cannons",
+        "emptyMedia": "img/icon.png",
+        "emptyName": "Cannons",
+        "requirements": [],
+        "providesEquipStats": false,
+        "allowQuantity": false,
+        "gridPosition": {
+          "col": 3,
+          "row": 19
+        }
+      }
+    ],
+    "pages": [
+      {
+        "id": "Sailing",
+        "media": "img/sailing-boat.png",
+        "containerID": "sailing-container",
+        "headerBgClass": "bg-combat",
+        "hasGameGuide": false,
+        "canBeDefault": true,
+        "skillSidebarCategoryID": "Combat",
+        "skills": [
+          "sailing:Sailing"
+        ]
+      }
+    ],
+    "skillData": [
+      {
+        "skillID": "sailing:Sailing",
+        "data": {
+          "masteryTokenID": "sailing:Mastery_Token_Sailing",
+          "masteryLevelUnlocks": [
+            {
+              "level": 1,
+              "description": "Each level provides +10 GP acquired for this boat type?"
+            }
+          ],
+          "masteryLevelBonuses": [
+            {
+              "modifiers": {
+                "currencyGain": [
+                  {
+                    "currencyID": "melvorD:GP",
+                    "skillID": "sailing:Sailing",
+                    "actionID": "sailing:sailingMastery1",
+                    "value": 1
+                  }
+                ]
+              },
+              "level": 1,
+              "levelScalingMax": 99,
+              "levelScalingSlope": 1
+            }
+          ],
+          "masteryPoolBonuses": [
+            {
+              "percent": 10,
+              "realm": "melvorD:Melvor",
+              "modifiers": {
+                "melvorD:skillXP": 5
+              }
+            },
+            {
+              "percent": 25,
+              "realm": "melvorD:Melvor",
+              "modifiers": {
+                "increasedChanceToPreserveFood": 10
+              }
+            }
+          ],
+          "pets": [
+            "sailing:Kraken"
+          ],
+          "categories": [
+            {
+              "id": "Rigging",
+              "name": "Rigging",
+              "media": "img/icon.png",
+              "type": "Rigging"
+            },
+            {
+              "id": "Navigating",
+              "name": "Navigating",
+              "media": "img/icon.png",
+              "type": "Navigating"
+            }
+          ]
+        }
+      },
+      {
+        "skillID": "melvorD:Fletching",
+        "data": {
+          "categories": [
+            {
+              "id": "Oars",
+              "name": "Oars",
+              "media": "img/icon.png",
+              "realm": "melvorD:Melvor"
+            }
+          ],
+          "subcategories": [{"id": "test_oars","name": "sub oars"}],
+          "recipes": [
+            {
+              "id": "fletchWoodenOar",
+              "itemCosts": [{"id":"melvorD:Normal_Logs", "quantity": 1}],
+              "level": 1,
+              "baseExperience": 1,
+              "categoryID": "sailing:Oars",
+              "baseQuantity": 1,
+              "productID": "sailing:woodenOar"
+            }
+          ]
+        }
+      }
+    ],
+    "shopCategories": [],
+    "shopCategoryOrder": [],
+    "shopPurchases": []
+  }
+}

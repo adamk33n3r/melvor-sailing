@@ -1,0 +1,33 @@
+{
+  "$schema": "https://melvoridle.com/assets/schema/gameData.json",
+  "data": {
+    "gamemodes": [
+      {
+        "id": "testGameMode",
+        "name": "Test Game Mode",
+        "media": "img/icon.png",
+        "rules": [
+          "this is a test game mode",
+          "for the contest"
+        ],
+        "textClass": "text-danger",
+        "btnClass": "btn-gamemode-standard",
+        "isPermaDeath": false,
+        "isEvent": false,
+        "endDate": 0,
+        "combatTriangle": "Standard",
+        "hitpointMultiplier": 10,
+        "hasRegen": true,
+        "capNonCombatSkillLevels": false,
+        "startingPage": "melvorD:Mining",
+        "startingItems": [],
+        "allowSkillUnlock": false,
+        "skillUnlockCost": [],
+        "playerModifiers": {},
+        "enemyModifiers": {},
+        "hasTutorial": true,
+        "description": "Test game mode"
+      }
+    ]
+  }
+}

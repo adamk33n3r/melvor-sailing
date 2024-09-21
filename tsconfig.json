@@ -1,0 +1,22 @@
+{
+  "include": ["src/**/*", "node_modules/melvor-types"],
+  "compilerOptions": {
+    "allowUmdGlobalAccess": true,
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es6",
+    "lib": [
+      "ES6",
+      "DOM"
+    ],
+    "jsx": "react",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "esModuleInterop": true
+  }
+}

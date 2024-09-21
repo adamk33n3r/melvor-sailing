@@ -1,0 +1,393 @@
+{
+  "$schema": "./gameDataEx.json",
+  "namespace": "sailing",
+  "modifications": {
+    "skillData": [
+      {
+        "skillID": "sailing:Sailing",
+        "data": {
+          "headerUpgradeChains": [
+            "sailing:Hull"
+          ]
+        }
+      }
+    ]
+  },
+  "data": {
+    "modifiers": [
+        {
+            "id": "sailingSpeed",
+            "allowNegative": false,
+            "allowedScopes": [
+                {
+                    "scopes": {},
+                    "descriptions": [
+                        {
+                            "text": "+${value} Sailing Speed",
+                            "lang": "sailing_Sailing_Speed_Positive",
+                            "above": 0,
+                            "includeSign": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "sailingCombat",
+            "allowNegative": false,
+            "allowedScopes": [
+                {
+                    "scopes": {},
+                    "descriptions": [
+                        {
+                            "text": "+${value} Combat",
+                            "lang": "sailing_Sailing_Combat_Positive",
+                            "above": 0,
+                            "includeSign": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "shopDisplayOrder": [
+        {
+            "afterID": "melvorD:Iron_Axe",
+            "insertAt": "After",
+            "ids": [
+                "sailing:Iron_Hull",
+                "sailing:Steel_Hull",
+                "sailing:Black_Hull",
+                "sailing:Mithril_Hull",
+                "sailing:Adamant_Hull",
+                "sailing:Rune_Hull",
+                "sailing:Dragon_Hull"
+            ]
+        }
+    ],
+    "shopPurchases": [
+        {
+            "id": "Iron_Hull",
+            "media": "img/hull_iron.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -5
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [],
+            "purchaseRequirements": [],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Iron Hull",
+            "customDescription": "-5% Sailing Interval for a total of -5% applied from your Sail."
+        },
+        {
+            "id": "Steel_Hull",
+            "media": "img/hull_steel.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -5
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Iron_Hull",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 10
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Steel Hull",
+            "customDescription": "-5% Sailing Interval for a total of -10% applied from your Sail."
+        },
+        {
+            "id": "Black_Hull",
+            "media": "img/hull_black.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -5
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Steel_Hull",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 20
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Black Hull",
+            "customDescription": "-5% Sailing Interval for a total of -15% applied from your Sail."
+        },
+        {
+            "id": "Mithril_Hull",
+            "media": "img/hull_mithril.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -5
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Black_Hull",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 35
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Mithril Hull",
+            "customDescription": "-5% Sailing Interval for a total of -20% applied from your Sail."
+        },
+        {
+            "id": "Adamant_Hull",
+            "media": "img/hull_adamant.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -10
+                        }
+                    ],
+                    "sailing:sailingSpeed": 420,
+                    "sailing:sailingCombat": 6969
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Mithril_Hull",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 50
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Adamant Hull",
+            "customDescription": "-10% Sailing Interval for a total of -30% applied from your Sail."
+        },
+        {
+            "id": "Rune_Hull",
+            "media": "img/hull_rune.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -10
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Adamant_Hull",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 60
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Rune Hull",
+            "customDescription": "-10% Sailing Interval for a total of -40% applied from your Sail."
+        },
+        {
+            "id": "Dragon_Hull",
+            "media": "img/hull_dragon.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -10
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Rune_Hull",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 80
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Dragon Hull",
+            "customDescription": "-10% Sailing Interval for a total of -50% applied from your Sail."
+        }
+    ],
+    "shopUpgradeChains": [
+        {
+            "id": "Hull",
+            "chainName": "Current Hull",
+            "rootUpgradeID": "sailing:Dragon_Hull",
+            "defaultName": "Bronze Hull",
+            "defaultMedia": "img/hull_dragon.png",
+            "defaultDescription": "No bonuses."
+        }
+    ]
+  }
+}

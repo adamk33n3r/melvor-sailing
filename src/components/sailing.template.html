@@ -1,0 +1,78 @@
+<template id="sailing-page-template">
+  <div class="content d-none" id="sailing-container" @vue:mounted="mounted($el)">
+    <div class="skill-info">
+      <skill-header data-skill-id="sailing:Sailing"></skill-header>
+    </div>
+    <div class="row row-deck gutters-tiny" id="boat-container"></div>
+    <div class="row row-deck">
+      <category-menu @vue:mounted="categoryMenu = $el" class="col-12" id="sailing-category-menu"></category-menu>
+      <realmed-category-menu class="col-12" id="realmed-sailing-category-menu"></realmed-category-menu>
+      <div class="col-12">
+        <div class="block block-rounded block-link-pop border-top border-smithing border-4x">
+          <div class="row no-gutters" id="sailing-category-container">
+            <div class="col-12 col-md-4">
+              <!-- <necromancy-artisan-menu id="sailing-artisan-menu"></necromancy-artisan-menu> -->
+              this is a test
+              <lang-string lang-id="sailing_Oar">TEST OAR</lang-string>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-12 row justify-content-center gutters-tiny text-center icon-size-48"
+        id="grants-container"
+      >
+        <xp-icon id="music-xp"></xp-icon>
+        <mastery-xp-icon id="music-mastery-xp"></mastery-xp-icon>
+        <mastery-pool-icon id="music-pool-xp"></mastery-pool-icon>
+        <interval-icon id="music-interval"></interval-icon>
+      </div>
+      <div class="col-12 p-2 mt-3"></div>
+          <progress-bar class="mt-3 progress-height-5" id="music-progress-bar">
+              <progres-bar></progres-bar>
+          </progress-bar>
+      </div>
+      <div class="col-12">
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="equip-sailing-item-template">
+  <div class="col-12" id="equip-sailing-item-container">
+    <div class="block block-rounded-double bg-combat-inner-dark">
+      <div class="block-header block-header-default bg-dark-bank-block-header px-3 py-1" id="size-elem-0">
+        <h5 class="font-size-sm font-w600 mb-0">
+          <lang-string lang-id="BANK_STRING_27"></lang-string>
+        </h5>
+        <div class="block-options" id="size-elem-1">
+          <h5 class="font-w600 font-size-sm text-right text-combat-smoke mb-0">
+            <img class="skill-icon-xxs mr-2" id="equip-slot-image"><span id="equip-slot-name"></span>
+          </h5>
+        </div>
+      </div>
+      <div class="row no-gutters p-2">
+        <div class="col-12">
+          <div class="row gutters-tiny">
+            <div class="col-12" id="size-elem-2">
+              <h5 class="font-w400 font-size-xs text-combat-smoke m-1 text-center">
+                <lang-string lang-id="BANK_STRING_28"></lang-string>
+              </h5>
+              <div class="btn-group w-100 text-center" id="equip-set-button-container"></div>
+            </div>
+            <div class="col-12" id="size-elem-3">
+            </div>
+            <div class="col-12 mt-1" id="size-elem-4">
+              <div class="form-group bank-rangeslider-equip-container" id="equip-quantity-slider-container">
+                <input type="text" class="js-rangeslider" id="equip-quantity-slider" name="bank-rangeslider-equip"
+                  value="0" data-min="0" data-max="0">
+              </div>
+            </div>
+            <div class="col-12 text-right" id="size-elem-5"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

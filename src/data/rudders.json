@@ -1,0 +1,354 @@
+{
+  "$schema": "./gameDataEx.json",
+  "namespace": "sailing",
+  "modifications": {
+    "skillData": [
+      {
+        "skillID": "sailing:Sailing",
+        "data": {
+          "headerUpgradeChains": [
+            "sailing:Rudder"
+          ]
+        }
+      }
+    ]
+  },
+  "data": {
+    "shopDisplayOrder": [
+        {
+            "afterID": "melvorD:Iron_Axe",
+            "insertAt": "After",
+            "ids": [
+                "sailing:Iron_Rudder",
+                "sailing:Steel_Rudder",
+                "sailing:Black_Rudder",
+                "sailing:Mithril_Rudder",
+                "sailing:Adamant_Rudder",
+                "sailing:Rune_Rudder",
+                "sailing:Dragon_Rudder"
+            ]
+        }
+    ],
+    "shopPurchases": [
+        {
+            "id": "Iron_Rudder",
+            "media": "melvor:assets/media/shop/pickaxe_iron.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -5
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [],
+            "purchaseRequirements": [],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Iron Rudder",
+            "customDescription": "-5% Sailing Interval for a total of -5% applied from your Rudder."
+        },
+        {
+            "id": "Steel_Rudder",
+            "media": "melvor:assets/media/shop/pickaxe_steel.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -5
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Iron_Rudder",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 10
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Steel Rudder",
+            "customDescription": "-5% Sailing Interval for a total of -10% applied from your Rudder."
+        },
+        {
+            "id": "Black_Rudder",
+            "media": "melvor:assets/media/shop/pickaxe_black.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -5
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Steel_Rudder",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 20
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Black Rudder",
+            "customDescription": "-5% Sailing Interval for a total of -15% applied from your Rudder."
+        },
+        {
+            "id": "Mithril_Rudder",
+            "media": "melvor:assets/media/shop/pickaxe_mithril.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -5
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Black_Rudder",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 35
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Mithril Rudder",
+            "customDescription": "-5% Sailing Interval for a total of -20% applied from your Rudder."
+        },
+        {
+            "id": "Adamant_Rudder",
+            "media": "melvor:assets/media/shop/pickaxe_adamant.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -10
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Mithril_Rudder",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 50
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Adamant Rudder",
+            "customDescription": "-10% Sailing Interval for a total of -30% applied from your Rudder."
+        },
+        {
+            "id": "Rune_Rudder",
+            "media": "melvor:assets/media/shop/pickaxe_rune.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -10
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Adamant_Rudder",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 60
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Rune Rudder",
+            "customDescription": "-10% Sailing Interval for a total of -40% applied from your Rudder."
+        },
+        {
+            "id": "Dragon_Rudder",
+            "media": "melvor:assets/media/shop/pickaxe_dragon.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -10
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 1
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Rune_Rudder",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 80
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Dragon Rudder",
+            "customDescription": "-10% Sailing Interval for a total of -50% applied from your Rudder."
+        }
+    ],
+    "shopUpgradeChains": [
+        {
+            "id": "Rudder",
+            "chainName": "Current Rudder",
+            "rootUpgradeID": "sailing:Dragon_Rudder",
+            "defaultName": "Bronze Rudder",
+            "defaultDescription": "No bonuses."
+        }
+    ]
+  }
+}
