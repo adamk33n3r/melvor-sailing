@@ -27,6 +27,7 @@ import './images';
 import { Sailing } from './sailing';
 import { Translation } from './translation';
 import { UserInterface } from './ui';
+import { Constants } from './Constants';
 
 declare global {
   interface Game {
@@ -61,19 +62,28 @@ export async function setup(ctx: Modding.ModContext) {
 
   ctx.onInterfaceAvailable(() => {
     console.log('CREATE UI');
-    sailing.ui= new UserInterface(ctx, game, sailing);
+    sailing.ui = new UserInterface(ctx, game, sailing);
     console.log('AFTER UI CREATE');
   });
 
 
   // await ctx.gameData.addPackage(ModData2 as any);
 
+  console.log('VERSION:', ctx.version);
   ctx.patch(Shop, 'buyItemOnClick').after((_, purchase, confirmed) => {
     if (purchase.category.id === 'sailing:SailingUpgrades') {
       if (confirmed) {
-        sailing.page.boatComponent.update();
+        sailing.page.update();
       }
     }
+  });
+
+  ctx.patch(ShopUpgradeChain, 'defaultMedia').get(function (original) {
+    if (this.namespace === Constants.MOD_NAMESPACE && this._defaultMedia.startsWith('sailing:')) {
+      return ctx.getResourceUrl(this._defaultMedia.substring(Constants.MOD_NAMESPACE.length + 1));
+    }
+
+    return original();
   });
 
   ctx.patch(BankSidebarMenuElement, 'setItem').before(function(bankItem, game) {
@@ -129,12 +139,12 @@ export async function setup(ctx: Modding.ModContext) {
 
     sidebar.categories().filter((cat) => cat.id === 'Passive')[0].toggle()
     sidebar.categories().filter((cat) => cat.id === 'Non-Combat')[0].toggle()
-    game.shop.purchases.forEachInNamespace('sailing', (purchase) => {
-      console.log('Purchase:', purchase);
-    });
-    game.shop.upgradesPurchased.forEach((count, upgrade) => {
-      console.log('Purchased upgrade:', upgrade, count);
-    });
+    // game.shop.purchases.forEachInNamespace('sailing', (purchase) => {
+    //   console.log('Purchase:', purchase);
+    // });
+    // game.shop.upgradesPurchased.forEach((count, upgrade) => {
+    //   console.log('Purchased upgrade:', upgrade, count);
+    // });
     
 
 
@@ -184,9 +194,6 @@ export async function setup(ctx: Modding.ModContext) {
         open(ctx, root);
       },
     });
-
-
-
 
   });
 }

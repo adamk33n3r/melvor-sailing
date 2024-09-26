@@ -181,7 +181,7 @@
           },
           {
             "type": "MasteryLevel",
-            "actionID": "sailing:sailingMastery1",
+            "actionID": "sailing:Boat1",
             "level": 1,
             "skillID": "sailing:Sailing"
           }
@@ -272,8 +272,8 @@
                   {
                     "currencyID": "melvorD:GP",
                     "skillID": "sailing:Sailing",
-                    "actionID": "sailing:sailingMastery1",
-                    "value": 1
+                    "actionID": "sailing:Boat1",
+                    "value": 10
                   }
                 ]
               },
@@ -287,14 +287,25 @@
               "percent": 10,
               "realm": "melvorD:Melvor",
               "modifiers": {
-                "melvorD:skillXP": 5
+                "melvorD:masteryXP": [
+                  {
+                    "skillID": "sailing:Sailing",
+                    "realmID": "melvorD:Melvor",
+                    "value": 5
+                  }
+                ]
               }
             },
             {
-              "percent": 25,
+              "percent": 90,
               "realm": "melvorD:Melvor",
               "modifiers": {
-                "increasedChanceToPreserveFood": 10
+                "melvorD:skillXP": [
+                  {
+                    "skillID": "sailing:Sailing",
+                    "value": 10
+                  }
+                ]
               }
             }
           ],

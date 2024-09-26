@@ -1,15 +1,28 @@
 import { ComponentClass } from '../ts/component';
-import { BoatComponent, BoatComponentProps } from './boat';
+import { BoatComponent } from './boat.component';
 
 export class SailingPage extends ComponentClass {
   $template = '#sailing-page-template';
-  boatComponent = new BoatComponent();
+  // todo: loop through boats registery
+  boatComponents: Component<any>[] = []
   categoryMenu: CategoryMenuElement;
+  // constructor() {
+  //   super();
+  //   game.sailing.boats.forEach((boat) => {
+  //     const boatComponent = new BoatComponent(boat);
+  //   });
+  // }
   mounted() {
-    ui.create(this.boatComponent, document.getElementById('boat-container'));
+    game.sailing.boats.forEach((boat) => {
+      const boatComponent = BoatComponent(boat);
+      this.boatComponents.push(boatComponent);
+      ui.create(boatComponent, document.getElementById('boat-container'));
+    });
   }
   update() {
-    this.boatComponent.update();
+    this.boatComponents.forEach((boatComponent) => {
+      boatComponent.update();
+    });
   }
   setCategoryMenu(options: any) {
     console.log('!!!!!!!!!!!!!!!!!:', options);

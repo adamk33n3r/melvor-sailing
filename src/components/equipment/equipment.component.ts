@@ -1,5 +1,5 @@
 import { Constants } from '../../ts/Constants';
-import { createTooltipComponent } from '../../util';
+import { createTooltipComponent } from '../../ts/util';
 import { EquipmentEquipTooltipComponent } from '../equipment-equip-tooltip/equipment-equip-tooltip';
 
 function getImgSrc(slot: string, emptyMedia: string) {

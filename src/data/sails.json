@@ -7,68 +7,32 @@
         "skillID": "sailing:Sailing",
         "data": {
           "headerUpgradeChains": [
-            "sailing:Hull"
+            "sailing:Sail"
           ]
         }
       }
     ]
   },
   "data": {
-    "modifiers": [
-        {
-            "id": "sailingSpeed",
-            "allowNegative": false,
-            "allowedScopes": [
-                {
-                    "scopes": {},
-                    "descriptions": [
-                        {
-                            "text": "+${value} Sailing Speed",
-                            "lang": "sailing_Sailing_Speed_Positive",
-                            "above": 0,
-                            "includeSign": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "sailingCombat",
-            "allowNegative": false,
-            "allowedScopes": [
-                {
-                    "scopes": {},
-                    "descriptions": [
-                        {
-                            "text": "+${value} Combat",
-                            "lang": "sailing_Sailing_Combat_Positive",
-                            "above": 0,
-                            "includeSign": false
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
     "shopDisplayOrder": [
         {
             "afterID": "melvorD:Iron_Axe",
             "insertAt": "After",
             "ids": [
-                "sailing:Iron_Hull",
-                "sailing:Steel_Hull",
-                "sailing:Black_Hull",
-                "sailing:Mithril_Hull",
-                "sailing:Adamant_Hull",
-                "sailing:Rune_Hull",
-                "sailing:Dragon_Hull"
+                "sailing:Iron_Sail",
+                "sailing:Steel_Sail",
+                "sailing:Black_Sail",
+                "sailing:Mithril_Sail",
+                "sailing:Adamant_Sail",
+                "sailing:Rune_Sail",
+                "sailing:Dragon_Sail"
             ]
         }
     ],
     "shopPurchases": [
         {
-            "id": "Iron_Hull",
-            "media": "img/hull_iron.png",
+            "id": "Iron_Sail",
+            "media": "img/sail_iron.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -97,12 +61,12 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Iron Hull",
+            "customName": "Iron Sail",
             "customDescription": "-5% Sailing Interval for a total of -5% applied from your Sail."
         },
         {
-            "id": "Steel_Hull",
-            "media": "img/hull_steel.png",
+            "id": "Steel_Sail",
+            "media": "img/sail_steel.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -129,7 +93,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Iron_Hull",
+                    "purchaseID": "sailing:Iron_Sail",
                     "count": 1
                 }
             ],
@@ -143,12 +107,12 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Steel Hull",
+            "customName": "Steel Sail",
             "customDescription": "-5% Sailing Interval for a total of -10% applied from your Sail."
         },
         {
-            "id": "Black_Hull",
-            "media": "img/hull_black.png",
+            "id": "Black_Sail",
+            "media": "img/sail_black.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -175,7 +139,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Steel_Hull",
+                    "purchaseID": "sailing:Steel_Sail",
                     "count": 1
                 }
             ],
@@ -189,12 +153,12 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Black Hull",
+            "customName": "Black Sail",
             "customDescription": "-5% Sailing Interval for a total of -15% applied from your Sail."
         },
         {
-            "id": "Mithril_Hull",
-            "media": "img/hull_mithril.png",
+            "id": "Mithril_Sail",
+            "media": "img/sail_mithril.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -221,7 +185,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Black_Hull",
+                    "purchaseID": "sailing:Black_Sail",
                     "count": 1
                 }
             ],
@@ -235,12 +199,12 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Mithril Hull",
+            "customName": "Mithril Sail",
             "customDescription": "-5% Sailing Interval for a total of -20% applied from your Sail."
         },
         {
-            "id": "Adamant_Hull",
-            "media": "img/hull_adamant.png",
+            "id": "Adamant_Sail",
+            "media": "img/sail_adamant.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -250,9 +214,7 @@
                             "skillID": "sailing:Sailing",
                             "value": -10
                         }
-                    ],
-                    "sailing:sailingSpeed": 420,
-                    "sailing:sailingCombat": 6969
+                    ]
                 }
             },
             "cost": {
@@ -269,7 +231,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Mithril_Hull",
+                    "purchaseID": "sailing:Mithril_Sail",
                     "count": 1
                 }
             ],
@@ -283,12 +245,12 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Adamant Hull",
+            "customName": "Adamant Sail",
             "customDescription": "-10% Sailing Interval for a total of -30% applied from your Sail."
         },
         {
-            "id": "Rune_Hull",
-            "media": "img/hull_rune.png",
+            "id": "Rune_Sail",
+            "media": "img/sail_rune.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -315,7 +277,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Adamant_Hull",
+                    "purchaseID": "sailing:Adamant_Sail",
                     "count": 1
                 }
             ],
@@ -329,12 +291,12 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Rune Hull",
+            "customName": "Rune Sail",
             "customDescription": "-10% Sailing Interval for a total of -40% applied from your Sail."
         },
         {
-            "id": "Dragon_Hull",
-            "media": "img/hull_dragon.png",
+            "id": "Dragon_Sail",
+            "media": "img/sail_dragon.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -361,7 +323,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Rune_Hull",
+                    "purchaseID": "sailing:Rune_Sail",
                     "count": 1
                 }
             ],
@@ -375,17 +337,16 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Dragon Hull",
+            "customName": "Dragon Sail",
             "customDescription": "-10% Sailing Interval for a total of -50% applied from your Sail."
         }
     ],
     "shopUpgradeChains": [
         {
-            "id": "Hull",
-            "chainName": "Current Hull",
-            "rootUpgradeID": "sailing:Dragon_Hull",
-            "defaultName": "Bronze Hull",
-            "defaultMedia": "sailing:img/hull_bronze.png",
+            "id": "Sail",
+            "chainName": "Current Sail",
+            "rootUpgradeID": "sailing:Dragon_Sail",
+            "defaultName": "Bronze Sail",
             "defaultDescription": "No bonuses."
         }
     ]

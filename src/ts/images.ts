@@ -3,6 +3,7 @@ import '../img/frigate.jpeg'
 import '../img/frigate2.jpeg'
 import '../img/sailing-boat.png'
 import '../img/hull_empty.png';
+import '../img/hull_bronze.png';
 import '../img/hull_iron.png';
 import '../img/hull_steel.png';
 import '../img/hull_black.png';

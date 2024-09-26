@@ -1,28 +1,65 @@
 <template id="sailing-boat-template">
-  <div class="col-6 col-lg-3" :id="localId" @vue:mounted="mounted">
+  <div class="col-6 col-lg-3" :id="boat.localID" @vue:mounted="mounted">
     <div
-      class="block block-content block-content-full block-rounded-extra block-link-pop border-top border-music border-4x text-center"
+      class="block block-rounded block-link-pop border-top border-danger border-4x justify-vertical-center"
+      v-show="isLocked"
     >
-      Hull
-      <div id="hull-grid"></div>
+      <div class="block-content block-content-full bg-light pb-0">
+        <div class="font-size-sm font-w600 text-center text-muted">
+          <span><lang-string lang-id="MENU_TEXT_LOCKED"></lang-string></span><br />
+          <img class="mining-ore-img m-3" :src="lockedImgSrc" /><br />
+          <span class="badge badge-danger badge-pill w-100 mb-1">Level {{ getAction().level }}</span>
+          <!-- <span class="badge badge-danger badge-pill w-100 mb-1" id="next-abyssal-level">Abyssal Level 69</span> -->
+        </div>
+      </div>
     </div>
     <div
-      class="block block-content block-content-full block-rounded-extra block-link-pop border-top border-music border-4x text-center"
+      class="block block-content block-content-full block-rounded block-link-pop border-top border-4x text-center"
+      v-show="!isLocked"
     >
-      Deck Items
-      <div id="deck-grid"></div>
-    </div>
-    <div
-      class="block block-content block-content-full block-rounded-extra block-link-pop border-top border-music border-4x text-center"
-    >
-      Rudder
-      <div id="rudder-grid"></div>
-    </div>
-    <div
-      class="block block-content block-content-full block-rounded-extra block-link-pop border-top border-music border-4x text-center"
-    >
-      Ram
-      <div id="ram-grid"></div>
+      <div class="row gutters-tiny">
+        <div class="col-12 p-2">
+          {{ boat.localID }}
+        </div>
+        <div class="col-6">
+          <div class="p-2">
+            Hull
+          </div>
+          <div id="hull-grid"></div>
+        </div>
+        <div class="col-6">
+          <div class="p-2">
+            Deck Items
+          </div>
+          <div id="deck-grid"></div>
+        </div>
+        <div class="col-6">
+          <div class="p-2">
+            Rudder
+          </div>
+          <div id="rudder-grid"></div>
+        </div>
+        <div class="col-6">
+          <div class="p-2">
+            Ram
+          </div>
+          <div id="ram-grid"></div>
+        </div>
+        <div class="col-12 mt-2">
+          <!-- <span>Ready to Sail: {{ readyToSail }}</span>
+          <span>On Trip: {{ onTrip }}</span>
+          <span>Has Returned: {{ hasReturned }}</span> -->
+          <button class="btn btn-primary btn-block btn-lg" @click="setSail()" v-if="readyToSail">
+            Set Sail
+          </button>
+          <button class="btn btn-info btn-block btn-lg" disabled v-if="onTrip">
+            Sailing the high seas...<br/>Returns in {{ returnTimer }}
+          </button>
+          <button class="btn btn-success btn-block btn-lg" @click="collectLoot()" v-if="hasReturned">
+            Collect Loot
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
