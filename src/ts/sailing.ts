@@ -6,12 +6,14 @@ const ctx = mod.getContext(Constants.MOD_NAMESPACE);
 // console.log('import meta', import.meta);
 // console.log(version);
 import LargeIcon from '../img/icon_large.png';
+import { Port, PortData } from './port';
 
 class SailingRenderQueue extends MasterySkillRenderQueue<BoatAction> {
   boats: boolean;
 }
 interface SailingSkillData extends BaseSkillData {
-  categories: SkillCategoryData[];
+  categories?: SkillCategoryData[];
+  ports?: PortData[];
 };
 interface SailingMasteryData extends BasicSkillRecipeData {
   name: string;
@@ -55,6 +57,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   public boat: Component<any>;
   public categories: NamespaceRegistry<SkillCategory>;
   public boats: NamespaceRegistry<Boat>;
+  public ports: NamespaceRegistry<Port>;
 
   public ui: UserInterface;
   private lootTable: DropTable;
@@ -64,6 +67,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     super(namespace, 'Sailing', game);
     console.log('loaded sailing skill');
     this.categories = new NamespaceRegistry(game.registeredNamespaces, SkillCategory.name);
+    this.ports = new NamespaceRegistry(game.registeredNamespaces, Port.name);
     this.boats = new NamespaceRegistry(game.registeredNamespaces, Boat.name);
     this.lootTable = new DropTable(this.game, []);
     this.loot = new CombatLoot(100, this.game);
@@ -160,28 +164,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.renderQueue.boats = true;
   }
 
-  public postDataRegistration(): void {
-    super.postDataRegistration();
-
-    this.milestones.push(...this.actions.allObjects);
-    this.sortMilestones();
-
-    this.lootTable.registerDrops(this.game, [
-      {
-        itemID: "melvorD:Gold_Topaz_Ring",
-        minQuantity: 1,
-        maxQuantity: 10,
-        weight: 100,
-      },
-      {
-        itemID: "sailing:woodenOar",
-        minQuantity: 1,
-        maxQuantity: 10,
-        weight: 100,
-      },
-    ]);
-  }
-
   public getRegistry(type: ScopeSourceType): NamespaceRegistry<NamedObject> | undefined {
     switch (type) {
       case ScopeSourceType.Action:
@@ -231,6 +213,18 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.actions.allObjects.forEach((action) => {
       this.boats.registerObject(new Boat(namespace, action.localID, this.game));
     });
+
+    if (data.ports !== undefined) {
+      console.log(`Registering ${data.ports.length} Ports`);
+      data.ports.forEach((port) => {
+        console.log(port);
+        this.ports.registerObject(new Port(namespace, port, this.game));
+      });
+    }
+
+    this.boats.forEach((boat) => {
+      boat.port = this.ports.getObjectSafe('sailing:tinyIsland');
+    });
   }
 
   public modifyData(data: FixedMasterySkillModificationData): void {
@@ -240,20 +234,45 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     }
   }
 
-  private decodeBoat(reader: SaveWriter, version: number): void {
-      let boat = reader.getNamespacedObject(this.boats);
-      if (typeof boat === 'string') {
-        console.log('not registered:', boat);
-        // TODO: Ask to explain this dummy object
-        if (boat.startsWith('sailing')) {
-          boat = this.boats.getDummyObject(boat, Boat, this.game);
-          console.log('getting dummy:', boat);
-        } else {
-          boat = this.game.constructDummyObject(boat, Boat);
-        }
+  public postDataRegistration(): void {
+    super.postDataRegistration();
+
+    // Use unshift so that the skill mastery milestone is last after sort if there are lvl 99 actions or ports
+    this.milestones.unshift(...this.actions.allObjects);
+    this.milestones.unshift(...this.ports.allObjects);
+    this.sortMilestones();
+
+    this.lootTable.registerDrops(this.game, [
+      {
+        itemID: "melvorD:Gold_Topaz_Ring",
+        minQuantity: 1,
+        maxQuantity: 10,
+        weight: 100,
+      },
+      {
+        itemID: "sailing:woodenOar",
+        minQuantity: 1,
+        maxQuantity: 10,
+        weight: 100,
+      },
+    ]);
+  }
+
+  private decodeBoat(reader: SaveWriter, version: number): Boat {
+    let boat = reader.getNamespacedObject(this.boats);
+    if (typeof boat === 'string') {
+      console.log('not registered:', boat);
+      // TODO: Ask to explain this dummy object
+      if (boat.startsWith('sailing')) {
+        boat = this.boats.getDummyObject(boat, Boat, this.game);
+        console.log('getting dummy:', boat);
+      } else {
+        boat = this.game.constructDummyObject(boat, Boat);
       }
-      boat.decode(reader, version);
     }
+    boat.decode(reader, version);
+    return boat;
+  }
 
   public decode(reader: SaveWriter, version: number): void {
     super.decode(reader, version);
@@ -266,8 +285,10 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       this.decodeBoat(reader, version);
     }
     const numDummyBoats = reader.getUint32();
+    const tinyIsland = this.ports.getObjectSafe('sailing:tinyIsland');
     for (let i = 0; i < numDummyBoats; i++) {
-      this.decodeBoat(reader, version);
+      const boat = this.decodeBoat(reader, version);
+      if (boat.port === undefined) boat.port = tinyIsland;
     }
   }
 

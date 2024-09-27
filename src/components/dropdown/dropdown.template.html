@@ -1,0 +1,16 @@
+<template id="port-dropdown-template">
+  <div class="form-inline flex-wrap-reverse" @vue:mounted="mounted">
+    <div class="dropdown">
+      <button
+        type="button"
+        class="btn btn-primary dropdown-toggle font-size-sm"
+        id="port-dropdown-button"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      ></button>
+      <div class="dropdown-menu overflow-y-auto" id="port-options-container" style="max-height: 60vh"></div>
+    </div>
+    <span class="font-size-sm text-muted ml-2" id="port-label"></span>
+  </div>
+</template>

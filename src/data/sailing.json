@@ -258,6 +258,52 @@
       {
         "skillID": "sailing:Sailing",
         "data": {
+          "ports": [
+            {
+              "id": "tinyIsland",
+              "name": "Tiny Island",
+              "description": "The island you see in comics.",
+              "media": "img/sailing-boat.png",
+              "level": 1,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Steel_Boots",
+                  "minQuantity": 1,
+                  "maxQuantity": 10,
+                  "weight": 100
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 10,
+                  "max": 100
+                }
+              ]
+            },
+            {
+              "id": "pirateCove",
+              "name": "Pirate Cove",
+              "description": "The place where pirates do their business.",
+              "media": "img/sailing-boat.png",
+              "level": 99,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Steel_Boots",
+                  "minQuantity": 1,
+                  "maxQuantity": 10,
+                  "weight": 100
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 10,
+                  "max": 100
+                }
+              ]
+            }
+          ],
           "masteryTokenID": "sailing:Mastery_Token_Sailing",
           "masteryLevelUnlocks": [
             {
