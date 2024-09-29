@@ -106,7 +106,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     rewards.addXP(this, xpAmt, boat.action);
 
     const action = this.actions.allObjects.find(action => action.localID === boat.localID);
-    const masteryXPToAdd = this.getMasteryXPToAddForAction(action, boat.scaledInterval);
+    const masteryXPToAdd = this.getMasteryXPToAddForAction(action, boat.scaledForMasteryInterval);
     const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd);
 
     this.rollForRareDrops(boat.action.level, rewards, boat.action);
@@ -124,7 +124,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     }).then(() => {
       rewards.setSource('Sailing.Loot');
       rewards.giveRewards(true);
-      this.addMasteryForAction(action, boat.scaledInterval);
+      this.addMasteryForAction(action, boat.scaledForMasteryInterval);
       onClose();
     });
   }

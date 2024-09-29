@@ -28,7 +28,11 @@ export class Boat extends NamespacedObject {
         return this.port.distance * 60 * 1000;
     }
 
-    get scaledInterval() {
+    get modifiedInterval() {
+        return this.game.sailing.modifyInterval(this.interval, this.action);
+    }
+
+    get scaledForMasteryInterval() {
         return this.port.distance * 1000;
     }
 
@@ -50,7 +54,7 @@ export class Boat extends NamespacedObject {
 
     public setSail() {
         this._sailTimer.action = () => this.onReturn();
-        // this._sailTimer.start(this.interval);
+        // this._sailTimer.start(this.modifiedInterval);
         this._sailTimer.start(1000*1);
         this.state = BoatState.OnTrip;
         this.callBackCallbacks();

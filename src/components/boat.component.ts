@@ -20,7 +20,7 @@ export function BoatComponent(boat: Boat) {
         readyToSail: true,
         onTrip: false,
         hasReturned: false,
-        returnTime: tickToTime(boat.port.distance * TICKS_PER_MINUTE, true),
+        returnTime: tickToTime(boat.modifiedInterval / TICK_INTERVAL, true),
         returnTimer: '',
         hull: EquipmentComponent('Hull', 'img/hull_bronze.png'),
         deckItems: EquipmentComponent('Deck_Items', 'img/hull_empty.png'),
@@ -41,7 +41,7 @@ export function BoatComponent(boat: Boat) {
         }, (port: Port) => {
             console.log('CHANGED PORT:', port);
             boat.port = port;
-            self.returnTime = tickToTime(boat.port.distance * TICKS_PER_MINUTE, true);
+            self.returnTime = tickToTime(boat.modifiedInterval / TICK_INTERVAL, true);
         }),
         update() {
             self.isLocked = game.sailing.level < self.getAction().level;
@@ -50,7 +50,7 @@ export function BoatComponent(boat: Boat) {
             self.rudder.update();
             self.ram.update();
             self.port.setEnabled(this.readyToSail);
-            self.returnTime = tickToTime(boat.port.distance * TICKS_PER_MINUTE, true);
+            self.returnTime = tickToTime(boat.modifiedInterval / TICK_INTERVAL, true);
             self.port.setData({
                 name: 'Port',
                 selected: { name: boat.port.name, value: boat.port, media: boat.port.media },
