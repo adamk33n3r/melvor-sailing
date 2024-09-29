@@ -1,5 +1,8 @@
 export interface PortData extends RealmedObjectData, MilestoneLike {
     description: string;
+    distance: number;
+    minRolls: number;
+    maxRolls: number;
     lootTable: DropTableData[];
     currencyDrops: CurrencyDropData[];
 }
@@ -9,6 +12,9 @@ export class Port extends NamespacedObject {
     private _description: string;
     private _media: string;
     private _level: number;
+    private _distance: number;
+    private _minRolls: number;
+    private _maxRolls: number;
     private _lootTable: DropTable;
     private _currencyDrops: CurrencyDrop[];
 
@@ -28,6 +34,18 @@ export class Port extends NamespacedObject {
         return this._level;
     }
 
+    public get distance() {
+        return this._distance;
+    }
+
+    public get minRolls() {
+        return this._minRolls;
+    }
+
+    public get maxRolls() {
+        return this._maxRolls;
+    }
+
     public get lootTable() {
         return this._lootTable;
     }
@@ -42,6 +60,9 @@ export class Port extends NamespacedObject {
         this._description = data.description;
         this._media = data.media;
         this._level = data.level;
+        this._distance = data.distance;
+        this._minRolls = data.minRolls;
+        this._maxRolls = data.maxRolls;
 
         this._lootTable = new DropTable(game, data.lootTable);
         this._currencyDrops = data.currencyDrops.map(({ currencyID, min, max }) => {
@@ -60,6 +81,9 @@ export class DummyPort extends Port {
                 description: '',
                 media: 'assets/media/main/question.png',
                 level: 1,
+                distance: 0,
+                minRolls: 1,
+                maxRolls: 1,
                 lootTable: [],
                 currencyDrops: [],
             },

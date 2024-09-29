@@ -5,8 +5,9 @@ import { UserInterface } from './ui';
 const ctx = mod.getContext(Constants.MOD_NAMESPACE);
 // console.log('import meta', import.meta);
 // console.log(version);
-import LargeIcon from '../img/icon_large.png';
+import SailingBoat from '../img/sailing-boat.png';
 import { Port, PortData } from './port';
+import { LootComponent } from '../components/loot.component';
 
 class SailingRenderQueue extends MasterySkillRenderQueue<BoatAction> {
   boats: boolean;
@@ -60,8 +61,8 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   public ports: NamespaceRegistry<Port>;
 
   public ui: UserInterface;
-  private lootTable: DropTable;
-  private loot: CombatLoot;
+  // private lootTable: DropTable;
+  // private loot: CombatLoot;
 
   constructor(namespace: DataNamespace, game: Game) {
     super(namespace, 'Sailing', game);
@@ -69,28 +70,44 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.categories = new NamespaceRegistry(game.registeredNamespaces, SkillCategory.name);
     this.ports = new NamespaceRegistry(game.registeredNamespaces, Port.name);
     this.boats = new NamespaceRegistry(game.registeredNamespaces, Boat.name);
-    this.lootTable = new DropTable(this.game, []);
-    this.loot = new CombatLoot(100, this.game);
   }
 
   public generateLoot(boat: Boat, onClose: VoidFunction) {
     console.log('generating loot for boat:', boat.id);
-    for (let i = 0; i < 10; i++) {
-      const lootItem = this.lootTable.getDrop();
-      this.loot.add(lootItem.item, lootItem.quantity, false);
+
+    const lootMap = new Map<AnyItem, number>();
+
+    const numRolls = rollInteger(boat.port.minRolls, boat.port.maxRolls);
+    for (let i = 0; i < numRolls; i++) {
+      const lootItem = boat.port.lootTable.getDrop();
+      const prev = lootMap.get(lootItem.item) ?? 0;
+      lootMap.set(lootItem.item, prev + lootItem.quantity)
     }
-    const gpAmt = rollInteger(5, 500);
-    const xpAmt = rollInteger(5, 500);
+
+    const currencyMap = new Map<Currency, number>();
+    boat.port.currencyDrops.forEach(({ currency, min, max }) => {
+      currencyMap.set(currency, rollInteger(min, max));
+    });
+    const currencies = Array.from(currencyMap).map(([currency, quantity]) => ({ currency, quantity }));
+    const loot = Array.from(lootMap).map(([item, quantity]) => ({ item, quantity }));
+    const dummyHost = document.createElement('div');
+    const xpAmt = boat.port.distance * boat.port.distance;
+    ui.create(LootComponent(xpAmt, currencies, loot), dummyHost);
     SwalLocale.fire({
-      iconHtml: `<img class="mbts__logo-img" src="${ctx.getResourceUrl(LargeIcon)}" />`,
+      iconHtml: `<img class="mbts__logo-img" src="${ctx.getResourceUrl(SailingBoat)}" />`,
       title: ctx.name,
-      html: '<div>XP: '+xpAmt+'</div><div>GP: '+gpAmt+'</div><div>' + this.loot.drops.map((item) => item.item.name).join('<br>') + '</div>',
+      html: dummyHost,
     }).then(() => {
-      this.loot.lootAll();
-      game.gp.add(gpAmt);
+      for (const currencyQ of currencies) {
+        currencyQ.currency.add(currencyQ.quantity);
+      }
       const action = this.actions.allObjects.find(action => action.localID === boat.localID);
+      loot.forEach((itemQ) => {
+        this.game.bank.addItem(itemQ.item, itemQ.quantity, false, true, true, true, 'Sailing.Loot');
+      });
       this.addXP(xpAmt, action);
-      this.addMasteryForAction(action, 1);
+      this.addMasteryXP(action, xpAmt);
+      this.addMasteryForAction(action, boat.port.distance * 60 * 1000);
       onClose();
     });
   }
@@ -241,21 +258,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.milestones.unshift(...this.actions.allObjects);
     this.milestones.unshift(...this.ports.allObjects);
     this.sortMilestones();
-
-    this.lootTable.registerDrops(this.game, [
-      {
-        itemID: "melvorD:Gold_Topaz_Ring",
-        minQuantity: 1,
-        maxQuantity: 10,
-        weight: 100,
-      },
-      {
-        itemID: "sailing:woodenOar",
-        minQuantity: 1,
-        maxQuantity: 10,
-        weight: 100,
-      },
-    ]);
   }
 
   private decodeBoat(reader: SaveWriter, version: number): Boat {

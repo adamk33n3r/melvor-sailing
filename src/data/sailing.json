@@ -262,44 +262,305 @@
             {
               "id": "tinyIsland",
               "name": "Tiny Island",
-              "description": "The island you see in comics.",
+              "description": "A quaint and peaceful port, perfect for novice traders.",
               "media": "img/sailing-boat.png",
               "level": 1,
+              "distance": 10,
+              "minRolls": 3,
+              "maxRolls": 3,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Steel_Boots",
+                  "itemID": "melvorD:Normal_Logs",
                   "minQuantity": 1,
-                  "maxQuantity": 10,
-                  "weight": 100
+                  "maxQuantity": 3,
+                  "weight": 10
+                },
+                {
+                  "itemID": "melvorD:Raw_Shrimp",
+                  "minQuantity": 1,
+                  "maxQuantity": 5,
+                  "weight": 5
+                },
+                {
+                  "itemID": "melvorD:Treasure_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
                   "min": 10,
-                  "max": 100
+                  "max": 50
                 }
               ]
             },
             {
-              "id": "pirateCove",
-              "name": "Pirate Cove",
-              "description": "The place where pirates do their business.",
+              "id": "fishermansWharf",
+              "name": "Fisherman's Wharf",
+              "description": "A bustling hub where fishermen bring their daily catch.",
               "media": "img/sailing-boat.png",
-              "level": 99,
+              "level": 10,
+              "distance": 30,
+              "minRolls": 3,
+              "maxRolls": 3,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Steel_Boots",
+                  "itemID": "melvorD:Oak_Logs",
                   "minQuantity": 1,
-                  "maxQuantity": 10,
-                  "weight": 100
+                  "maxQuantity": 3,
+                  "weight": 10
+                },
+                {
+                  "itemID": "melvorD:Raw_Shrimp",
+                  "minQuantity": 1,
+                  "maxQuantity": 5,
+                  "weight": 5
+                },
+                {
+                  "itemID": "melvorD:Raw_Sardine",
+                  "minQuantity": 1,
+                  "maxQuantity": 2,
+                  "weight": 5
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 10,
-                  "max": 100
+                  "min": 50,
+                  "max": 500
+                }
+              ]
+            },
+            {
+              "id": "seafarersHaven",
+              "name": "Seafarer's Haven",
+              "description": "A safe harbor for weary sailors to rest and resupply.",
+              "media": "img/sailing-boat.png",
+              "level": 20,
+              "distance": 45,
+              "minRolls": 1,
+              "maxRolls": 2,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Egg_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Bird_Nest",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 500,
+                  "max": 1000
+                }
+              ]
+            },
+            {
+              "id": "buccaneersBay",
+              "name": "Buccaneer's Bay",
+              "description": "A lively port frequented by adventurous buccaneers.",
+              "media": "img/sailing-boat.png",
+              "level": 30,
+              "distance": 60,
+              "minRolls": 1,
+              "maxRolls": 2,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Bandit_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 1000,
+                  "max": 5000
+                }
+              ]
+            },
+            {
+              "id": "piratesCove",
+              "name": "Pirate's Cove",
+              "description": "A hidden cove known for its pirate activity and secret treasures.",
+              "media": "melvor:assets/media/monsters/pirate.png",
+              "level": 40,
+              "distance": 90,
+              "minRolls": 1,
+              "maxRolls": 2,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Pirate_Booty",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 5000,
+                  "max": 10000
+                }
+              ]
+            },
+            {
+              "id": "corsairsRetreat",
+              "name": "Corsair's Retreat",
+              "description": "A secluded retreat favored by corsairs for its strategic location.",
+              "media": "img/sailing-boat.png",
+              "level": 50,
+              "distance": 120,
+              "minRolls": 1,
+              "maxRolls": 3,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Magic_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 10000,
+                  "max": 50000
+                }
+              ]
+            },
+            {
+              "id": "navigatorsNook",
+              "name": "Navigator's Nook",
+              "description": "A well-charted port where navigators gather to share maps and tales.",
+              "media": "img/sailing-boat.png",
+              "level": 60,
+              "distance": 150,
+              "minRolls": 1,
+              "maxRolls": 3,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Spider_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 50000,
+                  "max": 100000
+                }
+              ]
+            },
+            {
+              "id": "merchantsMarina",
+              "name": "Merchant's Marina",
+              "description": "A thriving marina bustling with trade activity.",
+              "media": "img/sailing-boat.png",
+              "level": 70,
+              "distance": 240,
+              "minRolls": 1,
+              "maxRolls": 2,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Standard_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 50000,
+                  "max": 150000
+                }
+              ]
+            },
+            {
+              "id": "dragonsDock",
+              "name": "Dragon's Dock",
+              "description": "A legendary dock rumored to be guarded by dragons.",
+              "media": "img/sailing-boat.png",
+              "level": 80,
+              "distance": 300,
+              "minRolls": 2,
+              "maxRolls": 3,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Elite_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 75000,
+                  "max": 250000
+                }
+              ]
+            },
+            {
+              "id": "roguesRefuge",
+              "name": "Rogue's Refuge",
+              "description": "A hidden port where rogues gather to plan their next heist.",
+              "media": "img/sailing-boat.png",
+              "level": 90,
+              "distance": 360,
+              "minRolls": 1,
+              "maxRolls": 3,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Chest_of_Witwix",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 100000,
+                  "max": 500000
+                }
+              ]
+            },
+            {
+              "id": "kingsLanding",
+              "name": "Kings Landing",
+              "description": "The ultimate port, fit for royalty and the most skilled traders.",
+              "media": "img/sailing-boat.png",
+              "level": 99,
+              "distance": 480,
+              "minRolls": 3,
+              "maxRolls": 5,
+              "lootTable": [
+                {
+                  "itemID": "melvorD:Elite_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 500000,
+                  "max": 10000000
                 }
               ]
             }

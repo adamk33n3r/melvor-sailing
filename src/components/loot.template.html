@@ -1,0 +1,19 @@
+<template id="sailing-loot-template">
+  <div>
+    <div class="col-12">
+      <span class="text-success">{{ xp }}</span>
+      <img class="skill-icon-xs" :src="skillIcon" />
+      <span>Sailing Skill XP</span>
+    </div>
+    <div v-for="currencyQ in currencies" class="col-12">
+      <span>{{ currencyQ.quantity }}</span>
+      <img class="skill-icon-xs" :src="currencyQ.currency.media" />
+      <span>{{ currencyQ.currency.name }}</span>
+    </div>
+    <div v-for="itemQ in loot" class="col-12">
+      <span class="text-success">{{ itemQ.quantity }}</span>
+      <img class="skill-icon-xs" :src="itemQ.item.media" />
+      <span>{{ itemQ.item.name }}</span>
+    </div>
+  </div>
+</template>

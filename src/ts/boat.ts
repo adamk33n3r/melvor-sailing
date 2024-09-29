@@ -31,7 +31,8 @@ export class Boat extends NamespacedObject {
 
     public setSail() {
         this._sailTimer.action = () => this.onReturn();
-        this._sailTimer.start(1000*60*60*3);
+        // this._sailTimer.start(1000*60*this.port.distance);
+        this._sailTimer.start(1000*30);
         this.state = BoatState.OnTrip;
         this.callBackCallbacks();
     }

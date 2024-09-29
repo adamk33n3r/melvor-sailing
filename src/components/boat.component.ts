@@ -87,10 +87,10 @@ export function BoatComponent(boat: Boat) {
 
         setSail() {
             console.log('SET SAIL');
-            this.boat.setSail();
+            boat.setSail();
         },
         collectLoot() {
-            this.boat.collectLoot();
+            boat.collectLoot();
         }
     }
 }
