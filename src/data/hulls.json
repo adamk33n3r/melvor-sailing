@@ -14,42 +14,6 @@
     ]
   },
   "data": {
-    "modifiers": [
-        {
-            "id": "sailingSpeed",
-            "allowNegative": false,
-            "allowedScopes": [
-                {
-                    "scopes": {},
-                    "descriptions": [
-                        {
-                            "text": "+${value} Sailing Speed",
-                            "lang": "sailing_Sailing_Speed_Positive",
-                            "above": 0,
-                            "includeSign": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "sailingCombat",
-            "allowNegative": false,
-            "allowedScopes": [
-                {
-                    "scopes": {},
-                    "descriptions": [
-                        {
-                            "text": "+${value} Combat",
-                            "lang": "sailing_Sailing_Combat_Positive",
-                            "above": 0,
-                            "includeSign": false
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
     "shopDisplayOrder": [
         {
             "afterID": "melvorD:Iron_Axe",

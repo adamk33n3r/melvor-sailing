@@ -2,6 +2,76 @@
   "$schema": "./gameDataEx.json",
   "namespace": "sailing",
   "data": {
+    "modifiers": [
+      {
+        "id": "sailingSpeed",
+        "allowNegative": false,
+        "allowedScopes": [
+          {
+            "scopes": {},
+            "descriptions": [
+              {
+                "text": "+${value} Sailing Speed",
+                "lang": "sailing_Sailing_Speed_Positive",
+                "above": 0,
+                "includeSign": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sailingCombat",
+        "allowNegative": false,
+        "allowedScopes": [
+          {
+            "scopes": {},
+            "descriptions": [
+              {
+                "text": "+${value} Combat",
+                "lang": "sailing_Sailing_Combat_Positive",
+                "above": 0,
+                "includeSign": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sailingMorale",
+        "allowNegative": false,
+        "allowedScopes": [
+          {
+            "scopes": {},
+            "descriptions": [
+              {
+                "text": "+${value} Morale",
+                "lang": "sailing_Sailing_Morale_Positive",
+                "above": 0,
+                "includeSign": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sailingSeafaring",
+        "allowNegative": false,
+        "allowedScopes": [
+          {
+            "scopes": {},
+            "descriptions": [
+              {
+                "text": "+${value} Seafaring",
+                "lang": "sailing_Sailing_Seafaring_Positive",
+                "above": 0,
+                "includeSign": false
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "shopCategories": [
       {
         "id": "SailingUpgrades",
@@ -14,6 +84,52 @@
         "insertAt": "Start",
         "ids": [
           "sailing:SailingUpgrades"
+        ]
+      }
+    ],
+    "shopPurchases": [
+      {
+        "id": "Sailing_Skillcape",
+        "media": "img/skillcape_sailing.png",
+        "category": "melvorD:Skillcapes",
+        "contains": {
+          "items": [
+            {
+              "id": "sailing:Sailing_Skillcape",
+              "quantity": 1
+            }
+          ]
+        },
+        "cost": {
+          "items": [],
+          "currencies": [
+            {
+              "currency": "melvorD:GP",
+              "type": "Fixed",
+              "cost": 1000000
+            }
+          ]
+        },
+        "allowQuantityPurchase": false,
+        "unlockRequirements": [],
+        "purchaseRequirements": [
+          {
+            "type": "SkillLevel",
+            "skillID": "sailing:Sailing",
+            "level": 99
+          }
+        ],
+        "defaultBuyLimit": 1,
+        "buyLimitOverrides": [],
+        "showBuyLimit": false
+      }
+    ],
+    "shopDisplayOrder": [
+      {
+        "insertAt": "After",
+        "afterID": "melvorF:Runecrafting_Skillcape",
+        "ids": [
+          "sailing:Sailing_Skillcape"
         ]
       }
     ],
@@ -49,7 +165,7 @@
         "id": "Kraken",
         "name": "Kraken",
         "media": "img/icon.png",
-        "scaleChanceWithMasteryPool": false,
+        "scaleChanceWithMasteryPool": true,
         "modifiers": {
           "skillXP": 100
         },
@@ -99,6 +215,48 @@
       }
     ],
     "items": [
+      {
+        "itemType": "Equipment",
+        "id": "Sailing_Skillcape",
+        "name": "Sailing Skillcape",
+        "category": "Combat",
+        "type": "Armour",
+        "media": "img/skillcape_sailing.png",
+        "ignoreCompletion": false,
+        "obtainFromItemLog": false,
+        "golbinRaidExclusive": false,
+        "sellsFor": 250000,
+        "tier": "Skillcape",
+        "validSlots": ["Cape"],
+        "occupiesSlots": [],
+        "equipRequirements": [
+          {
+            "type": "SkillLevel",
+            "skillID": "sailing:Sailing",
+            "level": 99
+          }
+        ],
+        "equipmentStats": [
+          {
+            "key": "meleeDefenceBonus",
+            "value": 9
+          },
+          {
+            "key": "rangedDefenceBonus",
+            "value": 9
+          },
+          {
+            "key": "magicDefenceBonus",
+            "value": 9
+          }
+        ],
+        "modifiers": {
+          "sailing:sailingSpeed": 100,
+          "sailing:sailingCombat": 100,
+          "sailing:sailingMorale": 100,
+          "sailing:sailingSeafaring": 100
+        }
+      },
       {
         "id": "Mastery_Token_Sailing",
         "name": "Mastery Token (Sailing)",
@@ -263,7 +421,7 @@
               "id": "tinyIsland",
               "name": "Tiny Island",
               "description": "A quaint and peaceful port, perfect for novice traders.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/shrimp.png",
               "level": 1,
               "distance": 10,
               "minRolls": 3,
@@ -300,7 +458,7 @@
               "id": "fishermansWharf",
               "name": "Fisherman's Wharf",
               "description": "A bustling hub where fishermen bring their daily catch.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/treasure_chest.png",
               "level": 10,
               "distance": 30,
               "minRolls": 3,
@@ -323,6 +481,12 @@
                   "minQuantity": 1,
                   "maxQuantity": 2,
                   "weight": 5
+                },
+                {
+                  "itemID": "melvorD:Treasure_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 2
                 }
               ],
               "currencyDrops": [
@@ -337,7 +501,7 @@
               "id": "seafarersHaven",
               "name": "Seafarer's Haven",
               "description": "A safe harbor for weary sailors to rest and resupply.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/egg_chest.png",
               "level": 20,
               "distance": 45,
               "minRolls": 1,
@@ -368,7 +532,7 @@
               "id": "buccaneersBay",
               "name": "Buccaneer's Bay",
               "description": "A lively port frequented by adventurous buccaneers.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/bandit_chest.png",
               "level": 30,
               "distance": 60,
               "minRolls": 1,
@@ -393,7 +557,7 @@
               "id": "piratesCove",
               "name": "Pirate's Cove",
               "description": "A hidden cove known for its pirate activity and secret treasures.",
-              "media": "melvor:assets/media/monsters/pirate.png",
+              "media": "melvor:assets/media/bank/pirate_booty.png",
               "level": 40,
               "distance": 90,
               "minRolls": 1,
@@ -418,7 +582,7 @@
               "id": "corsairsRetreat",
               "name": "Corsair's Retreat",
               "description": "A secluded retreat favored by corsairs for its strategic location.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/magic_chest.png",
               "level": 50,
               "distance": 120,
               "minRolls": 1,
@@ -443,9 +607,9 @@
               "id": "navigatorsNook",
               "name": "Navigator's Nook",
               "description": "A well-charted port where navigators gather to share maps and tales.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/spider_chest.png",
               "level": 60,
-              "distance": 150,
+              "distance": 180,
               "minRolls": 1,
               "maxRolls": 3,
               "lootTable": [
@@ -468,9 +632,9 @@
               "id": "merchantsMarina",
               "name": "Merchant's Marina",
               "description": "A thriving marina bustling with trade activity.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/standard_chest.png",
               "level": 70,
-              "distance": 240,
+              "distance": 300,
               "minRolls": 1,
               "maxRolls": 2,
               "lootTable": [
@@ -493,9 +657,9 @@
               "id": "dragonsDock",
               "name": "Dragon's Dock",
               "description": "A legendary dock rumored to be guarded by dragons.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/elite_chest.png",
               "level": 80,
-              "distance": 300,
+              "distance": 420,
               "minRolls": 2,
               "maxRolls": 3,
               "lootTable": [
@@ -518,9 +682,9 @@
               "id": "roguesRefuge",
               "name": "Rogue's Refuge",
               "description": "A hidden port where rogues gather to plan their next heist.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/bank/chest_of_witwix.png",
               "level": 90,
-              "distance": 360,
+              "distance": 540,
               "minRolls": 1,
               "maxRolls": 3,
               "lootTable": [
@@ -543,12 +707,66 @@
               "id": "kingsLanding",
               "name": "Kings Landing",
               "description": "The ultimate port, fit for royalty and the most skilled traders.",
-              "media": "img/sailing-boat.png",
+              "media": "melvor:assets/media/skills/thieving/king.png",
               "level": 99,
-              "distance": 480,
+              "distance": 720,
               "minRolls": 3,
               "maxRolls": 5,
               "lootTable": [
+                {
+                  "itemID": "melvorD:Treasure_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Egg_Chest",
+                  "minQuantity": 3,
+                  "maxQuantity": 10,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Bird_Nest",
+                  "minQuantity": 3,
+                  "maxQuantity": 10,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Bandit_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Pirate_Booty",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Magic_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Spider_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Standard_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Chest_of_Witwix",
+                  "minQuantity": 1,
+                  "maxQuantity": 3,
+                  "weight": 1
+                },
                 {
                   "itemID": "melvorD:Elite_Chest",
                   "minQuantity": 1,
@@ -646,11 +864,11 @@
               "realm": "melvorD:Melvor"
             }
           ],
-          "subcategories": [{"id": "test_oars","name": "sub oars"}],
+          "subcategories": [{ "id": "test_oars", "name": "sub oars" }],
           "recipes": [
             {
               "id": "fletchWoodenOar",
-              "itemCosts": [{"id":"melvorD:Normal_Logs", "quantity": 1}],
+              "itemCosts": [{ "id": "melvorD:Normal_Logs", "quantity": 1 }],
               "level": 1,
               "baseExperience": 1,
               "categoryID": "sailing:Oars",
@@ -667,7 +885,7 @@
       {
         "id": "melvorD:Dungeons",
         "areas": {
-          "add": [{"insertAt": "Start", "ids": ["sailing:pirateCove"] }]
+          "add": [{ "insertAt": "Start", "ids": ["sailing:pirateCove"] }]
         }
       }
     ]

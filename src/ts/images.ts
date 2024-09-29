@@ -1,7 +1,5 @@
-import '../img/sailing.jpeg'
-import '../img/frigate.jpeg'
-import '../img/frigate2.jpeg'
-import '../img/sailing-boat.png'
+import '../img/sailing-boat.png';
+import '../img/skillcape_sailing.png';
 import '../img/hull_empty.png';
 import '../img/hull_bronze.png';
 import '../img/hull_iron.png';

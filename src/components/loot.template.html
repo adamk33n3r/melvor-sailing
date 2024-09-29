@@ -5,6 +5,16 @@
       <img class="skill-icon-xs" :src="skillIcon" />
       <span>Sailing Skill XP</span>
     </div>
+    <div class="col-12">
+      <span class="text-success">{{ masteryXP }}</span>
+      <img class="skill-icon-xs" :src="skillIcon" />
+      <span>{{ actionName }} Mastery XP</span>
+    </div>
+    <div class="col-12">
+      <span class="text-success">{{ masteryPoolXP }}</span>
+      <img class="skill-icon-xs" :src="skillIcon" />
+      <span>Mastery Pool XP</span>
+    </div>
     <div v-for="currencyQ in currencies" class="col-12">
       <span>{{ currencyQ.quantity }}</span>
       <img class="skill-icon-xs" :src="currencyQ.currency.media" />

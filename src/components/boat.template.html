@@ -19,7 +19,7 @@
     >
       <div class="row gutters-tiny">
         <div class="col-12 p-2">
-          {{ boat.localID }}
+          {{ boat.name }}
         </div>
         <div class="col-6">
           <div class="p-2">
@@ -51,7 +51,7 @@
           <span>On Trip: {{ onTrip }}</span>
           <span>Has Returned: {{ hasReturned }}</span> -->
           <button class="btn btn-primary btn-block btn-lg" @click="setSail()" v-if="readyToSail">
-            Set Sail
+            Set Sail ({{ returnTime }})
           </button>
           <button class="btn btn-info btn-block btn-lg" disabled v-if="onTrip">
             Sailing the high seas...<br/>Returns in {{ returnTimer }}
@@ -59,6 +59,9 @@
           <button class="btn btn-success btn-block btn-lg" @click="collectLoot()" v-if="hasReturned">
             Collect Loot
           </button>
+        </div>
+        <div class="col-12">
+          <mastery-display class="mastery-6" data-skill-id="sailing:Sailing" :data-action-id="boat.id"></mastery-display>
         </div>
       </div>
     </div>

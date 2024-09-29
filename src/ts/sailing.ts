@@ -1,5 +1,5 @@
 import { SailingPage } from '../components/sailing';
-import { Boat } from './boat';
+import { Boat, DummyBoat } from './boat';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
 const ctx = mod.getContext(Constants.MOD_NAMESPACE);
@@ -20,12 +20,14 @@ interface SailingMasteryData extends BasicSkillRecipeData {
   name: string;
 }
 export class BoatAction extends BasicSkillRecipe {
+  private _name: string;
   constructor(namespace: DataNamespace, data: SailingMasteryData, game: Game) {
     super(namespace, data, game);
+    this._name = data.name;
   }
 
   public get name() {
-    return this.localID;
+    return this._name;
     return getLangString(`Myth_Music_Instrument_${this.localID}`);
   }
 
@@ -35,6 +37,13 @@ export class BoatAction extends BasicSkillRecipe {
   }
 }
 export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
+  resetMasteries() {
+    this.actionMastery.forEach((actionMastery) => {
+      actionMastery.xp = 0;
+      actionMastery.level = 1;
+    });
+    this.actions.forEach((action) => this.updateMasteryDisplays(action));
+  }
   passiveTick() {
     this.boats.forEach(boat => {
       boat.sailTimer.tick();
@@ -75,6 +84,8 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   public generateLoot(boat: Boat, onClose: VoidFunction) {
     console.log('generating loot for boat:', boat.id);
 
+    const rewards = new Rewards(this.game);
+
     const lootMap = new Map<AnyItem, number>();
 
     const numRolls = rollInteger(boat.port.minRolls, boat.port.maxRolls);
@@ -83,31 +94,38 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       const prev = lootMap.get(lootItem.item) ?? 0;
       lootMap.set(lootItem.item, prev + lootItem.quantity)
     }
+    const items = Array.from(lootMap).map(([item, quantity]) => ({ item, quantity }));
 
     const currencyMap = new Map<Currency, number>();
     boat.port.currencyDrops.forEach(({ currency, min, max }) => {
       currencyMap.set(currency, rollInteger(min, max));
     });
     const currencies = Array.from(currencyMap).map(([currency, quantity]) => ({ currency, quantity }));
-    const loot = Array.from(lootMap).map(([item, quantity]) => ({ item, quantity }));
+    rewards.addItemsAndCurrency({ items, currencies })
+
+    const xpAmt = boat.port.distance * (boat.port.distance / 4);
+    rewards.addXP(this, xpAmt, boat.action);
+
+    const action = this.actions.allObjects.find(action => action.localID === boat.localID);
+    const masteryXPToAdd = this.getMasteryXPToAddForAction(action, boat.scaledInterval);
+    const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd);
+
+    this.rollForRareDrops(boat.action.level, rewards, boat.action);
+    this.rollForAdditionalItems(rewards, boat.interval);
+    this.rollForAncientRelics(boat.action.level, boat.action.realm);
+    this.rollForMasteryTokens(rewards, boat.action.realm);
+    this.rollForPets(boat.interval, boat.action);
+
     const dummyHost = document.createElement('div');
-    const xpAmt = boat.port.distance * boat.port.distance;
-    ui.create(LootComponent(xpAmt, currencies, loot), dummyHost);
+    ui.create(LootComponent(action, rewards, Math.floor(masteryXPToAdd), Math.floor(masteryPoolXPToAdd)), dummyHost);
     SwalLocale.fire({
       iconHtml: `<img class="mbts__logo-img" src="${ctx.getResourceUrl(SailingBoat)}" />`,
       title: ctx.name,
       html: dummyHost,
     }).then(() => {
-      for (const currencyQ of currencies) {
-        currencyQ.currency.add(currencyQ.quantity);
-      }
-      const action = this.actions.allObjects.find(action => action.localID === boat.localID);
-      loot.forEach((itemQ) => {
-        this.game.bank.addItem(itemQ.item, itemQ.quantity, false, true, true, true, 'Sailing.Loot');
-      });
-      this.addXP(xpAmt, action);
-      this.addMasteryXP(action, xpAmt);
-      this.addMasteryForAction(action, boat.port.distance * 60 * 1000);
+      rewards.setSource('Sailing.Loot');
+      rewards.giveRewards(true);
+      this.addMasteryForAction(action, boat.scaledInterval);
       onClose();
     });
   }
@@ -228,7 +246,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     }, this.game))
 
     this.actions.allObjects.forEach((action) => {
-      this.boats.registerObject(new Boat(namespace, action.localID, this.game));
+      this.boats.registerObject(new Boat(namespace, action, this.game));
     });
 
     if (data.ports !== undefined) {
@@ -254,6 +272,8 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   public postDataRegistration(): void {
     super.postDataRegistration();
 
+    this.sortedMasteryActions = this.actions.allObjects.sort((a, b) => a.level - b.level);
+
     // Use unshift so that the skill mastery milestone is last after sort if there are lvl 99 actions or ports
     this.milestones.unshift(...this.actions.allObjects);
     this.milestones.unshift(...this.ports.allObjects);
@@ -266,10 +286,10 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       console.log('not registered:', boat);
       // TODO: Ask to explain this dummy object
       if (boat.startsWith('sailing')) {
-        boat = this.boats.getDummyObject(boat, Boat, this.game);
+        boat = this.boats.getDummyObject(boat, DummyBoat, this.game);
         console.log('getting dummy:', boat);
       } else {
-        boat = this.game.constructDummyObject(boat, Boat);
+        boat = this.game.constructDummyObject(boat, DummyBoat);
       }
     }
     boat.decode(reader, version);

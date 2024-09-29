@@ -35,7 +35,7 @@ export function EquipmentComponent(slot: string, emptyMedia: string): Component<
         $template: '#sail-equipment-icon-template',
         // $template: '#equipment-grid-icon-template',
         imgSrc: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl(emptyMedia),
-        quantity: 69,
+        quantity: null,
         update() {
             this.imgSrc = getImgSrc(slot, emptyMedia);
             const lowest = game.shop.getLowestUpgradeInChain(upgradeChain.rootUpgrade);

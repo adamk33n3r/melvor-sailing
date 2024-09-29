@@ -19,13 +19,15 @@ export function getElementByIdWithoutId(id: string) {
     return ele;
 }
 
-export function tickToTime(ticks: number) {
+export function tickToTime(ticks: number, truncate = false) {
     if (ticks >= TICKS_PER_MINUTE) {
         const minutes = Math.floor(ticks / TICKS_PER_MINUTE);
         if (minutes >= 60) {
-            return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+            const minutesLeft = minutes % 60;
+            return `${Math.floor(minutes / 60)}h` + (truncate && minutesLeft == 0 ? '' : ` ${minutesLeft}m`);
         }
-        return `${minutes}m ${Math.floor(ticks % TICKS_PER_MINUTE / TICKS_PER_SECOND)}s`;
+        const secondsLeft = Math.floor(ticks % TICKS_PER_MINUTE / TICKS_PER_SECOND)
+        return `${minutes}m` + (truncate && secondsLeft == 0 ? '' : ` ${secondsLeft}s`);
     }
     return `${Math.floor(ticks / TICKS_PER_SECOND)}s`;
 }

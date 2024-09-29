@@ -1,4 +1,5 @@
 import { DummyPort, Port } from './port';
+import { BoatAction } from './sailing';
 
 export enum BoatState {
     ReadyToSail,
@@ -9,18 +10,36 @@ export class Boat extends NamespacedObject {
     private _sailTimer: Timer = null;
     public state: BoatState = BoatState.ReadyToSail;
     public port: Port;
+    private _action: BoatAction;
 
     get sailTimer() {
         return this._sailTimer;
+    }
+
+    get action() {
+        return this._action;
+    }
+
+    get name() {
+        return this.action.name;
+    }
+
+    get interval() {
+        return this.port.distance * 60 * 1000;
+    }
+
+    get scaledInterval() {
+        return this.port.distance * 1000;
     }
 
     get onTrip() {
         return this._sailTimer.ticksLeft > 0;
     }
 
-    constructor(namespace: DataNamespace, localId: string, private game: Game) {
-        super(namespace, localId);
+    constructor(namespace: DataNamespace, action: BoatAction, private game: Game) {
+        super(namespace, action.localID);
         this._sailTimer = new Timer('Skill', () => this.onReturn());
+        this._action = action;
     }
 
     private updateCallbacks: VoidFunction[] = [];
@@ -31,8 +50,8 @@ export class Boat extends NamespacedObject {
 
     public setSail() {
         this._sailTimer.action = () => this.onReturn();
-        // this._sailTimer.start(1000*60*this.port.distance);
-        this._sailTimer.start(1000*30);
+        // this._sailTimer.start(this.interval);
+        this._sailTimer.start(1000*1);
         this.state = BoatState.OnTrip;
         this.callBackCallbacks();
     }
@@ -86,5 +105,20 @@ export class Boat extends NamespacedObject {
 
     private callBackCallbacks() {
         this.updateCallbacks.forEach((callback) => callback());
+    }
+}
+
+export class DummyBoat extends Boat {
+    constructor(namespace: DataNamespace, localID: string, game: Game) {
+        super(
+            namespace,
+            new BoatAction(namespace, {
+                id: localID,
+                name: 'Dummy Action',
+                baseExperience: 0,
+                level: 1,
+            }, game),
+            game,
+        );
     }
 }

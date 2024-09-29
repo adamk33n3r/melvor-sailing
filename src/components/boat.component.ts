@@ -8,6 +8,7 @@ import { DropdownComponent } from './dropdown/dropdown.component';
 import { EquipmentComponent, EquipmentComponentProps } from './equipment/equipment.component';
 
 export function BoatComponent(boat: Boat) {
+    let self = {} as ReturnType<typeof BoatComponent>;
     return {
         $template: '#sailing-boat-template',
         boat,
@@ -19,6 +20,7 @@ export function BoatComponent(boat: Boat) {
         readyToSail: true,
         onTrip: false,
         hasReturned: false,
+        returnTime: tickToTime(boat.port.distance * TICKS_PER_MINUTE, true),
         returnTimer: '',
         hull: EquipmentComponent('Hull', 'img/hull_bronze.png'),
         deckItems: EquipmentComponent('Deck_Items', 'img/hull_empty.png'),
@@ -39,15 +41,16 @@ export function BoatComponent(boat: Boat) {
         }, (port: Port) => {
             console.log('CHANGED PORT:', port);
             boat.port = port;
+            self.returnTime = tickToTime(boat.port.distance * TICKS_PER_MINUTE, true);
         }),
         update() {
-            const self = this as ReturnType<typeof BoatComponent>;
             self.isLocked = game.sailing.level < self.getAction().level;
             self.hull.update();
             self.deckItems.update();
             self.rudder.update();
             self.ram.update();
             self.port.setEnabled(this.readyToSail);
+            self.returnTime = tickToTime(boat.port.distance * TICKS_PER_MINUTE, true);
             self.port.setData({
                 name: 'Port',
                 selected: { name: boat.port.name, value: boat.port, media: boat.port.media },
@@ -63,7 +66,8 @@ export function BoatComponent(boat: Boat) {
             });
         },
         mounted() {
-            const self = this as ReturnType<typeof BoatComponent>;
+            // HACK: This is so we can reference the reactive proxy object `this` in the dropdown callback
+            self = this;
             console.log('!!!MOUNTED');
             ui.create(self.hull, getElementByIdWithoutId('hull-grid'));
             ui.create(self.deckItems, getElementByIdWithoutId('deck-grid'));
