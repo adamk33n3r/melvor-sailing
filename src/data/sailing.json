@@ -133,85 +133,23 @@
         ]
       }
     ],
-    "dungeons": [
-      {
-        "id": "pirateCove",
-        "name": "Pirate Cove",
-        "media": "img/icon.png",
-        "difficulty": [
-          2
-        ],
-        "monsterIDs": [
-          "melvorD:Seagull",
-          "melvorD:Pirate",
-          "melvorD:PirateCaptain"
-        ],
-        "entryRequirements": [],
-        "rewardItemIDs": [
-          "melvorD:Steel_Boots"
-        ],
-        "dropBones": true,
-        "pet": {
-          "petID": "sailing:Kraken",
-          "weight": 1
-        },
-        "floors": [4, 2, 1],
-        "fixedPetClears": false,
-        "pauseOnBosses": false
-      }
-    ],
     "pets": [
       {
         "id": "Kraken",
         "name": "Kraken",
-        "media": "img/icon.png",
+        "media": "melvor:assets/media/monsters/kraken.png",
         "scaleChanceWithMasteryPool": true,
         "modifiers": {
-          "skillXP": 100
+          "melvorD:skillXP": [
+            {
+              "skillID": "sailing:Sailing",
+              "value": 100
+            }
+          ]
         },
         "ignoreCompletion": false,
         "activeInRaid": false,
-        "hint": "Find this where Pirates roam."
-      }
-    ],
-    "combatAreas": [
-      {
-        "id": "Beach",
-        "name": "Beach",
-        "media": "img/icon.png",
-        "difficulty": [
-          0
-        ],
-        "monsterIDs": [
-          "melvorD:Seagull",
-          "melvorD:GiantCrab"
-        ],
-        "entryRequirements": [
-          {
-            "type": "SkillLevel",
-            "skillID": "sailing:Sailing",
-            "level": 1
-          }
-        ]
-      }
-    ],
-    "combatAreaCategories": [
-      {
-        "id": "Sailing",
-        "name": "Sailing",
-        "media": "img/icon.png",
-        "areas": [
-          "sailing:Beach"
-        ]
-      }
-    ],
-    "combatAreaCategoryOrder": [
-      {
-        "insertAt": "Before",
-        "beforeID": "melvorD:Dungeons",
-        "ids": [
-          "sailing:Sailing"
-        ]
+        "hint": "Maybe you'll find one of these on a trading voyage?"
       }
     ],
     "items": [
@@ -262,7 +200,7 @@
         "name": "Mastery Token (Sailing)",
         "category": "Mastery",
         "type": "Token",
-        "media": "img/icon.png",
+        "media": "img/sailing-boat.png",
         "ignoreCompletion": true,
         "obtainFromItemLog": false,
         "golbinRaidExclusive": false,
@@ -317,85 +255,6 @@
             "level": 60
           }
         ]
-      },
-      {
-        "id": "woodenOar",
-        "name": "Wooden Oar",
-        "category": "Sailing",
-        "type": "Oar",
-        "media": "img/icon.png",
-        "ignoreCompletion": false,
-        "obtainFromItemLog": false,
-        "golbinRaidExclusive": false,
-        "sellsFor": 0,
-        "tier": "wooden",
-        "validSlots": ["sailing:Oar", "sailing:Rudder", "sailing:Cannons"],
-        "occupiesSlots": [],
-        "equipRequirements": [
-          {
-            "type": "SkillLevel",
-            "skillID": "sailing:Sailing",
-            "level": 1
-          },
-          {
-            "type": "MasteryLevel",
-            "actionID": "sailing:Boat1",
-            "level": 1,
-            "skillID": "sailing:Sailing"
-          }
-        ],
-        "equipmentStats": [],
-        "itemType": "Equipment"
-      }
-    ],
-    "equipmentSlots": [
-      {
-        "id": "Oar",
-        "emptyMedia": "img/icon.png",
-        "emptyName": "Oar",
-        "requirements": [],
-        "providesEquipStats": false,
-        "allowQuantity": false,
-        "gridPosition": {
-          "col": 2,
-          "row": 18
-        }
-      },
-      {
-        "id": "Sail",
-        "emptyMedia": "img/icon.png",
-        "emptyName": "Sail",
-        "requirements": [],
-        "providesEquipStats": false,
-        "allowQuantity": false,
-        "gridPosition": {
-          "col": 0,
-          "row": 18
-        }
-      },
-      {
-        "id": "Rudder",
-        "emptyMedia": "img/icon.png",
-        "emptyName": "Rudder",
-        "requirements": [],
-        "providesEquipStats": false,
-        "allowQuantity": false,
-        "gridPosition": {
-          "col": 1,
-          "row": 18
-        }
-      },
-      {
-        "id": "Cannons",
-        "emptyMedia": "img/icon.png",
-        "emptyName": "Cannons",
-        "requirements": [],
-        "providesEquipStats": false,
-        "allowQuantity": false,
-        "gridPosition": {
-          "col": 3,
-          "row": 19
-        }
       }
     ],
     "pages": [
@@ -416,6 +275,54 @@
       {
         "skillID": "sailing:Sailing",
         "data": {
+          "rareDrops": [
+            {
+              "itemID": "melvorD:Gold_Topaz_Ring",
+              "altItemID": "melvorD:Signet_Ring_Half_A",
+              "quantity": 1,
+              "requirements": [],
+              "chance": {
+                "type": "LevelScaling",
+                "maxChance": 100,
+                "baseChance": 0,
+                "scalingFactor": 0.000006060606060606061
+              }
+            },
+            {
+              "itemID": "melvorD:Circlet_of_Rhaelyx",
+              "quantity": 1,
+              "requirements": [],
+              "chance": {
+                "type": "TotalMasteryScaling",
+                "maxChance": 0.001,
+                "baseChance": 0.00001,
+                "scalingFactor": 4e-8
+              }
+            },
+            {
+              "itemID": "melvorD:Mysterious_Stone",
+              "quantity": 1,
+              "requirements": [
+                {
+                    "type": "ItemFound",
+                    "itemID": "melvorD:Crown_of_Rhaelyx"
+                }
+              ],
+              "chance": {
+                "type": "Fixed",
+                "chance": 0.025
+              }
+            },
+            {
+              "itemID": "sailing:Barrelchest_Anchor",
+              "quantity": 1,
+              "requirements": [],
+              "chance": {
+                "type": "Fixed",
+                "chance": 0.025
+              }
+            }
+          ],
           "ports": [
             {
               "id": "tinyIsland",
@@ -836,56 +743,7 @@
           ],
           "pets": [
             "sailing:Kraken"
-          ],
-          "categories": [
-            {
-              "id": "Rigging",
-              "name": "Rigging",
-              "media": "img/icon.png",
-              "type": "Rigging"
-            },
-            {
-              "id": "Navigating",
-              "name": "Navigating",
-              "media": "img/icon.png",
-              "type": "Navigating"
-            }
           ]
-        }
-      },
-      {
-        "skillID": "melvorD:Fletching",
-        "data": {
-          "categories": [
-            {
-              "id": "Oars",
-              "name": "Oars",
-              "media": "img/icon.png",
-              "realm": "melvorD:Melvor"
-            }
-          ],
-          "subcategories": [{ "id": "test_oars", "name": "sub oars" }],
-          "recipes": [
-            {
-              "id": "fletchWoodenOar",
-              "itemCosts": [{ "id": "melvorD:Normal_Logs", "quantity": 1 }],
-              "level": 1,
-              "baseExperience": 1,
-              "categoryID": "sailing:Oars",
-              "baseQuantity": 1,
-              "productID": "sailing:woodenOar"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  "modifications": {
-    "combatAreaCategories": [
-      {
-        "id": "melvorD:Dungeons",
-        "areas": {
-          "add": [{ "insertAt": "Start", "ids": ["sailing:pirateCove"] }]
         }
       }
     ]

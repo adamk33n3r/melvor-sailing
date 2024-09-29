@@ -96,11 +96,10 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     }
     const items = Array.from(lootMap).map(([item, quantity]) => ({ item, quantity }));
 
-    const currencyMap = new Map<Currency, number>();
+    const currencies: CurrencyQuantity[] = [];
     boat.port.currencyDrops.forEach(({ currency, min, max }) => {
-      currencyMap.set(currency, rollInteger(min, max));
+      currencies.push({ currency, quantity: this.modifyCurrencyReward(currency, rollInteger(min, max), boat.action) });
     });
-    const currencies = Array.from(currencyMap).map(([currency, quantity]) => ({ currency, quantity }));
     rewards.addItemsAndCurrency({ items, currencies })
 
     const xpAmt = boat.port.distance * (boat.port.distance / 4);
@@ -117,7 +116,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.rollForPets(boat.interval, boat.action);
 
     const dummyHost = document.createElement('div');
-    ui.create(LootComponent(action, rewards, Math.floor(masteryXPToAdd), Math.floor(masteryPoolXPToAdd)), dummyHost);
+    ui.create(LootComponent(action, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
     SwalLocale.fire({
       iconHtml: `<img class="mbts__logo-img" src="${ctx.getResourceUrl(SailingBoat)}" />`,
       title: ctx.name,

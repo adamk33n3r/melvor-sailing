@@ -11,9 +11,9 @@ export function LootComponent(
     actionName: action.name,
     currencies: rewards.getCurrencyQuantityArray(),
     loot: rewards.getItemQuantityArray(),
-    xp: rewards.getXP(game.sailing, action),
-    masteryXP,
-    masteryPoolXP,
+    xp: Math.floor(game.sailing.modifyXP(rewards.getXP(game.sailing, action), action)),
+    masteryXP: Math.floor(masteryXP),
+    masteryPoolXP: Math.floor(masteryPoolXP),
     skillIcon: game.sailing.media,
   }
 }
