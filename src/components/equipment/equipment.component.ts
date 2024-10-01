@@ -39,16 +39,17 @@ export function EquipmentComponent(slot: string, emptyMedia: string): Component<
         update() {
             this.imgSrc = getImgSrc(slot, emptyMedia);
             const lowest = game.shop.getLowestUpgradeInChain(upgradeChain.rootUpgrade);
+            const stats = game.shop.getTotalStatsInChain(lowest);
             const equipmentItem = new EquipmentItem(game.registeredNamespaces.getNamespace(Constants.MOD_NAMESPACE), {
                 id: 'sailing_dummy_equipment_item',
                 name: lowest ? lowest.name : upgradeChain.defaultName,
-                customDescription: 'this is a description',
+                // customDescription: 'this is a description',
                 tier: 'none',
                 validSlots: [],
                 media: '',
                 occupiesSlots: [],
                 equipRequirements: [],
-                equipmentStats: lowest ? lowest.contains.stats.modifiers.map((mod) => ({key:mod.modifier.localID, value: mod.value})) as any : [],
+                equipmentStats: lowest ? stats.modifiers.toCondensedValues().map((mod) => ({key:mod.modifier.localID, value: mod.value})) as any : [],
                 category: '',
                 type: '',
                 ignoreCompletion: false,

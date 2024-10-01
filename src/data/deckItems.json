@@ -19,6 +19,7 @@
             "afterID": "melvorD:Iron_Axe",
             "insertAt": "After",
             "ids": [
+                "sailing:Bronze_Deck_Item",
                 "sailing:Iron_Deck_Item",
                 "sailing:Steel_Deck_Item",
                 "sailing:Black_Deck_Item",
@@ -111,27 +112,20 @@
     ],
     "shopPurchases": [
         {
-            "id": "Iron_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_iron.png",
+            "id": "Bronze_Deck_Item",
+            "media": "melvor:assets/media/shop/pickaxe_bronze.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingCombat": 100
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Bronze_Bar",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -141,8 +135,45 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Iron Deck Item",
-            "customDescription": "-5% Sailing Interval for a total of -5% applied from your Deck Item."
+            "customName": "Bronze Cannon"
+        },
+        {
+            "id": "Iron_Deck_Item",
+            "media": "melvor:assets/media/shop/pickaxe_iron.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "sailing:sailingCombat": 200
+                }
+            },
+            "cost": {
+                "items": [
+                    {
+                        "id": "melvorD:Iron_Bar",
+                        "quantity": 1000
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Bronze_Deck_Item",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 5
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Iron Cannon"
         },
         {
             "id": "Steel_Deck_Item",
@@ -151,21 +182,14 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingCombat": 300
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Steel_Bar",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -187,8 +211,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Steel Deck Item",
-            "customDescription": "-5% Sailing Interval for a total of -10% applied from your Deck Item."
+            "customName": "Steel Cannon"
         },
         {
             "id": "Black_Deck_Item",
@@ -197,21 +220,14 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingCombat": 400
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Coal_Ore",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -233,8 +249,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Black Deck Item",
-            "customDescription": "-5% Sailing Interval for a total of -15% applied from your Deck Item."
+            "customName": "Black Cannon"
         },
         {
             "id": "Mithril_Deck_Item",
@@ -243,21 +258,14 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingCombat": 500
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Mithril_Bar",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -279,8 +287,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Mithril Deck Item",
-            "customDescription": "-5% Sailing Interval for a total of -20% applied from your Deck Item."
+            "customName": "Mithril Cannon"
         },
         {
             "id": "Adamant_Deck_Item",
@@ -289,21 +296,14 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ]
+                    "sailing:sailingCombat": 600
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Adamantite_Bar",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -325,8 +325,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Adamant Deck Item",
-            "customDescription": "-10% Sailing Interval for a total of -30% applied from your Deck Item."
+            "customName": "Adamant Cannon"
         },
         {
             "id": "Rune_Deck_Item",
@@ -335,21 +334,14 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ]
+                    "sailing:sailingCombat": 700
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Runite_Bar",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -371,8 +363,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Rune Deck Item",
-            "customDescription": "-10% Sailing Interval for a total of -40% applied from your Deck Item."
+            "customName": "Rune Cannon"
         },
         {
             "id": "Dragon_Deck_Item",
@@ -381,21 +372,14 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ]
+                    "sailing:sailingCombat": 800
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Dragonite_Bar",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -417,16 +401,16 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Dragon Deck Item",
-            "customDescription": "-10% Sailing Interval for a total of -50% applied from your Deck Item."
+            "customName": "Dragon Cannon"
         }
     ],
     "shopUpgradeChains": [
         {
             "id": "Deck_Items",
-            "chainName": "Current Deck Item",
+            "chainName": "Current Cannon",
             "rootUpgradeID": "sailing:Dragon_Deck_Item",
-            "defaultName": "Bronze Deck Item",
+            "defaultName": "Stone Catapult",
+            "defaultMedia": "sailing:img/cannon_stone.png",
             "defaultDescription": "No bonuses."
         }
     ]

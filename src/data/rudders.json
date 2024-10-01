@@ -19,39 +19,39 @@
             "afterID": "melvorD:Iron_Axe",
             "insertAt": "After",
             "ids": [
-                "sailing:Iron_Rudder",
-                "sailing:Steel_Rudder",
-                "sailing:Black_Rudder",
-                "sailing:Mithril_Rudder",
-                "sailing:Adamant_Rudder",
-                "sailing:Rune_Rudder",
-                "sailing:Dragon_Rudder"
+                "sailing:Normal_Rudder",
+                "sailing:Oak_Rudder",
+                "sailing:Willow_Rudder",
+                "sailing:Teak_Rudder",
+                "sailing:Maple_Rudder",
+                "sailing:Yew_Rudder",
+                "sailing:Magic_Rudder",
+                "sailing:Redwood_Rudder"
             ]
         }
     ],
     "shopPurchases": [
         {
-            "id": "Iron_Rudder",
-            "media": "melvor:assets/media/shop/pickaxe_iron.png",
+            "id": "Normal_Rudder",
+            "media": "melvor:assets/media/bank/logs_normal.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
+                    "sailing:sailingSpeed": 100,
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -5
+                            "value": -1
                         }
                     ]
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Normal_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -61,31 +61,29 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Iron Rudder",
-            "customDescription": "-5% Sailing Interval for a total of -5% applied from your Rudder."
+            "customName": "Normal Rudder"
         },
         {
-            "id": "Steel_Rudder",
-            "media": "melvor:assets/media/shop/pickaxe_steel.png",
+            "id": "Oak_Rudder",
+            "media": "melvor:assets/media/bank/logs_oak.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
+                    "sailing:sailingSpeed": 200,
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -5
+                            "value": -1
                         }
                     ]
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Oak_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -93,7 +91,51 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Iron_Rudder",
+                    "purchaseID": "sailing:Normal_Rudder",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 5
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Oak Rudder"
+        },
+        {
+            "id": "Willow_Rudder",
+            "media": "melvor:assets/media/bank/logs_willow.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "sailing:sailingSpeed": 300,
+                    "skillInterval": [
+                        {
+                            "skillID": "sailing:Sailing",
+                            "value": -1
+                        }
+                    ]
+                }
+            },
+            "cost": {
+                "items": [
+                    {
+                        "id": "melvorD:Willow_Logs",
+                        "quantity": 1000
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Oak_Rudder",
                     "count": 1
                 }
             ],
@@ -107,31 +149,29 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Steel Rudder",
-            "customDescription": "-5% Sailing Interval for a total of -10% applied from your Rudder."
+            "customName": "Willow Rudder"
         },
         {
-            "id": "Black_Rudder",
-            "media": "melvor:assets/media/shop/pickaxe_black.png",
+            "id": "Teak_Rudder",
+            "media": "melvor:assets/media/bank/logs_teak.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
+                    "sailing:sailingSpeed": 400,
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -5
+                            "value": -1
                         }
                     ]
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Teak_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -139,7 +179,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Steel_Rudder",
+                    "purchaseID": "sailing:Willow_Rudder",
                     "count": 1
                 }
             ],
@@ -153,31 +193,29 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Black Rudder",
-            "customDescription": "-5% Sailing Interval for a total of -15% applied from your Rudder."
+            "customName": "Teak Rudder"
         },
         {
-            "id": "Mithril_Rudder",
-            "media": "melvor:assets/media/shop/pickaxe_mithril.png",
+            "id": "Maple_Rudder",
+            "media": "melvor:assets/media/bank/logs_maple.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
+                    "sailing:sailingSpeed": 500,
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -5
+                            "value": -1
                         }
                     ]
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Maple_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -185,7 +223,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Black_Rudder",
+                    "purchaseID": "sailing:Teak_Rudder",
                     "count": 1
                 }
             ],
@@ -199,31 +237,29 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Mithril Rudder",
-            "customDescription": "-5% Sailing Interval for a total of -20% applied from your Rudder."
+            "customName": "Maple Rudder"
         },
         {
-            "id": "Adamant_Rudder",
-            "media": "melvor:assets/media/shop/pickaxe_adamant.png",
+            "id": "Yew_Rudder",
+            "media": "melvor:assets/media/bank/logs_yew.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
+                    "sailing:sailingSpeed": 600,
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -10
+                            "value": -1
                         }
                     ]
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Yew_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -231,7 +267,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Mithril_Rudder",
+                    "purchaseID": "sailing:Maple_Rudder",
                     "count": 1
                 }
             ],
@@ -245,31 +281,29 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Adamant Rudder",
-            "customDescription": "-10% Sailing Interval for a total of -30% applied from your Rudder."
+            "customName": "Yew Rudder"
         },
         {
-            "id": "Rune_Rudder",
-            "media": "melvor:assets/media/shop/pickaxe_rune.png",
+            "id": "Magic_Rudder",
+            "media": "melvor:assets/media/bank/logs_magic.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
+                    "sailing:sailingSpeed": 700,
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -10
+                            "value": -1
                         }
                     ]
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Magic_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -277,7 +311,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Adamant_Rudder",
+                    "purchaseID": "sailing:Yew_Rudder",
                     "count": 1
                 }
             ],
@@ -291,31 +325,29 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Rune Rudder",
-            "customDescription": "-10% Sailing Interval for a total of -40% applied from your Rudder."
+            "customName": "Magic Rudder"
         },
         {
-            "id": "Dragon_Rudder",
-            "media": "melvor:assets/media/shop/pickaxe_dragon.png",
+            "id": "Redwood_Rudder",
+            "media": "melvor:assets/media/bank/logs_redwood.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
+                    "sailing:sailingSpeed": 800,
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -10
+                            "value": -1
                         }
                     ]
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Redwood_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -323,7 +355,7 @@
             "unlockRequirements": [
                 {
                     "type": "ShopPurchase",
-                    "purchaseID": "sailing:Rune_Rudder",
+                    "purchaseID": "sailing:Magic_Rudder",
                     "count": 1
                 }
             ],
@@ -337,16 +369,16 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Dragon Rudder",
-            "customDescription": "-10% Sailing Interval for a total of -50% applied from your Rudder."
+            "customName": "Redwood Rudder"
         }
     ],
     "shopUpgradeChains": [
         {
             "id": "Rudder",
             "chainName": "Current Rudder",
-            "rootUpgradeID": "sailing:Dragon_Rudder",
-            "defaultName": "Bronze Rudder",
+            "rootUpgradeID": "sailing:Redwood_Rudder",
+            "defaultName": "Stone Rudder",
+            "defaultMedia": "sailing:img/rudder_stone.png",
             "defaultDescription": "No bonuses."
         }
     ]

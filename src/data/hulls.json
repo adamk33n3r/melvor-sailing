@@ -19,6 +19,7 @@
             "afterID": "melvorD:Iron_Axe",
             "insertAt": "After",
             "ids": [
+                "sailing:Bronze_Hull",
                 "sailing:Iron_Hull",
                 "sailing:Steel_Hull",
                 "sailing:Black_Hull",
@@ -31,27 +32,24 @@
     ],
     "shopPurchases": [
         {
-            "id": "Iron_Hull",
-            "media": "img/hull_iron.png",
+            "id": "Bronze_Hull",
+            "media": "img/hull_bronze.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingSeafaring": 100
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Bronze_Bar",
+                        "quantity": 1000
+                    },
+                    {
+                        "id": "melvorD:Normal_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -61,8 +59,49 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Iron Hull",
-            "customDescription": "-5% Sailing Interval for a total of -5% applied from your Sail."
+            "customName": "Bronze Hull"
+        },
+        {
+            "id": "Iron_Hull",
+            "media": "img/hull_iron.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "sailing:sailingSeafaring": 200
+                }
+            },
+            "cost": {
+                "items": [
+                    {
+                        "id": "melvorD:Iron_Bar",
+                        "quantity": 1000
+                    },
+                    {
+                        "id": "melvorD:Oak_Logs",
+                        "quantity": 1000
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Bronze_Hull",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 5
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Iron Hull"
         },
         {
             "id": "Steel_Hull",
@@ -71,21 +110,18 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingSeafaring": 300
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Steel_Bar",
+                        "quantity": 1000
+                    },
+                    {
+                        "id": "melvorD:Willow_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -107,8 +143,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Steel Hull",
-            "customDescription": "-5% Sailing Interval for a total of -10% applied from your Sail."
+            "customName": "Steel Hull"
         },
         {
             "id": "Black_Hull",
@@ -117,21 +152,18 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingSeafaring": 400
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Coal_Ore",
+                        "quantity": 1000
+                    },
+                    {
+                        "id": "melvorD:Teak_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -153,8 +185,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Black Hull",
-            "customDescription": "-5% Sailing Interval for a total of -15% applied from your Sail."
+            "customName": "Black Hull"
         },
         {
             "id": "Mithril_Hull",
@@ -163,21 +194,18 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingSeafaring": 500
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Mithril_Bar",
+                        "quantity": 1000
+                    },
+                    {
+                        "id": "melvorD:Maple_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -199,8 +227,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Mithril Hull",
-            "customDescription": "-5% Sailing Interval for a total of -20% applied from your Sail."
+            "customName": "Mithril Hull"
         },
         {
             "id": "Adamant_Hull",
@@ -209,23 +236,18 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ],
-                    "sailing:sailingSpeed": 420,
-                    "sailing:sailingCombat": 6969
+                    "sailing:sailingSeafaring": 600
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Adamantite_Bar",
+                        "quantity": 1000
+                    },
+                    {
+                        "id": "melvorD:Yew_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -247,8 +269,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Adamant Hull",
-            "customDescription": "-10% Sailing Interval for a total of -30% applied from your Sail."
+            "customName": "Adamant Hull"
         },
         {
             "id": "Rune_Hull",
@@ -257,21 +278,18 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ]
+                    "sailing:sailingSeafaring": 700
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Runite_Bar",
+                        "quantity": 1000
+                    },
+                    {
+                        "id": "melvorD:Magic_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -293,8 +311,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Rune Hull",
-            "customDescription": "-10% Sailing Interval for a total of -40% applied from your Sail."
+            "customName": "Rune Hull"
         },
         {
             "id": "Dragon_Hull",
@@ -303,21 +320,18 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ]
+                    "sailing:sailingSeafaring": 800
                 }
             },
             "cost": {
-                "items": [],
-                "currencies": [
+                "items": [
                     {
-                        "currency": "melvorD:GP",
-                        "type": "Fixed",
-                        "cost": 1
+                        "id": "melvorD:Dragonite_Bar",
+                        "quantity": 1000
+                    },
+                    {
+                        "id": "melvorD:Redwood_Logs",
+                        "quantity": 1000
                     }
                 ]
             },
@@ -339,8 +353,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Dragon Hull",
-            "customDescription": "-10% Sailing Interval for a total of -50% applied from your Sail."
+            "customName": "Dragon Hull"
         }
     ],
     "shopUpgradeChains": [
@@ -348,8 +361,8 @@
             "id": "Hull",
             "chainName": "Current Hull",
             "rootUpgradeID": "sailing:Dragon_Hull",
-            "defaultName": "Bronze Hull",
-            "defaultMedia": "sailing:img/hull_bronze.png",
+            "defaultName": "Wooden Hull",
+            "defaultMedia": "sailing:img/hull_wooden.png",
             "defaultDescription": "No bonuses."
         }
     ]

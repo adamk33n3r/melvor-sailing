@@ -9,3 +9,5 @@ import '../img/hull_mithril.png';
 import '../img/hull_adamant.png';
 import '../img/hull_rune.png';
 import '../img/hull_dragon.png';
+
+import '../img/rudder_stone.png';

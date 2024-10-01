@@ -35,6 +35,10 @@ export class Boat extends NamespacedObject {
         return this.action.name;
     }
 
+    get media() {
+        return this.action.media;
+    }
+
     get interval() {
         return this.port.distance * 60 * 1000;
     }

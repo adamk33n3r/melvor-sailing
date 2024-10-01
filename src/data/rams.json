@@ -19,6 +19,7 @@
             "afterID": "melvorD:Iron_Axe",
             "insertAt": "After",
             "ids": [
+                "sailing:Bronze_Ram",
                 "sailing:Iron_Ram",
                 "sailing:Steel_Ram",
                 "sailing:Black_Ram",
@@ -31,18 +32,13 @@
     ],
     "shopPurchases": [
         {
-            "id": "Iron_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_iron.png",
+            "id": "Bronze_Ram",
+            "media": "melvor:assets/media/shop/pickaxe_bronze.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingMorale": 100
                 }
             },
             "cost": {
@@ -51,7 +47,7 @@
                     {
                         "currency": "melvorD:GP",
                         "type": "Fixed",
-                        "cost": 1
+                        "cost": 1000
                     }
                 ]
             },
@@ -61,22 +57,16 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Iron Ram",
-            "customDescription": "-5% Sailing Interval for a total of -5% applied from your Ram."
+            "customName": "Bronze Ram"
         },
         {
-            "id": "Steel_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_steel.png",
+            "id": "Iron_Ram",
+            "media": "melvor:assets/media/shop/pickaxe_iron.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingMorale": 200
                 }
             },
             "cost": {
@@ -85,7 +75,47 @@
                     {
                         "currency": "melvorD:GP",
                         "type": "Fixed",
-                        "cost": 1
+                        "cost": 5000
+                    }
+                ]
+            },
+            "allowQuantityPurchase": false,
+            "unlockRequirements": [
+                {
+                    "type": "ShopPurchase",
+                    "purchaseID": "sailing:Bronze_Ram",
+                    "count": 1
+                }
+            ],
+            "purchaseRequirements": [
+                {
+                    "type": "SkillLevel",
+                    "skillID": "sailing:Sailing",
+                    "level": 5
+                }
+            ],
+            "defaultBuyLimit": 1,
+            "buyLimitOverrides": [],
+            "showBuyLimit": false,
+            "customName": "Iron Ram"
+        },
+        {
+            "id": "Steel_Ram",
+            "media": "melvor:assets/media/shop/pickaxe_steel.png",
+            "category": "sailing:SailingUpgrades",
+            "contains": {
+                "items": [],
+                "modifiers": {
+                    "sailing:sailingMorale": 300
+                }
+            },
+            "cost": {
+                "items": [],
+                "currencies": [
+                    {
+                        "currency": "melvorD:GP",
+                        "type": "Fixed",
+                        "cost": 10000
                     }
                 ]
             },
@@ -107,8 +137,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Steel Ram",
-            "customDescription": "-5% Sailing Interval for a total of -10% applied from your Ram."
+            "customName": "Steel Ram"
         },
         {
             "id": "Black_Ram",
@@ -117,12 +146,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingMorale": 400
                 }
             },
             "cost": {
@@ -131,7 +155,7 @@
                     {
                         "currency": "melvorD:GP",
                         "type": "Fixed",
-                        "cost": 1
+                        "cost": 50000
                     }
                 ]
             },
@@ -153,8 +177,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Black Ram",
-            "customDescription": "-5% Sailing Interval for a total of -15% applied from your Ram."
+            "customName": "Black Ram"
         },
         {
             "id": "Mithril_Ram",
@@ -163,12 +186,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -5
-                        }
-                    ]
+                    "sailing:sailingMorale": 500
                 }
             },
             "cost": {
@@ -177,7 +195,7 @@
                     {
                         "currency": "melvorD:GP",
                         "type": "Fixed",
-                        "cost": 1
+                        "cost": 100000
                     }
                 ]
             },
@@ -199,8 +217,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Mithril Ram",
-            "customDescription": "-5% Sailing Interval for a total of -20% applied from your Ram."
+            "customName": "Mithril Ram"
         },
         {
             "id": "Adamant_Ram",
@@ -209,12 +226,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ]
+                    "sailing:sailingMorale": 600
                 }
             },
             "cost": {
@@ -223,7 +235,7 @@
                     {
                         "currency": "melvorD:GP",
                         "type": "Fixed",
-                        "cost": 1
+                        "cost": 500000
                     }
                 ]
             },
@@ -245,8 +257,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Adamant Ram",
-            "customDescription": "-10% Sailing Interval for a total of -30% applied from your Ram."
+            "customName": "Adamant Ram"
         },
         {
             "id": "Rune_Ram",
@@ -255,12 +266,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ]
+                    "sailing:sailingMorale": 700
                 }
             },
             "cost": {
@@ -269,7 +275,7 @@
                     {
                         "currency": "melvorD:GP",
                         "type": "Fixed",
-                        "cost": 1
+                        "cost": 1000000
                     }
                 ]
             },
@@ -291,8 +297,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Rune Ram",
-            "customDescription": "-10% Sailing Interval for a total of -40% applied from your Ram."
+            "customName": "Rune Ram"
         },
         {
             "id": "Dragon_Ram",
@@ -301,12 +306,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -10
-                        }
-                    ]
+                    "sailing:sailingMorale": 800
                 }
             },
             "cost": {
@@ -315,7 +315,7 @@
                     {
                         "currency": "melvorD:GP",
                         "type": "Fixed",
-                        "cost": 1
+                        "cost": 10000000
                     }
                 ]
             },
@@ -337,8 +337,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Dragon Ram",
-            "customDescription": "-10% Sailing Interval for a total of -50% applied from your Ram."
+            "customName": "Dragon Ram"
         }
     ],
     "shopUpgradeChains": [
@@ -346,7 +345,8 @@
             "id": "Ram",
             "chainName": "Current Ram",
             "rootUpgradeID": "sailing:Dragon_Ram",
-            "defaultName": "Bronze Ram",
+            "defaultName": "Wooden Ram",
+            "defaultMedia": "sailing:img/ram_wooden.png",
             "defaultDescription": "No bonuses."
         }
     ]

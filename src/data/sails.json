@@ -61,8 +61,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Iron Sail",
-            "customDescription": "-5% Sailing Interval for a total of -5% applied from your Sail."
+            "customName": "Iron Sail"
         },
         {
             "id": "Steel_Sail",
@@ -107,8 +106,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Steel Sail",
-            "customDescription": "-5% Sailing Interval for a total of -10% applied from your Sail."
+            "customName": "Steel Sail"
         },
         {
             "id": "Black_Sail",
@@ -153,8 +151,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Black Sail",
-            "customDescription": "-5% Sailing Interval for a total of -15% applied from your Sail."
+            "customName": "Black Sail"
         },
         {
             "id": "Mithril_Sail",
@@ -199,8 +196,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Mithril Sail",
-            "customDescription": "-5% Sailing Interval for a total of -20% applied from your Sail."
+            "customName": "Mithril Sail"
         },
         {
             "id": "Adamant_Sail",
@@ -245,8 +241,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Adamant Sail",
-            "customDescription": "-10% Sailing Interval for a total of -30% applied from your Sail."
+            "customName": "Adamant Sail"
         },
         {
             "id": "Rune_Sail",
@@ -291,8 +286,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Rune Sail",
-            "customDescription": "-10% Sailing Interval for a total of -40% applied from your Sail."
+            "customName": "Rune Sail"
         },
         {
             "id": "Dragon_Sail",
@@ -337,8 +331,7 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Dragon Sail",
-            "customDescription": "-10% Sailing Interval for a total of -50% applied from your Sail."
+            "customName": "Dragon Sail"
         }
     ],
     "shopUpgradeChains": [

@@ -62,7 +62,10 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   }
 
   public generateLoot(boat: Boat, onClose: VoidFunction) {
-    // this.game.shop.getLowestUpgradeInChain(this.hullChain.rootUpgrade)
+    const hullUpgrade = this.game.shop.getLowestUpgradeInChain(this.hullChain.rootUpgrade);
+    const deckItemUpgrade = this.game.shop.getLowestUpgradeInChain(this.deckItemsChain.rootUpgrade);
+    const rudderUpgrade = this.game.shop.getLowestUpgradeInChain(this.rudderChain.rootUpgrade);
+    const ramUpgrade = this.game.shop.getLowestUpgradeInChain(this.ramChain.rootUpgrade);
 
     const rewards = new Rewards(this.game);
 
@@ -167,12 +170,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
 
   public registerData(namespace: DataNamespace, data: SailingSkillData): void {
     super.registerData(namespace, data);
-    if (data.categories !== undefined) {
-      console.log(`Registering ${data.categories.length} Categories`);
-      data.categories.forEach(category => {
-        this.categories.registerObject(new SkillCategory(namespace, category, this, this.game));
-      });
-    }
 
     this.actions.registerObject(new BoatAction(namespace, {
       id: "Boat1",
@@ -186,7 +183,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       baseExperience: 1,
       realm: "melvorD:Melvor",
     }, this.game))
-    // each boat is a further destination, so they'll take longer and have higher rewards?
     this.actions.registerObject(new BoatAction(namespace, {
       id: "Boat3",
       level: 50,

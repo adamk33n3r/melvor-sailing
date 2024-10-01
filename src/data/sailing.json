@@ -332,6 +332,9 @@
               "media": "melvor:assets/media/bank/shrimp.png",
               "level": 1,
               "distance": 10,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 3,
               "maxRolls": 3,
               "lootTable": [
@@ -369,6 +372,9 @@
               "media": "melvor:assets/media/bank/treasure_chest.png",
               "level": 10,
               "distance": 30,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 3,
               "maxRolls": 3,
               "lootTable": [
@@ -412,6 +418,9 @@
               "media": "melvor:assets/media/bank/egg_chest.png",
               "level": 20,
               "distance": 45,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 1,
               "maxRolls": 2,
               "lootTable": [
@@ -443,6 +452,9 @@
               "media": "melvor:assets/media/bank/bandit_chest.png",
               "level": 30,
               "distance": 60,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 1,
               "maxRolls": 2,
               "lootTable": [
@@ -468,6 +480,9 @@
               "media": "melvor:assets/media/bank/pirate_booty.png",
               "level": 40,
               "distance": 90,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 1,
               "maxRolls": 2,
               "lootTable": [
@@ -493,6 +508,9 @@
               "media": "melvor:assets/media/bank/magic_chest.png",
               "level": 50,
               "distance": 120,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 1,
               "maxRolls": 3,
               "lootTable": [
@@ -518,6 +536,9 @@
               "media": "melvor:assets/media/bank/spider_chest.png",
               "level": 60,
               "distance": 180,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 1,
               "maxRolls": 3,
               "lootTable": [
@@ -543,6 +564,9 @@
               "media": "melvor:assets/media/bank/standard_chest.png",
               "level": 70,
               "distance": 300,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 1,
               "maxRolls": 2,
               "lootTable": [
@@ -568,6 +592,9 @@
               "media": "melvor:assets/media/bank/elite_chest.png",
               "level": 80,
               "distance": 420,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 2,
               "maxRolls": 3,
               "lootTable": [
@@ -593,6 +620,9 @@
               "media": "melvor:assets/media/bank/chest_of_witwix.png",
               "level": 90,
               "distance": 540,
+              "combat": 100,
+              "morale": 100,
+              "seafaring": 100,
               "minRolls": 1,
               "maxRolls": 3,
               "lootTable": [
@@ -618,6 +648,9 @@
               "media": "melvor:assets/media/skills/thieving/king.png",
               "level": 99,
               "distance": 720,
+              "combat": 14000,
+              "morale": 14000,
+              "seafaring": 14000,
               "minRolls": 3,
               "maxRolls": 5,
               "lootTable": [

@@ -92,10 +92,10 @@ export function BoatComponent(boat: Boat) {
             // HACK: This is so we can reference the reactive proxy object `this` in the dropdown callback
             self = this;
             const parent = document.getElementById(self.boat.localID);
-            ui.create(self.hull, getElementByIdAndRemoveId('hull-grid', parent));
-            ui.create(self.deckItems, getElementByIdAndRemoveId('deck-grid', parent));
-            ui.create(self.rudder, getElementByIdAndRemoveId('rudder-grid', parent));
-            ui.create(self.ram, getElementByIdAndRemoveId('ram-grid', parent));
+            // ui.create(self.hull, getElementByIdAndRemoveId('hull-grid', parent));
+            // ui.create(self.deckItems, getElementByIdAndRemoveId('deck-grid', parent));
+            // ui.create(self.rudder, getElementByIdAndRemoveId('rudder-grid', parent));
+            // ui.create(self.ram, getElementByIdAndRemoveId('ram-grid', parent));
             ui.create(self.port, getElementByIdAndRemoveId('dropdown', parent));
 
             setInterval(() => {
