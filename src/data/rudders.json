@@ -33,7 +33,7 @@
     "shopPurchases": [
         {
             "id": "Normal_Rudder",
-            "media": "melvor:assets/media/bank/logs_normal.png",
+            "media": "img/rudder_normal.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -65,7 +65,7 @@
         },
         {
             "id": "Oak_Rudder",
-            "media": "melvor:assets/media/bank/logs_oak.png",
+            "media": "img/rudder_oak.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -109,7 +109,7 @@
         },
         {
             "id": "Willow_Rudder",
-            "media": "melvor:assets/media/bank/logs_willow.png",
+            "media": "img/rudder_willow.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -153,7 +153,7 @@
         },
         {
             "id": "Teak_Rudder",
-            "media": "melvor:assets/media/bank/logs_teak.png",
+            "media": "img/rudder_teak.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -197,7 +197,7 @@
         },
         {
             "id": "Maple_Rudder",
-            "media": "melvor:assets/media/bank/logs_maple.png",
+            "media": "img/rudder_maple.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -241,7 +241,7 @@
         },
         {
             "id": "Yew_Rudder",
-            "media": "melvor:assets/media/bank/logs_yew.png",
+            "media": "img/rudder_yew.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -285,7 +285,7 @@
         },
         {
             "id": "Magic_Rudder",
-            "media": "melvor:assets/media/bank/logs_magic.png",
+            "media": "img/rudder_magic.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -329,7 +329,7 @@
         },
         {
             "id": "Redwood_Rudder",
-            "media": "melvor:assets/media/bank/logs_redwood.png",
+            "media": "img/rudder_redwood.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -378,7 +378,6 @@
             "chainName": "Current Rudder",
             "rootUpgradeID": "sailing:Redwood_Rudder",
             "defaultName": "Stone Rudder",
-            "defaultMedia": "sailing:img/rudder_stone.png",
             "defaultDescription": "No bonuses."
         }
     ]

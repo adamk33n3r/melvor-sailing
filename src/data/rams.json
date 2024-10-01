@@ -346,7 +346,6 @@
             "chainName": "Current Ram",
             "rootUpgradeID": "sailing:Dragon_Ram",
             "defaultName": "Wooden Ram",
-            "defaultMedia": "sailing:img/ram_wooden.png",
             "defaultDescription": "No bonuses."
         }
     ]

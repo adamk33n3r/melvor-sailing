@@ -362,7 +362,6 @@
             "chainName": "Current Hull",
             "rootUpgradeID": "sailing:Dragon_Hull",
             "defaultName": "Wooden Hull",
-            "defaultMedia": "sailing:img/hull_wooden.png",
             "defaultDescription": "No bonuses."
         }
     ]

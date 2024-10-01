@@ -410,7 +410,6 @@
             "chainName": "Current Cannon",
             "rootUpgradeID": "sailing:Dragon_Deck_Item",
             "defaultName": "Stone Catapult",
-            "defaultMedia": "sailing:img/cannon_stone.png",
             "defaultDescription": "No bonuses."
         }
     ]

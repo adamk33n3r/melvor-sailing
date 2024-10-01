@@ -90,10 +90,22 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     const masteryXPToAdd = this.getMasteryXPToAddForAction(boat.action, boat.scaledForMasteryInterval);
     const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd);
 
+    const tokens = this.masteryTokens.get(boat.action.realm);
+    if (tokens !== undefined) {
+      tokens.forEach((token)=>{
+        if (!token.rollInSkill)
+          return;
+        const masteryTokenChance = this.masteryTokenChance * boat.port.distance * 8;
+        if (rollPercentage(masteryTokenChance)) {
+          const qty = 1 + this.game.modifiers.flatMasteryTokens + Math.floor(Math.max(1, boat.port.distance / rollInteger(10, 100)));
+          rewards.addItem(token, qty);
+        }
+      });
+    }
+
     this.rollForRareDrops(boat.action.level, rewards, boat.action);
     this.rollForAdditionalItems(rewards, boat.interval);
     this.rollForAncientRelics(boat.action.level, boat.action.realm);
-    this.rollForMasteryTokens(rewards, boat.action.realm);
     this.rollForPets(boat.interval, boat.action);
 
     const dummyHost = document.createElement('div');
