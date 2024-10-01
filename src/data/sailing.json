@@ -192,7 +192,13 @@
           "sailing:sailingSpeed": 100,
           "sailing:sailingCombat": 100,
           "sailing:sailingMorale": 100,
-          "sailing:sailingSeafaring": 100
+          "sailing:sailingSeafaring": 100,
+          "skillInterval": [
+              {
+                  "skillID": "sailing:Sailing",
+                  "value": -10
+              }
+          ]
         }
       },
       {
