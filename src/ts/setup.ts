@@ -68,9 +68,4 @@ export async function setup(ctx: Modding.ModContext) {
 
     return original();
   });
-
-  ctx.onInterfaceReady(() => {
-    sidebar.categories().filter((cat) => cat.id === 'Combat')[0].toggle()
-    sidebar.categories().filter((cat) => cat.id === 'Non-Combat')[0].toggle()
-  });
 }

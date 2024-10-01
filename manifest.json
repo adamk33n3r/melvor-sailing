@@ -1,6 +1,6 @@
 {
   "namespace": "sailing",
-  "icon": "img/icon.png",
+  "icon": "img/sailing-boat.png",
   "setup": "setup.mjs",
   "load": ["templates.min.html"]
 }

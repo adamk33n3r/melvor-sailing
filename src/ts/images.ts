@@ -1,5 +1,6 @@
 import '../img/sailing-boat.png';
 import '../img/skillcape_sailing.png';
+import '../img/barrelchest_anchor.png';
 
 import '../img/hull_empty.png';
 import '../img/hull_bronze.png';

@@ -222,7 +222,7 @@
         "category": "Sailing",
         "type": "Equipment",
         "itemType": "Weapon",
-        "media": "img/icon.png",
+        "media": "img/barrelchest_anchor.png",
         "ignoreCompletion": false,
         "obtainFromItemLog": false,
         "golbinRaidExclusive": false,
