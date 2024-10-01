@@ -33,7 +33,7 @@
     "shopPurchases": [
         {
             "id": "Bronze_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_bronze.png",
+            "media": "img/figurehead_bronze.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -57,11 +57,11 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Bronze Ram"
+            "customName": "Bronze Figurehead"
         },
         {
             "id": "Iron_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_iron.png",
+            "media": "img/figurehead_iron.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -97,11 +97,11 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Iron Ram"
+            "customName": "Iron Figurehead"
         },
         {
             "id": "Steel_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_steel.png",
+            "media": "img/figurehead_steel.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -137,11 +137,11 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Steel Ram"
+            "customName": "Steel Figurehead"
         },
         {
             "id": "Black_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_black.png",
+            "media": "img/figurehead_black.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -177,11 +177,11 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Black Ram"
+            "customName": "Black Figurehead"
         },
         {
             "id": "Mithril_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_mithril.png",
+            "media": "img/figurehead_mithril.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -217,11 +217,11 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Mithril Ram"
+            "customName": "Mithril Figurehead"
         },
         {
             "id": "Adamant_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_adamant.png",
+            "media": "img/figurehead_adamant.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -257,11 +257,11 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Adamant Ram"
+            "customName": "Adamant Figurehead"
         },
         {
             "id": "Rune_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_rune.png",
+            "media": "img/figurehead_rune.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -297,11 +297,11 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Rune Ram"
+            "customName": "Rune Figurehead"
         },
         {
             "id": "Dragon_Ram",
-            "media": "melvor:assets/media/shop/pickaxe_dragon.png",
+            "media": "img/figurehead_dragon.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -337,15 +337,15 @@
             "defaultBuyLimit": 1,
             "buyLimitOverrides": [],
             "showBuyLimit": false,
-            "customName": "Dragon Ram"
+            "customName": "Dragon Figurehead"
         }
     ],
     "shopUpgradeChains": [
         {
             "id": "Ram",
-            "chainName": "Current Ram",
+            "chainName": "Current Figurehead",
             "rootUpgradeID": "sailing:Dragon_Ram",
-            "defaultName": "Wooden Ram",
+            "defaultName": "Wooden Figurehead",
             "defaultDescription": "No bonuses."
         }
     ]

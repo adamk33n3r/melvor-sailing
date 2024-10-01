@@ -113,7 +113,7 @@
     "shopPurchases": [
         {
             "id": "Bronze_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_bronze.png",
+            "media": "img/cannon_bronze.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -139,7 +139,7 @@
         },
         {
             "id": "Iron_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_iron.png",
+            "media": "img/cannon_iron.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -177,7 +177,7 @@
         },
         {
             "id": "Steel_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_steel.png",
+            "media": "img/cannon_steel.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -215,7 +215,7 @@
         },
         {
             "id": "Black_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_black.png",
+            "media": "img/cannon_black.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -253,7 +253,7 @@
         },
         {
             "id": "Mithril_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_mithril.png",
+            "media": "img/cannon_mithril.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -291,7 +291,7 @@
         },
         {
             "id": "Adamant_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_adamant.png",
+            "media": "img/cannon_adamant.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -329,7 +329,7 @@
         },
         {
             "id": "Rune_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_rune.png",
+            "media": "img/cannon_rune.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
@@ -367,7 +367,7 @@
         },
         {
             "id": "Dragon_Deck_Item",
-            "media": "melvor:assets/media/shop/pickaxe_dragon.png",
+            "media": "img/cannon_dragon.png",
             "category": "sailing:SailingUpgrades",
             "contains": {
                 "items": [],
