@@ -143,7 +143,8 @@ export function BoatComponent(boat: Boat) {
             SwalLocale.fire({
               iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
               title: boat.port.name,
-              html: `${boat.port.minRolls} - ${boat.port.maxRolls} Rolls<hr>` +
+              html: boat.port.currencyDrops.map((drop) => `${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
+                `${boat.port.minRolls} - ${boat.port.maxRolls} Rolls<br>` +
                 boat.port.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
             });
         }

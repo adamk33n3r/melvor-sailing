@@ -15,12 +15,12 @@
       <img class="skill-icon-xs" data-src="assets/media/main/mastery_pool.png" />
       <span>Mastery Pool XP</span>
     </div>
+    <hr>
     <div v-for="currencyQ in currencies" class="col-12">
       <span class="text-success">{{ currencyQ.quantity }}</span>
       <img class="skill-icon-xs" :src="currencyQ.currency.media" />
       <span>{{ currencyQ.currency.name }}</span>
     </div>
-    <hr>
     <div v-for="itemQ in loot" class="col-12">
       <span class="text-success">{{ itemQ.quantity }}</span>
       <img class="skill-icon-xs" :src="itemQ.item.media" />

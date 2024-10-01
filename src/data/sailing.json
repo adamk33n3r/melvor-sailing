@@ -686,7 +686,7 @@
                 {
                   "currencyID": "melvorD:GP",
                   "min": 500000,
-                  "max": 10000000
+                  "max": 5000000
                 }
               ]
             }

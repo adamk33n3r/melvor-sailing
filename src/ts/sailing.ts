@@ -2,10 +2,6 @@ import { SailingPage } from '../components/sailing';
 import { Boat, DummyBoat } from './boat';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
-const ctx = mod.getContext(Constants.MOD_NAMESPACE);
-// console.log('import meta', import.meta);
-// console.log(version);
-import SailingBoat from '../img/sailing-boat.png';
 import { Port, PortData } from './port';
 import { LootComponent } from '../components/loot.component';
 
@@ -33,7 +29,6 @@ export class BoatAction extends BasicSkillRecipe {
 
   public get media() {
     return this.getMediaURL('img/sailing-boat.png');
-    // return this.getMediaURL(this.data.media);
   }
 }
 
@@ -103,8 +98,8 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     const dummyHost = document.createElement('div');
     ui.create(LootComponent(boat.action, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
     SwalLocale.fire({
-      iconHtml: `<img class="mbts__logo-img" src="${ctx.getResourceUrl(SailingBoat)}" />`,
-      title: ctx.name,
+      iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
+      title: boat.port.name,
       html: dummyHost,
     }).then(() => {
       rewards.setSource('Sailing.Loot');
