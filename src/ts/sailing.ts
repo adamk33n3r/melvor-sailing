@@ -62,8 +62,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   }
 
   public generateLoot(boat: Boat, onClose: VoidFunction) {
-    console.log('generating loot for boat:', boat.id);
-
     // this.game.shop.getLowestUpgradeInChain(this.hullChain.rootUpgrade)
 
     const rewards = new Rewards(this.game);
@@ -100,8 +98,15 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     SwalLocale.fire({
       iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
       title: boat.port.name,
+      confirmButtonText: 'Collect',
+      confirmButtonColor: '#3085d6',
+      // Can't let cancel because loot is generated here instead of on ship return
+      // showCancelButton: true,
       html: dummyHost,
-    }).then(() => {
+    }).then((result) => {
+      // if (!result.value) {
+      //   return;
+      // }
       rewards.setSource('Sailing.Loot');
       rewards.giveRewards(true);
       this.addMasteryForAction(boat.action, boat.scaledForMasteryInterval);
@@ -141,11 +146,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     });
 
     this.renderQueue.boats = false;
-  }
-
-  public initMenus(): void {
-    super.initMenus();
-    console.log('PAGE:', this.page.setCategoryMenu(this.categories));
   }
 
   public onLoad(): void {
@@ -207,7 +207,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     if (data.ports !== undefined) {
       console.log(`Registering ${data.ports.length} Ports`);
       data.ports.forEach((port) => {
-        console.log(port);
         this.ports.registerObject(new Port(namespace, port, this.game));
       });
     }
@@ -244,11 +243,8 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   private decodeBoat(reader: SaveWriter, version: number): Boat {
     let boat = reader.getNamespacedObject(this.boats);
     if (typeof boat === 'string') {
-      console.log('not registered:', boat);
-      // TODO: Ask to explain this dummy object
       if (boat.startsWith('sailing')) {
         boat = this.boats.getDummyObject(boat, DummyBoat, this.game);
-        console.log('getting dummy:', boat);
       } else {
         boat = this.game.constructDummyObject(boat, DummyBoat);
       }
@@ -261,7 +257,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     super.decode(reader, version);
 
     const saveVersion = reader.getUint32();
-    console.log('decoded save version', saveVersion);
 
     const numBoats = reader.getUint32();
     for (let i = 0; i < numBoats; i++) {

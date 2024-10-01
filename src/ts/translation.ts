@@ -5,20 +5,6 @@ import { languages } from './language';
 export class Translation {
     constructor(private readonly ctx: Modding.ModContext) { }
 
-    public patch() {
-        // this.ctx.patch(Skill, 'name').get(function (original) {
-        //     if (this.namespace === Constants.MOD_NAMESPACE) {
-        //         console.log('skill name get patch');
-        //         console.log(this.namespace, Constants.MOD_NAMESPACE);
-        //         console.log(this.localID);
-        //         console.log(getLangString(`SKILL_NAME_${this.localID}`), original());
-        //         return getLangString(`SKILL_NAME_${this.localID}`);
-        //     }
-
-        //     return original();
-        // })
-    }
-
     public register() {
         let lang = setLang;
 

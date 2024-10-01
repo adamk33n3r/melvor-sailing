@@ -35,7 +35,6 @@ export function BoatComponent(boat: Boat) {
                 };
             }),
         }, (port: Port) => {
-            console.log('CHANGED PORT:', port);
             boat.port = port;
             self.returnTime = tickToTime(boat.modifiedInterval / TICK_INTERVAL, true);
             self.updateGrants();
@@ -92,7 +91,6 @@ export function BoatComponent(boat: Boat) {
         mounted() {
             // HACK: This is so we can reference the reactive proxy object `this` in the dropdown callback
             self = this;
-            console.log('!!!MOUNTED');
             const parent = document.getElementById(self.boat.localID);
             ui.create(self.hull, getElementByIdAndRemoveId('hull-grid', parent));
             ui.create(self.deckItems, getElementByIdAndRemoveId('deck-grid', parent));
@@ -107,7 +105,6 @@ export function BoatComponent(boat: Boat) {
             }, 1000);
 
             self.boat.registerOnUpdate(() => {
-                console.log('ON UPDATE');
                 self.readyToSail = self.boat.state == BoatState.ReadyToSail;
                 self.onTrip = self.boat.state == BoatState.OnTrip;
                 self.hasReturned = self.boat.state == BoatState.HasReturned;
@@ -131,7 +128,6 @@ export function BoatComponent(boat: Boat) {
         },
 
         setSail() {
-            console.log('SET SAIL');
             boat.setSail();
             self.updateProgressBar();
         },
@@ -139,7 +135,6 @@ export function BoatComponent(boat: Boat) {
             boat.collectLoot();
         },
         viewLoot() {
-            console.log(boat.port.lootTable);
             SwalLocale.fire({
               iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
               title: boat.port.name,

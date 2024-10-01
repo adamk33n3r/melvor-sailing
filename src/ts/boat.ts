@@ -93,14 +93,11 @@ export class Boat extends NamespacedObject {
     private decodePort(reader: SaveWriter, version: number): Port {
         let port = reader.getNamespacedObject(game.sailing.ports);
         if (typeof port === 'string') {
-        console.log('not registered:', port);
-        // TODO: Ask to explain this dummy object
-        if (port.startsWith('sailing')) {
-            port = game.sailing.ports.getDummyObject(port, DummyPort, this.game);
-            console.log('getting dummy:', port);
-        } else {
-            port = this.game.constructDummyObject(port, DummyPort);
-        }
+            if (port.startsWith('sailing')) {
+                port = game.sailing.ports.getDummyObject(port, DummyPort, this.game);
+            } else {
+                port = this.game.constructDummyObject(port, DummyPort);
+            }
         }
         // port.decode(reader, version);
         return port;
@@ -117,7 +114,6 @@ export class Boat extends NamespacedObject {
     }
 
     private onReturn() {
-        console.log(`Boat ${this.id} Has Returned!`);
         this.state = BoatState.HasReturned;
         this.callBackCallbacks();
     }

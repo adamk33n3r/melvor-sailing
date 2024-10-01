@@ -3,15 +3,8 @@ import { BoatComponent } from './boat.component';
 
 export class SailingPage extends ComponentClass {
   $template = '#sailing-page-template';
-  // todo: loop through boats registery
   boatComponents: ReturnType<typeof BoatComponent>[] = []
   categoryMenu: CategoryMenuElement;
-  // constructor() {
-  //   super();
-  //   game.sailing.boats.forEach((boat) => {
-  //     const boatComponent = new BoatComponent(boat);
-  //   });
-  // }
   mounted() {
     game.sailing.boats.forEach((boat) => {
       const boatComponent = BoatComponent(boat);
@@ -23,15 +16,6 @@ export class SailingPage extends ComponentClass {
     this.boatComponents.forEach((boatComponent) => {
       boatComponent.update();
     });
-  }
-  setCategoryMenu(options: any) {
-    console.log('!!!!!!!!!!!!!!!!!:', options);
-    console.log(this.$refs);
-    console.log(this.categoryMenu);
-    // console.log((this.categoryMenu as CategoryMenuElement).addOptions(options.allObjects, "Select Sailing Category", /*switchToCategory(this.selectionTabs)*/ null));
-  }
-  getCategoryMenu() {
-    return this.$refs;
   }
 }
 
