@@ -1,7 +1,3 @@
-// Modules
-// You can import script modules and have full type completion
-import Greeter from '../components/Greeter/Greeter';
-
 // Data
 // Game data for registration
 import ModData from '../data/sailing.json';
