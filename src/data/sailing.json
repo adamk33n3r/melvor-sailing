@@ -759,23 +759,53 @@
               "percent": 10,
               "realm": "melvorD:Melvor",
               "modifiers": {
-                "melvorD:masteryXP": [
+                "melvorD:skillXP": [
                   {
                     "skillID": "sailing:Sailing",
-                    "realmID": "melvorD:Melvor",
-                    "value": 5
+                    "value": 3
                   }
                 ]
               }
             },
             {
-              "percent": 90,
+              "percent": 25,
               "realm": "melvorD:Melvor",
               "modifiers": {
-                "melvorD:skillXP": [
+                "melvorD:masteryXP": [
                   {
                     "skillID": "sailing:Sailing",
-                    "value": 10
+                    "realmID": "melvorD:Melvor",
+                    "value": 3
+                  }
+                ]
+              }
+            },
+            {
+              "percent": 50,
+              "realm": "melvorD:Melvor",
+              "modifiers": {
+                "melvorD:skillInterval": [
+                  {
+                    "skillID": "sailing:Sailing",
+                    "realmID": "melvorD:Melvor",
+                    "value": -5
+                  }
+                ]
+              }
+            },
+            {
+              "percent": 95,
+              "realm": "melvorD:Melvor",
+              "modifiers": {
+                "sailing:sailingSpeed": 1000,
+                "sailing:sailingCombat": 1000,
+                "sailing:sailingMorale": 1000,
+                "sailing:sailingSeafaring": 1000,
+                "skillInterval": [
+                  {
+                    "skillID": "sailing:Sailing",
+                    "realmID": "melvorD:Melvor",
+                    "value": -10
                   }
                 ]
               }

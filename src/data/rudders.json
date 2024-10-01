@@ -294,7 +294,7 @@
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -1
+                            "value": -2
                         }
                     ]
                 }
@@ -338,7 +338,7 @@
                     "skillInterval": [
                         {
                             "skillID": "sailing:Sailing",
-                            "value": -1
+                            "value": -2
                         }
                     ]
                 }
