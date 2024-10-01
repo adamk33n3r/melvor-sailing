@@ -22,7 +22,8 @@ export function BoatComponent(boat: Boat) {
         rudder: EquipmentComponent('Rudder', 'img/hull_empty.png'),
         ram: EquipmentComponent('Ram', 'img/hull_empty.png'),
         port: DropdownComponent({
-            name: 'Port',
+            name: '',
+            side: 'left',
             selected: { name: boat.port.name, value: boat.port, media: boat.port.media },
             options: game.sailing.ports.allObjects.map((p: Port) => {
                 const hasLevel = game.sailing.level >= p.level;
@@ -53,7 +54,6 @@ export function BoatComponent(boat: Boat) {
             self.port.setEnabled(this.readyToSail);
             self.returnTime = tickToTime(boat.modifiedInterval / TICK_INTERVAL, true);
             self.port.setData({
-                name: 'Port',
                 selected: { name: boat.port.name, value: boat.port, media: boat.port.media },
                 options: game.sailing.ports.allObjects.map((p: Port) => {
                     const hasLevel = game.sailing.level >= p.level;
@@ -137,6 +137,15 @@ export function BoatComponent(boat: Boat) {
         },
         collectLoot() {
             boat.collectLoot();
+        },
+        viewLoot() {
+            console.log(boat.port.lootTable);
+            SwalLocale.fire({
+              iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
+              title: boat.port.name,
+              html: `${boat.port.minRolls} - ${boat.port.maxRolls} Rolls<hr>` +
+                boat.port.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
+            });
         }
     }
 }

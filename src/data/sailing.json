@@ -262,10 +262,10 @@
         "id": "Sailing",
         "media": "img/sailing-boat.png",
         "containerID": "sailing-container",
-        "headerBgClass": "bg-combat",
+        "headerBgClass": "bg-sailing",
         "hasGameGuide": false,
         "canBeDefault": true,
-        "skillSidebarCategoryID": "Combat",
+        "skillSidebarCategoryID": "Passive",
         "action": "sailing:Sailing",
         "skills": [
           "sailing:Sailing"
@@ -695,7 +695,7 @@
           "masteryLevelUnlocks": [
             {
               "level": 1,
-              "description": "Each level provides +10 GP acquired for this boat type?"
+              "description": "Each level provides +1% GP acquired for this boat."
             }
           ],
           "masteryLevelBonuses": [
@@ -706,7 +706,7 @@
                     "currencyID": "melvorD:GP",
                     "skillID": "sailing:Sailing",
                     "actionID": "sailing:Boat1",
-                    "value": 10
+                    "value": 1
                   }
                 ]
               },

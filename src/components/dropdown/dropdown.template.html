@@ -1,5 +1,6 @@
 <template id="port-dropdown-template">
   <div class="form-inline flex-wrap-reverse" @vue:mounted="mounted">
+    <span class="font-size-sm text-muted mr-2" v-if="leftLabel">{{ label }}</span>
     <div class="dropdown">
       <button
         type="button"
@@ -11,6 +12,6 @@
       ></button>
       <div class="dropdown-menu overflow-y-auto" id="port-options-container" style="max-height: 60vh"></div>
     </div>
-    <span class="font-size-sm text-muted ml-2" id="port-label"></span>
+    <span class="font-size-sm text-muted ml-2" v-if="rightLabel">{{ label }}</span>
   </div>
 </template>

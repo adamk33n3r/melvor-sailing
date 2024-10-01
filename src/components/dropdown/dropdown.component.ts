@@ -9,42 +9,48 @@ interface DropdownOptionsData<T> {
 
 interface DropdownOptions<T> {
   name: string;
+  side: 'left' | 'right';
   options: DropdownOptionsData<T>[];
   selected?: DropdownOptionsData<T>;
 }
 
 export function DropdownComponent<T>(data: DropdownOptions<T>, onChange: (value: T) => void) {
+  let self = {} as ReturnType<typeof DropdownComponent<T>>;
   return {
     $template: '#port-dropdown-template',
+    label: data.name,
+    rightLabel: data.side === 'right',
+    leftLabel: data.side === 'left',
+    dropdownButton: null as HTMLButtonElement,
+    optionsContainer: null as HTMLDivElement,
     mounted() {
-      this.dropdownButton = getElementByIdWithoutId('port-dropdown-button');
-      this.optionsContainer = getElementByIdWithoutId('port-options-container');
-      this.label = getElementByIdWithoutId('port-label');
+      self = this;
+      self.dropdownButton = getElementByIdWithoutId('port-dropdown-button');
+      self.optionsContainer = getElementByIdWithoutId('port-options-container');
 
-      this.setData(data);
+      self.setData(data);
     },
     setEnabled(enabled: boolean) {
-      (this.dropdownButton as HTMLButtonElement).disabled = !enabled;
+      self.dropdownButton.disabled = !enabled;
     },
-    setData(data: DropdownOptions<T>) {
-      this.label.innerHTML = data.name;
-      this.optionsContainer.innerHTML = '';
+    setData(data: Pick<DropdownOptions<T>, 'options' | 'selected'>) {
+      self.optionsContainer.innerHTML = '';
       data.options.forEach((option) => {
         const item = createElement('a', { className: 'dropdown-item pointer-enabled' });
         if (option.disabled) {
           item.classList.add('disabled', 'text-danger');
         } else {
           item.onclick = () => {
-            this.updateValue(option.value);
+            self.updateValue(option);
             onChange(option.value);
           };
         }
-        this.appendOptionToElement(option, item);
-        this.optionsContainer.append(item);
+        self.appendOptionToElement(option, item);
+        self.optionsContainer.append(item);
       });
 
       if (data.selected !== undefined)
-        this.updateValue(data.selected);
+        self.updateValue(data.selected);
     },
     appendOptionToElement(option: DropdownOptionsData<T>, element: HTMLElement) {
       element.innerHTML = option.name;
@@ -54,7 +60,7 @@ export function DropdownComponent<T>(data: DropdownOptions<T>, onChange: (value:
       }
     },
     updateValue(newOption: DropdownOptionsData<T>) {
-      this.appendOptionToElement(newOption, this.dropdownButton);
+      self.appendOptionToElement(newOption, self.dropdownButton);
     },
   };
 }
