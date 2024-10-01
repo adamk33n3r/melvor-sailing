@@ -17,19 +17,19 @@ const archive = archiver('zip');
 output.on('close', () => {
   console.log(outname + ': ' + archive.pointer() + ' total bytes');
 
-  del.then(({ deleteSync }) => {
-    fs.readdir(dir, (err, files) => {
-      if (err) {
-        console.log(err);
-      }
+  // del.then(({ deleteSync }) => {
+  //   fs.readdir(dir, (err, files) => {
+  //     if (err) {
+  //       console.log(err);
+  //     }
     
-      files.forEach(file => {
-        if (file !== outname) {
-          deleteSync(path.join(dir, file));
-        }
-      });
-    });
-  });
+  //     files.forEach(file => {
+  //       if (file !== outname) {
+  //         deleteSync(path.join(dir, file));
+  //       }
+  //     });
+  //   });
+  // });
 });
 
 archive.on('error', (err) => {
