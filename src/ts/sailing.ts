@@ -12,23 +12,23 @@ import { LootComponent } from '../components/loot.component';
 class SailingRenderQueue extends MasterySkillRenderQueue<BoatAction> {
   boats: boolean;
 }
+
 interface SailingSkillData extends BaseSkillData {
   categories?: SkillCategoryData[];
   ports?: PortData[];
-};
-interface SailingMasteryData extends BasicSkillRecipeData {
-  name: string;
 }
+
+interface BoatActionData extends BasicSkillRecipeData {
+}
+
 export class BoatAction extends BasicSkillRecipe {
   private _name: string;
-  constructor(namespace: DataNamespace, data: SailingMasteryData, game: Game) {
+  constructor(namespace: DataNamespace, data: BoatActionData, game: Game) {
     super(namespace, data, game);
-    this._name = data.name;
   }
 
   public get name() {
-    return this._name;
-    return getLangString(`Myth_Music_Instrument_${this.localID}`);
+    return getLangString(`${Constants.MOD_NAMESPACE}_Boat_${this.localID}`);
   }
 
   public get media() {
@@ -36,46 +36,31 @@ export class BoatAction extends BasicSkillRecipe {
     // return this.getMediaURL(this.data.media);
   }
 }
+
 export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
-  resetMasteries() {
+  public resetMasteries() {
     this.actionMastery.forEach((actionMastery) => {
       actionMastery.xp = 0;
       actionMastery.level = 1;
     });
     this.actions.forEach((action) => this.updateMasteryDisplays(action));
   }
-  passiveTick() {
-    this.boats.forEach(boat => {
-      boat.sailTimer.tick();
-    });
-  }
-  getErrorLog(): string {
-    return 'Already active';
-    // return `Is Active: ${this.isActive}\n`;
-  }
-  isMasteryActionUnlocked(action: BoatAction): boolean {
-    // return true;
-    return this.isBasicSkillRecipeUnlocked(action);
-  }
-  getActionIDFromOldID(oldActionID: number, idMap: NumericIDMap): string {
-    return '';
-  }
   public _media = 'img/sailing-boat.png';
   public renderQueue = new SailingRenderQueue();
-  // public page: Element;
   public page: SailingPage;
-  public boat: Component<any>;
   public categories: NamespaceRegistry<SkillCategory>;
   public boats: NamespaceRegistry<Boat>;
   public ports: NamespaceRegistry<Port>;
 
+  public hullChain: ShopUpgradeChain;
+  public deckItemsChain: ShopUpgradeChain;
+  public rudderChain: ShopUpgradeChain;
+  public ramChain: ShopUpgradeChain;
+
   public ui: UserInterface;
-  // private lootTable: DropTable;
-  // private loot: CombatLoot;
 
   constructor(namespace: DataNamespace, game: Game) {
     super(namespace, 'Sailing', game);
-    console.log('loaded sailing skill');
     this.categories = new NamespaceRegistry(game.registeredNamespaces, SkillCategory.name);
     this.ports = new NamespaceRegistry(game.registeredNamespaces, Port.name);
     this.boats = new NamespaceRegistry(game.registeredNamespaces, Boat.name);
@@ -83,6 +68,8 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
 
   public generateLoot(boat: Boat, onClose: VoidFunction) {
     console.log('generating loot for boat:', boat.id);
+
+    // this.game.shop.getLowestUpgradeInChain(this.hullChain.rootUpgrade)
 
     const rewards = new Rewards(this.game);
 
@@ -102,11 +89,9 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     });
     rewards.addItemsAndCurrency({ items, currencies })
 
-    const xpAmt = boat.port.distance * (boat.port.distance / 4);
-    rewards.addXP(this, xpAmt, boat.action);
+    rewards.addXP(this, boat.baseXP, boat.action);
 
-    const action = this.actions.allObjects.find(action => action.localID === boat.localID);
-    const masteryXPToAdd = this.getMasteryXPToAddForAction(action, boat.scaledForMasteryInterval);
+    const masteryXPToAdd = this.getMasteryXPToAddForAction(boat.action, boat.scaledForMasteryInterval);
     const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd);
 
     this.rollForRareDrops(boat.action.level, rewards, boat.action);
@@ -116,7 +101,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.rollForPets(boat.interval, boat.action);
 
     const dummyHost = document.createElement('div');
-    ui.create(LootComponent(action, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
+    ui.create(LootComponent(boat.action, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
     SwalLocale.fire({
       iconHtml: `<img class="mbts__logo-img" src="${ctx.getResourceUrl(SailingBoat)}" />`,
       title: ctx.name,
@@ -124,7 +109,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     }).then(() => {
       rewards.setSource('Sailing.Loot');
       rewards.giveRewards(true);
-      this.addMasteryForAction(action, boat.scaledForMasteryInterval);
+      this.addMasteryForAction(boat.action, boat.scaledForMasteryInterval);
       onClose();
     });
   }
@@ -132,6 +117,11 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   public onLevelUp(oldLevel: number, newLevel: number) {
     super.onLevelUp(oldLevel, newLevel);
 
+    this.renderQueue.boats = true;
+  }
+
+  public renderModifierChange(): void {
+    super.renderModifierChange();
     this.renderQueue.boats = true;
   }
 
@@ -157,31 +147,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
 
     this.renderQueue.boats = false;
   }
-
-  // TODO: Add progress bar to boats
-    // public renderProgressBar() {
-    //     if (!this.renderQueue.progressBar) {
-    //         return;
-    //     }
-
-    //     const progressBar = this.userInterface.instruments.get(this.activeInstrument)?.progressBar;
-
-    //     if (progressBar !== this.renderedProgressBar) {
-    //         this.renderedProgressBar?.stopAnimation();
-    //     }
-
-    //     if (progressBar !== undefined) {
-    //         if (this.isActive) {
-    //             progressBar.animateProgressFromTimer(this.actionTimer);
-    //             this.renderedProgressBar = progressBar;
-    //         } else {
-    //             progressBar.stopAnimation();
-    //             this.renderedProgressBar = undefined;
-    //         }
-    //     }
-
-    //     this.renderQueue.progressBar = false;
-    // }
 
   public initMenus(): void {
     super.initMenus();
@@ -216,31 +181,27 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
 
     this.actions.registerObject(new BoatAction(namespace, {
       id: "Boat1",
-      name: "Boat 1",
       level: 1,
       baseExperience: 1,
       realm: "melvorD:Melvor",
     }, this.game))
     this.actions.registerObject(new BoatAction(namespace, {
       id: "Boat2",
-      name: "Boat 2",
       level: 15,
-      baseExperience: 10,
+      baseExperience: 1,
       realm: "melvorD:Melvor",
     }, this.game))
     // each boat is a further destination, so they'll take longer and have higher rewards?
     this.actions.registerObject(new BoatAction(namespace, {
       id: "Boat3",
-      name: "Boat 3",
       level: 50,
-      baseExperience: 100,
+      baseExperience: 1,
       realm: "melvorD:Melvor",
     }, this.game))
     this.actions.registerObject(new BoatAction(namespace, {
       id: "Boat4",
-      name: "Boat 4",
       level: 70,
-      baseExperience: 1000,
+      baseExperience: 1,
       realm: "melvorD:Melvor",
     }, this.game))
 
@@ -277,6 +238,12 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.milestones.unshift(...this.actions.allObjects);
     this.milestones.unshift(...this.ports.allObjects);
     this.sortMilestones();
+
+    const chains = this.game.shop.upgradeChains.namespaceMaps.get(Constants.MOD_NAMESPACE);
+    this.hullChain = chains.get(Constants.HULL_CHAIN_ID);
+    this.deckItemsChain = chains.get(Constants.DECK_ITEMS_CHAIN_ID);
+    this.rudderChain = chains.get(Constants.RUDDER_CHAIN_ID);
+    this.ramChain = chains.get(Constants.RAM_CHAIN_ID);
   }
 
   private decodeBoat(reader: SaveWriter, version: number): Boat {
@@ -330,6 +297,29 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     });
 
     return writer;
+  }
+
+  public passiveTick() {
+    this.boats.forEach(boat => {
+      boat.sailTimer.tick();
+    });
+  }
+
+  public getErrorLog(): string {
+    return this.boats.allObjects.map((boat) => {
+      return `Boat: ${boat.name}
+State: ${boat.state}
+Port: ${boat.port.name}
+`;
+    }).join('\n');
+  }
+
+  public isMasteryActionUnlocked(action: BoatAction): boolean {
+    return this.isBasicSkillRecipeUnlocked(action);
+  }
+
+  public getActionIDFromOldID(oldActionID: number, idMap: NumericIDMap): string {
+    return '';
   }
 }
 

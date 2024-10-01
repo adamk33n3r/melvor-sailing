@@ -6,6 +6,17 @@ export enum BoatState {
     OnTrip,
     HasReturned,
 }
+
+export interface TripData {
+    boat: Boat;
+    port: Port;
+    interval: number;
+    hull: ShopPurchase;
+    deckItems: ShopPurchase;
+    rudder: ShopPurchase;
+    ram: ShopPurchase;
+}
+
 export class Boat extends NamespacedObject {
     private _sailTimer: Timer = null;
     public state: BoatState = BoatState.ReadyToSail;
@@ -36,6 +47,10 @@ export class Boat extends NamespacedObject {
         return this.port.distance * 1000;
     }
 
+    get baseXP() {
+        return this.port.distance * (this.port.distance / 4);
+    }
+
     get onTrip() {
         return this._sailTimer.ticksLeft > 0;
     }
@@ -55,7 +70,7 @@ export class Boat extends NamespacedObject {
     public setSail() {
         this._sailTimer.action = () => this.onReturn();
         // this._sailTimer.start(this.modifiedInterval);
-        this._sailTimer.start(1000*1);
+        this._sailTimer.start(1000*5);
         this.state = BoatState.OnTrip;
         this.callBackCallbacks();
     }
@@ -118,7 +133,6 @@ export class DummyBoat extends Boat {
             namespace,
             new BoatAction(namespace, {
                 id: localID,
-                name: 'Dummy Action',
                 baseExperience: 0,
                 level: 1,
             }, game),

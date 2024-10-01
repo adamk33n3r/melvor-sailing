@@ -4,7 +4,7 @@ import { BoatComponent } from './boat.component';
 export class SailingPage extends ComponentClass {
   $template = '#sailing-page-template';
   // todo: loop through boats registery
-  boatComponents: Component<any>[] = []
+  boatComponents: ReturnType<typeof BoatComponent>[] = []
   categoryMenu: CategoryMenuElement;
   // constructor() {
   //   super();

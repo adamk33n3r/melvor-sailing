@@ -1,9 +1,7 @@
 import { Boat, BoatState } from '../ts/boat';
-import { ComponentClass } from '../ts/component';
 import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
-import { BoatAction } from '../ts/sailing';
-import { getElementByIdWithoutId, tickToTime } from '../ts/util';
+import { formatTime, getElementByIdWithoutId as getElementByIdAndRemoveId, tickToTime } from '../ts/util';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { EquipmentComponent, EquipmentComponentProps } from './equipment/equipment.component';
 
@@ -13,15 +11,12 @@ export function BoatComponent(boat: Boat) {
         $template: '#sailing-boat-template',
         boat,
         isLocked: true,
-        getAction(): BoatAction {
-            return game.sailing.actions.find(action => action.localID === this.boat.localID);
-        },
         lockedImgSrc: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl('img/sailing-boat.png'),
         readyToSail: true,
         onTrip: false,
         hasReturned: false,
         returnTime: tickToTime(boat.modifiedInterval / TICK_INTERVAL, true),
-        returnTimer: '',
+        returnTimer: 'Done',
         hull: EquipmentComponent('Hull', 'img/hull_bronze.png'),
         deckItems: EquipmentComponent('Deck_Items', 'img/hull_empty.png'),
         rudder: EquipmentComponent('Rudder', 'img/hull_empty.png'),
@@ -42,9 +37,15 @@ export function BoatComponent(boat: Boat) {
             console.log('CHANGED PORT:', port);
             boat.port = port;
             self.returnTime = tickToTime(boat.modifiedInterval / TICK_INTERVAL, true);
+            self.updateGrants();
         }),
+        xpIcon: null as XpIconElement,
+        masteryIcon: null as MasteryXpIconElement,
+        masteryPoolIcon: null as MasteryPoolIconElement,
+        intervalIcon: null as IntervalIconElement,
+        progressBar: null as ProgressBarElement,
         update() {
-            self.isLocked = game.sailing.level < self.getAction().level;
+            self.isLocked = game.sailing.level < boat.action.level;
             self.hull.update();
             self.deckItems.update();
             self.rudder.update();
@@ -64,19 +65,45 @@ export function BoatComponent(boat: Boat) {
                     };
                 }),
             });
+            self.updateGrants();
+            self.updateProgressBar();
+        },
+        updateGrants() {
+            const baseMasteryXPToAdd = game.sailing.getBaseMasteryXPToAddForAction(boat.action, boat.scaledForMasteryInterval);
+            const masteryXPToAdd = game.sailing.getMasteryXPToAddForAction(boat.action, boat.scaledForMasteryInterval);
+            const masteryPoolXPToAdd = game.sailing.getMasteryXPToAddToPool(masteryXPToAdd);
+            self.xpIcon.setXP(game.sailing.modifyXP(boat.baseXP, boat.action), boat.baseXP);
+            self.xpIcon.setSources(game.sailing.getXPSources(boat.action));
+            self.masteryIcon.setXP(masteryXPToAdd, baseMasteryXPToAdd);
+            self.masteryIcon.setSources(game.sailing.getMasteryXPSources(boat.action));
+            self.masteryPoolIcon.setXP(masteryPoolXPToAdd);
+            game.unlockedRealms.length > 1 ? this.masteryPoolIcon.setRealm(game.defaultRealm) : this.masteryPoolIcon.hideRealms();
+            self.intervalIcon.setCustomInterval(formatTime(boat.modifiedInterval/1000), game.sailing.getIntervalSources(boat.action));
+        },
+        updateProgressBar() {
+            if (self.progressBar !== undefined) {
+                if (boat.onTrip) {
+                    self.progressBar.animateProgressFromTimer(boat.sailTimer);
+                } else {
+                    self.progressBar.stopAnimation();
+                }
+            }
         },
         mounted() {
             // HACK: This is so we can reference the reactive proxy object `this` in the dropdown callback
             self = this;
             console.log('!!!MOUNTED');
-            ui.create(self.hull, getElementByIdWithoutId('hull-grid'));
-            ui.create(self.deckItems, getElementByIdWithoutId('deck-grid'));
-            ui.create(self.rudder, getElementByIdWithoutId('rudder-grid'));
-            ui.create(self.ram, getElementByIdWithoutId('ram-grid'));
-            ui.create(self.port, getElementByIdWithoutId('dropdown'));
+            const parent = document.getElementById(self.boat.localID);
+            ui.create(self.hull, getElementByIdAndRemoveId('hull-grid', parent));
+            ui.create(self.deckItems, getElementByIdAndRemoveId('deck-grid', parent));
+            ui.create(self.rudder, getElementByIdAndRemoveId('rudder-grid', parent));
+            ui.create(self.ram, getElementByIdAndRemoveId('ram-grid', parent));
+            ui.create(self.port, getElementByIdAndRemoveId('dropdown', parent));
 
             setInterval(() => {
                 self.returnTimer = tickToTime(self.boat.sailTimer.ticksLeft);
+                if (self.boat.sailTimer.ticksLeft === 0) self.returnTimer = 'Done';
+                self.updateProgressBar();
             }, 1000);
 
             self.boat.registerOnUpdate(() => {
@@ -85,13 +112,28 @@ export function BoatComponent(boat: Boat) {
                 self.onTrip = self.boat.state == BoatState.OnTrip;
                 self.hasReturned = self.boat.state == BoatState.HasReturned;
                 self.returnTimer = tickToTime(self.boat.sailTimer.ticksLeft);
+                if (self.boat.sailTimer.ticksLeft === 0) self.returnTimer = 'Done';
                 self.port.setEnabled(self.readyToSail);
+
+                self.updateGrants();
+                self.updateProgressBar();
             });
+
+
+            const grantsContainer = getElementByIdAndRemoveId('grants-container', parent);
+
+            self.xpIcon = getElementByIdAndRemoveId('sailing-xp', grantsContainer);
+            self.masteryIcon = getElementByIdAndRemoveId('sailing-mastery-xp', grantsContainer);
+            self.masteryPoolIcon = getElementByIdAndRemoveId('sailing-pool-xp', grantsContainer);
+            self.intervalIcon = getElementByIdAndRemoveId('sailing-interval', grantsContainer);
+
+            self.progressBar = getElementByIdAndRemoveId('sailing-progress-bar', parent);
         },
 
         setSail() {
             console.log('SET SAIL');
             boat.setSail();
+            self.updateProgressBar();
         },
         collectLoot() {
             boat.collectLoot();

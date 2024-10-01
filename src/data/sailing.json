@@ -12,7 +12,7 @@
             "descriptions": [
               {
                 "text": "+${value} Sailing Speed",
-                "lang": "sailing_Sailing_Speed_Positive",
+                "lang": "sailing_Speed_Positive",
                 "above": 0,
                 "includeSign": false
               }
@@ -29,7 +29,7 @@
             "descriptions": [
               {
                 "text": "+${value} Combat",
-                "lang": "sailing_Sailing_Combat_Positive",
+                "lang": "sailing_Combat_Positive",
                 "above": 0,
                 "includeSign": false
               }
@@ -46,7 +46,7 @@
             "descriptions": [
               {
                 "text": "+${value} Morale",
-                "lang": "sailing_Sailing_Morale_Positive",
+                "lang": "sailing_Morale_Positive",
                 "above": 0,
                 "includeSign": false
               }
@@ -63,7 +63,7 @@
             "descriptions": [
               {
                 "text": "+${value} Seafaring",
-                "lang": "sailing_Sailing_Seafaring_Positive",
+                "lang": "sailing_Seafaring_Positive",
                 "above": 0,
                 "includeSign": false
               }
@@ -266,6 +266,7 @@
         "hasGameGuide": false,
         "canBeDefault": true,
         "skillSidebarCategoryID": "Combat",
+        "action": "sailing:Sailing",
         "skills": [
           "sailing:Sailing"
         ]
