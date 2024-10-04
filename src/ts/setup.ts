@@ -32,7 +32,6 @@ declare global {
 }
 
 export async function setup(ctx: Modding.ModContext) {
-
   const trans = new Translation(ctx);
   trans.register();
 
@@ -47,10 +46,66 @@ export async function setup(ctx: Modding.ModContext) {
     ctx.gameData.addPackage(Sails as GameDataPackage),
   ]);
 
+  if (cloudManager.hasAoDEntitlementAndIsEnabled) {
+    await ctx.gameData.addPackage('data/data-aod.json');
+  }
+
   game.sailing = sailing;
 
   ctx.onInterfaceAvailable(() => {
     sailing.ui = new UserInterface(ctx, game, sailing);
+  });
+
+  ctx.onModsLoaded(async () => {
+    if (cloudManager.hasAoDEntitlementAndIsEnabled) {
+      const levelCapIncreases = [ 'sailing:Pre99Dungeons', 'sailing:ImpendingDarknessSet100' ];
+
+      if (cloudManager.hasTotHEntitlementAndIsEnabled) {
+        levelCapIncreases.push('sailing:Post99Dungeons', 'sailing:ThroneOfTheHeraldSet120');
+      }
+
+      const gamemodes = game.gamemodes.filter(
+        (gamemode) =>
+          gamemode.defaultInitialLevelCap !== undefined &&
+          gamemode.levelCapIncreases.length > 0 &&
+          gamemode.useDefaultSkillUnlockRequirements === true &&
+          gamemode.allowSkillUnlock === false,
+      );
+
+      await ctx.gameData.addPackage({
+        $schema: '',
+        namespace: 'sailing',
+        modifications: {
+          gamemodes: gamemodes.map((gamemode) => ({
+            id: gamemode.id,
+            levelCapIncreases: {
+              add: levelCapIncreases,
+            },
+            startingSkills: {
+              add: [ 'sailing:Sailing' ],
+            },
+            skillUnlockRequirements: [
+              {
+                skillID: 'sailing:Sailing',
+                requirements: [
+                  {
+                    type: 'SkillLevel',
+                    skillID: 'melvorD:Attack',
+                    level: 1,
+                  },
+                ],
+              },
+            ],
+          })),
+        },
+      });
+
+      ctx.patch(EventManager, 'loadEvents').after(() => {
+        if(game.currentGamemode.startingSkills !== undefined && game.currentGamemode.startingSkills.has(game.sailing)) {
+            game.sailing.setUnlock(true);
+        }
+      });
+    }
   });
 
   ctx.patch(Shop, 'buyItemOnClick').after((_, purchase, confirmed) => {
