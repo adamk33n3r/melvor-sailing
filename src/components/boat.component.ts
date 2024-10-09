@@ -17,6 +17,7 @@ export function BoatComponent(boat: Boat) {
         hasReturned: false,
         returnTime: tickToTime(boat.modifiedInterval / TICK_INTERVAL, true),
         returnTimer: 'Done',
+        lootImg: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl('melvor:assets/media/bank/pirate_booty.png'),
         hull: EquipmentComponent('Hull', 'img/hull_bronze.png'),
         deckItems: EquipmentComponent('Deck_Items', 'img/hull_empty.png'),
         rudder: EquipmentComponent('Rudder', 'img/hull_empty.png'),
@@ -24,6 +25,7 @@ export function BoatComponent(boat: Boat) {
         port: DropdownComponent({
             name: '',
             side: 'left',
+            block: true,
             selected: { name: boat.port.name, value: boat.port, media: boat.port.media },
             options: game.sailing.ports.allObjects.map((p: Port) => {
                 const hasLevel = game.sailing.level >= p.level;
@@ -100,7 +102,7 @@ export function BoatComponent(boat: Boat) {
 
             setInterval(() => {
                 self.returnTimer = tickToTime(self.boat.sailTimer.ticksLeft);
-                if (self.boat.sailTimer.ticksLeft === 0) self.returnTimer = 'Done';
+                if (self.boat.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
                 self.updateProgressBar();
             }, 1000);
 
@@ -109,7 +111,7 @@ export function BoatComponent(boat: Boat) {
                 self.onTrip = self.boat.state == BoatState.OnTrip;
                 self.hasReturned = self.boat.state == BoatState.HasReturned;
                 self.returnTimer = tickToTime(self.boat.sailTimer.ticksLeft);
-                if (self.boat.sailTimer.ticksLeft === 0) self.returnTimer = 'Done';
+                if (self.boat.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
                 self.port.setEnabled(self.readyToSail);
 
                 self.updateGrants();
@@ -138,7 +140,7 @@ export function BoatComponent(boat: Boat) {
             SwalLocale.fire({
               iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
               title: boat.port.name,
-              html: boat.port.currencyDrops.map((drop) => `${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
+              html: boat.port.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
                 `${boat.port.minRolls} - ${boat.port.maxRolls} Rolls<br>` +
                 boat.port.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
             });

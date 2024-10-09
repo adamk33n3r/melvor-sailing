@@ -52,7 +52,7 @@ export class Boat extends NamespacedObject {
     }
 
     get baseXP() {
-        return this.port.distance * (this.port.distance / 4);
+        return this.port.distance * (this.port.distance / 8);
     }
 
     get onTrip() {
@@ -73,8 +73,11 @@ export class Boat extends NamespacedObject {
 
     public setSail() {
         this._sailTimer.action = () => this.onReturn();
-        this._sailTimer.start(this.modifiedInterval);
-        // this._sailTimer.start(1000*5);
+        if (process.env.NODE_ENV === 'production') {
+            this._sailTimer.start(this.modifiedInterval);
+        } else {
+            this._sailTimer.start(1000*1);
+        }
         this.state = BoatState.OnTrip;
         this.callBackCallbacks();
     }

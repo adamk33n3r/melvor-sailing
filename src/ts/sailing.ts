@@ -1,5 +1,5 @@
 import { SailingPage } from '../components/sailing';
-import { Boat, DummyBoat } from './boat';
+import { Boat, BoatState, DummyBoat } from './boat';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
 import { Port, PortData } from './port';
@@ -53,6 +53,8 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   public ramChain: ShopUpgradeChain;
 
   public ui: UserInterface;
+
+  private returnNotification = new SuccessNotification('sailing:Returned');
 
   constructor(namespace: DataNamespace, game: Game) {
     super(namespace, 'Sailing', game);
@@ -125,8 +127,28 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       rewards.setSource('Sailing.Loot');
       rewards.giveRewards(true);
       this.addMasteryForAction(boat.action, boat.scaledForMasteryInterval);
+
+      this.updateNotification(boat, -1);
+
       onClose();
     });
+  }
+
+  private updateNotification(boat: Boat, quantity: number) {
+    this.game.notifications.addNotification(this.returnNotification, {
+      text: `Ships have returned!`,
+      media: boat.media,
+      quantity,
+      isImportant: true,
+      isError: false,
+    });
+    const quant = this.game.notifications.activeNotifications.get(this.returnNotification).quantity;
+    if (quant > 0) {
+      skillNav.setGlowing(this, true);
+    } else {
+      skillNav.setGlowing(this, false);
+      this.game.notifications.removeNotification(this.returnNotification);
+    }
   }
 
   public onLevelUp(oldLevel: number, newLevel: number) {
@@ -209,7 +231,13 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     }, this.game))
 
     this.actions.allObjects.forEach((action) => {
-      this.boats.registerObject(new Boat(namespace, action, this.game));
+      const boat = new Boat(namespace, action, this.game);
+      boat.registerOnUpdate(() => {
+        if (boat.state == BoatState.HasReturned) {
+          this.updateNotification(boat, 1);
+        }
+      });
+      this.boats.registerObject(boat);
     });
 
     if (data.ports !== undefined) {

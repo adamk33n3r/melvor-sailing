@@ -4,8 +4,8 @@
     "allowUmdGlobalAccess": true,
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "module": "es2022",
     "target": "es6",
+    "forceConsistentCasingInFileNames": true,
     "lib": [
       "ES6",
       "DOM"

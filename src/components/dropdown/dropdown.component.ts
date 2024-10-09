@@ -10,6 +10,7 @@ interface DropdownOptionsData<T> {
 interface DropdownOptions<T> {
   name: string;
   side: 'left' | 'right';
+  block: boolean;
   options: DropdownOptionsData<T>[];
   selected?: DropdownOptionsData<T>;
 }
@@ -21,6 +22,7 @@ export function DropdownComponent<T>(data: DropdownOptions<T>, onChange: (value:
     label: data.name,
     rightLabel: data.side === 'right',
     leftLabel: data.side === 'left',
+    block: data.block,
     dropdownButton: null as HTMLButtonElement,
     optionsContainer: null as HTMLDivElement,
     mounted() {
