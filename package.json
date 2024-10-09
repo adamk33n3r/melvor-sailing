@@ -9,7 +9,7 @@
     "zip": "node scripts/zip.js",
     "build": "webpack && node scripts/bundleHtml.js",
     "dev": "webpack --watch --progress",
-    "buildzip": "webpack --mode production && node scripts/bundleHtml.js && node scripts/zip.js"
+    "dist": "webpack --mode production && node scripts/bundleHtml.js && node scripts/zip.js"
   },
   "keywords": [],
   "author": "Grynjolf",
