@@ -1,6 +1,7 @@
 // Data
 // Game data for registration
 import ModData from '../data/sailing.json';
+import AoDData from '../data/sailing-aod.json';
 import DeckItems from '../data/deckItems.json';
 import Rams from '../data/rams.json';
 import Rudders from '../data/rudders.json';
@@ -47,7 +48,7 @@ export async function setup(ctx: Modding.ModContext) {
   ]);
 
   if (cloudManager.hasAoDEntitlementAndIsEnabled) {
-    await ctx.gameData.addPackage('data/data-aod.json');
+    await ctx.gameData.addPackage(AoDData as GameDataPackage);
   }
 
   game.sailing = sailing;
