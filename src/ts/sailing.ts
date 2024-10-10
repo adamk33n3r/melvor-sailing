@@ -40,6 +40,11 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     });
     this.actions.forEach((action) => this.updateMasteryDisplays(action));
   }
+  public removePets() {
+    this.game.petManager.unlocked.clear();
+    this.game.petManager.modifiers.entries.clear();
+    this.game.petManager.modifiers.entriesByID.clear();
+  }
   public _media = 'img/sailing-boat.png';
   public renderQueue = new SailingRenderQueue();
   public page: SailingPage;
@@ -70,6 +75,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     const ramUpgrade = this.game.shop.getLowestUpgradeInChain(this.ramChain.rootUpgrade);
 
     const rewards = new Rewards(this.game);
+    rewards.setActionInterval(boat.interval);
 
     const lootMap = new Map<AnyItem, number>();
 
@@ -112,7 +118,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
 
     const dummyHost = document.createElement('div');
     ui.create(LootComponent(boat.action, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
-    SwalLocale.fire({
+    addModalToQueue({
       iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
       title: boat.port.name,
       confirmButtonText: 'Collect',
@@ -120,18 +126,23 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       // Can't let cancel because loot is generated here instead of on ship return
       // showCancelButton: true,
       html: dummyHost,
-    }).then((result) => {
-      // if (!result.value) {
-      //   return;
-      // }
-      rewards.setSource('Sailing.Loot');
-      rewards.giveRewards(true);
-      this.addMasteryForAction(boat.action, boat.scaledForMasteryInterval);
+      didDestroy: () => {
+        // if (!result.value) {
+        //   return;
+        // }
+        rewards.setSource('Sailing.Loot');
+        rewards.giveRewards(true);
+        this.addMasteryForAction(boat.action, boat.scaledForMasteryInterval);
 
-      this.updateNotification(boat, -1);
+        this.updateNotification(boat, -1);
 
-      onClose();
+        onClose();
+      },
     });
+  }
+
+  public rollForPets(interval: number, action: BoatAction) {
+    super.rollForPets(interval * 100, action);
   }
 
   private updateNotification(boat: Boat, quantity: number) {
