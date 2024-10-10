@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   # runs when you either create a new tag or push an existing one
   create:
-  push:
-    tags:
-      - "v*"
 
 jobs:
   build-deploy:
