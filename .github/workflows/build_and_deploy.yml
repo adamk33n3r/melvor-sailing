@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-tags: true
       - uses: actions/setup-node@v3
         with:
           node-version: latest
@@ -58,4 +60,5 @@ jobs:
         with:
           artifacts: ${{ steps.metadata.outputs.ZIPFILE }}
           body: ${{ steps.metadata.outputs.CHANGELOG }}
+          tag: ${{ steps.metadata.outputs.VERSION }}
           makeLatest: true
