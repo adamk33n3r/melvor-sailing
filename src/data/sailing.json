@@ -81,7 +81,8 @@
     ],
     "shopCategoryOrder": [
       {
-        "insertAt": "Start",
+        "insertAt": "After",
+        "afterID": "melvorD:SkillUpgrades",
         "ids": [
           "sailing:SailingUpgrades"
         ]

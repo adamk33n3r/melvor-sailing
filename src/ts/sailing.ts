@@ -142,7 +142,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   }
 
   public rollForPets(interval: number, action: BoatAction) {
-    super.rollForPets(interval * 100, action);
+    super.rollForPets(interval / 100, action);
   }
 
   private updateNotification(boat: Boat, quantity: number) {
