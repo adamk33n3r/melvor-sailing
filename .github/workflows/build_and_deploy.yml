@@ -41,7 +41,7 @@ jobs:
           echo "MOD=$MOD_ID" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "ZIPFILE=./package/$ZIPFILE_NAME" >> $GITHUB_OUTPUT
-          echo "CHANGELOG=$VERSION_CHANGELOG" >> $GITHUB_OUTPUT
+          echo "CHANGELOG<<EOF"$'\n'"$VERSION_CHANGELOG"$'\n'EOF >> $GITHUB_OUTPUT
 
       - name: Deploy to mod.io
         uses: nickelc/upload-to-modio@v2.1.0
