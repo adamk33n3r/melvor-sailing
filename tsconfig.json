@@ -13,6 +13,8 @@
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
+    "noImplicitOverride": true,
+    "noImplicitThis": true,
     "resolveJsonModule": true,
     "strict": false,
     "skipLibCheck": true,

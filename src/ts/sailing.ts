@@ -98,19 +98,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     const masteryXPToAdd = this.getMasteryXPToAddForAction(boat.action, boat.scaledForMasteryInterval);
     const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd);
 
-    const tokens = this.masteryTokens.get(boat.action.realm);
-    if (tokens !== undefined) {
-      tokens.forEach((token)=>{
-        if (!token.rollInSkill)
-          return;
-        const masteryTokenChance = this.masteryTokenChance * boat.port.distance * 8;
-        if (rollPercentage(masteryTokenChance)) {
-          const qty = 1 + this.game.modifiers.flatMasteryTokens + Math.floor(Math.max(1, boat.port.distance / rollInteger(10, 100)));
-          rewards.addItem(token, qty);
-        }
-      });
-    }
-
+    this.rollForMasteryTokens(rewards, boat.action.realm);
     this.rollForRareDrops(boat.action.level, rewards, boat.action);
     this.rollForAdditionalItems(rewards, boat.interval);
     this.rollForAncientRelics(boat.action.level, boat.action.realm);
@@ -141,8 +129,25 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     });
   }
 
-  public rollForPets(interval: number, action: BoatAction) {
+  public override rollForPets(interval: number, action: BoatAction) {
     super.rollForPets(interval / 100, action);
+  }
+
+  public override rollForMasteryTokens(rewards: Rewards, realm: Realm): void {
+    const portDistance = rewards.actionInterval / 60 / 1000;
+    const tokens = this.masteryTokens.get(realm);
+    if (tokens !== undefined) {
+      tokens.forEach((token) => {
+        if (!token.rollInSkill)
+          return;
+        const masteryTokenChance = this.masteryTokenChance * portDistance;
+        if (rollPercentage(masteryTokenChance)) {
+          // Max tokens 1 per hour
+          const qty = 1 + this.game.modifiers.flatMasteryTokens + Math.floor(portDistance / rollInteger(60, 600));
+          rewards.addItem(token, qty);
+        }
+      });
+    }
   }
 
   private updateNotification(boat: Boat, quantity: number) {
@@ -162,22 +167,22 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     }
   }
 
-  public onLevelUp(oldLevel: number, newLevel: number) {
+  public override onLevelUp(oldLevel: number, newLevel: number) {
     super.onLevelUp(oldLevel, newLevel);
 
     this.renderQueue.boats = true;
   }
 
-  public renderModifierChange(): void {
+  public override renderModifierChange(): void {
     super.renderModifierChange();
     this.renderQueue.boats = true;
   }
 
-  public onMasteryLevelUp(action: BoatAction, oldLevel: number, newLevel: number): void {
+  public override onMasteryLevelUp(action: BoatAction, oldLevel: number, newLevel: number): void {
     super.onMasteryLevelUp(action, oldLevel, newLevel);
   }
 
-  public render() {
+  public override render() {
     super.render();
 
     this.renderBoats();
@@ -196,7 +201,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.renderQueue.boats = false;
   }
 
-  public onLoad(): void {
+  public override onLoad(): void {
     super.onLoad();
 
     for (const action of this.actions.registeredObjects.values()) {
@@ -206,14 +211,14 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.renderQueue.boats = true;
   }
 
-  public getRegistry(type: ScopeSourceType): NamespaceRegistry<NamedObject> | undefined {
+  public override getRegistry(type: ScopeSourceType): NamespaceRegistry<NamedObject> | undefined {
     switch (type) {
       case ScopeSourceType.Action:
         return this.actions;
     }
   }
 
-  public registerData(namespace: DataNamespace, data: SailingSkillData): void {
+  public override registerData(namespace: DataNamespace, data: SailingSkillData): void {
     super.registerData(namespace, data);
 
     this.actions.registerObject(new BoatAction(namespace, {
@@ -263,14 +268,14 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     });
   }
 
-  public modifyData(data: FixedMasterySkillModificationData): void {
+  public override modifyData(data: FixedMasterySkillModificationData): void {
     super.modifyData(data);
     if (data.headerUpgradeChains !== undefined) {
       this.headerUpgradeChains.push(...game.shop.upgradeChains.getArrayFromIds(data.headerUpgradeChains));
     }
   }
 
-  public postDataRegistration(): void {
+  public override postDataRegistration(): void {
     super.postDataRegistration();
 
     this.sortedMasteryActions = this.actions.allObjects.sort((a, b) => a.level - b.level);
@@ -300,7 +305,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     return boat;
   }
 
-  public decode(reader: SaveWriter, version: number): void {
+  public override decode(reader: SaveWriter, version: number): void {
     super.decode(reader, version);
 
     const saveVersion = reader.getUint32();
@@ -317,7 +322,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     }
   }
 
-  public encode(writer: SaveWriter): SaveWriter {
+  public override encode(writer: SaveWriter): SaveWriter {
     super.encode(writer);
 
     writer.writeUint32(Constants.VERSION);

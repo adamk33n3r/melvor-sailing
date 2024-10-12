@@ -67,7 +67,7 @@ export function EquipmentComponent(slot: string, emptyMedia: string): Component<
             quickEquip.init(MAX_QUICK_EQUIP_ITEMS);
 
             tooltipElem.setFromSlot(equipped);
-            this.tooltip = tippy(imgEle, {
+            tippy(imgEle, {
                 content: tooltipElem,
                 placement: 'top',
                 interactive: false,

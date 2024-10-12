@@ -2,7 +2,7 @@ import { ComponentClass } from '../ts/component';
 import { BoatComponent } from './boat.component';
 
 export class SailingPage extends ComponentClass {
-  $template = '#sailing-page-template';
+  override $template = '#sailing-page-template';
   boatComponents: ReturnType<typeof BoatComponent>[] = []
   categoryMenu: CategoryMenuElement;
   mounted() {
@@ -12,7 +12,7 @@ export class SailingPage extends ComponentClass {
       ui.create(boatComponent, document.getElementById('boat-container'));
     });
   }
-  update() {
+  override update() {
     this.boatComponents.forEach((boatComponent) => {
       boatComponent.update();
     });
