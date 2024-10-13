@@ -1,4 +1,4 @@
-import { Ship, ShipState } from '../ts/ship';
+import { LockState, Ship, ShipState } from '../ts/ship';
 import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
 import { formatTime, getElementByIdWithoutId as getElementByIdAndRemoveId, tickToTime } from '../ts/util';
@@ -11,6 +11,7 @@ export function ShipComponent(ship: Ship) {
         $template: '#sailing-ship-template',
         ship,
         isLocked: true,
+        hasLevel: false,
         lockedImgSrc: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl('img/sailing-boat.png'),
         readyToSail: true,
         onTrip: false,
@@ -41,13 +42,35 @@ export function ShipComponent(ship: Ship) {
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
             self.updateGrants();
         }),
+        currencyQuantity: null as unknown as CurrencyQuantityIconElement,
         xpIcon: null as unknown as XpIconElement,
         masteryIcon: null as unknown as MasteryXpIconElement,
         masteryPoolIcon: null as unknown as MasteryPoolIconElement,
         intervalIcon: null as unknown as IntervalIconElement,
         progressBar: null as unknown as ProgressBarElement,
+        _canUnlock() {
+            const abyssalLevelMet = ship.action.abyssalLevel === 0 ||  game.sailing.abyssalLevel >= ship.action.abyssalLevel;
+            return (
+                game.sailing.level >= ship.action.level &&
+                game.sailing.abyssalLevel >= ship.action.abyssalLevel &&
+                ship.action.getUnlockCosts().checkIfOwned() &&
+                abyssalLevelMet
+            );
+        },
+        canUnlock: false,
+        unlockShip() {
+            const costs = ship.action.getUnlockCosts();
+            costs.setSource(`Skill.${game.sailing.id}.UnlockShip`);
+            if (!costs.checkIfOwned() || game.sailing.level < ship.action.level || game.sailing.abyssalLevel < ship.action.abyssalLevel) return;
+            costs.consumeCosts();
+            self.isLocked = false;
+            ship.lockState = LockState.Unlocked;
+        },
         update() {
-            self.isLocked = game.sailing.level < ship.action.level;
+            self.hasLevel = game.sailing.level >= ship.action.level;
+            self.isLocked = ship.lockState == LockState.Locked;
+            self.canUnlock = self._canUnlock();
+            self.currencyQuantity.updateBorder();
             self.hull.update();
             self.deckItems.update();
             self.rudder.update();
@@ -121,6 +144,11 @@ export function ShipComponent(ship: Ship) {
                 self.updateProgressBar();
             });
 
+            self.currencyQuantity = getElementByIdAndRemoveId('sailing-ship-currency-cost', parent);
+            if (ship.action.currencyCosts.length > 0) {
+                self.currencyQuantity.setCurrency(ship.action.currencyCosts[0].currency, ship.action.currencyCosts[0].quantity);
+                self.currencyQuantity.updateBorder();
+            }
 
             const grantsContainer = getElementByIdAndRemoveId('grants-container', parent);
 

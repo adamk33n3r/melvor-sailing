@@ -1,6 +1,6 @@
 export class Constants {
     static readonly MOD_NAMESPACE = 'sailing';
-    static readonly VERSION = 1;
+    static readonly VERSION = 2;
     static readonly HULL_CHAIN_ID = 'Hull';
     static readonly DECK_ITEMS_CHAIN_ID = 'Deck_Items';
     static readonly RUDDER_CHAIN_ID = 'Rudder';

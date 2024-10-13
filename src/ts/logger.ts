@@ -17,23 +17,23 @@ export class Logger {
     this._level = level;
   }
 
-  public debug(...message: string[]) {
+  public debug(...message: any[]) {
     this.log(LogLevel.Debug, ...message);
   }
 
-  public info(...message: string[]) {
+  public info(...message: any[]) {
     this.log(LogLevel.Info, ...message);
   }
 
-  public warn(...message: string[]) {
+  public warn(...message: any[]) {
     this.log(LogLevel.Warning, ...message);
   }
 
-  public error(...message: string[]) {
+  public error(...message: any[]) {
     this.log(LogLevel.Error, ...message);
   }
 
-  public log(level: LogLevel, ...message: string[]) {
+  public log(level: LogLevel, ...message: any[]) {
     switch (level) {
       case LogLevel.Debug:
         if (this._level < LogLevel.Debug) return;

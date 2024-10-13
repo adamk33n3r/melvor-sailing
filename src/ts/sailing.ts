@@ -42,6 +42,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
   }
   /* devblock:end */
 
+  public saveVersion = -1;
   public _media = 'img/sailing-boat.png';
   public renderQueue = new SailingRenderQueue();
   public page = new SailingPage();
@@ -294,7 +295,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     super.decode(reader, version);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const saveVersion = reader.getUint32();
+    this.saveVersion = reader.getUint32();
 
     const numShips = reader.getUint32();
     for (let i = 0; i < numShips; i++) {
@@ -347,6 +348,22 @@ Port: ${ship.port.name}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getActionIDFromOldID(oldActionID: number, idMap: NumericIDMap): string {
     return '';
+  }
+
+  public override onPageChange(): void {
+    this.logger.debug('onPageChange');
+    this.renderQueue.ships = true;
+    super.onPageChange();
+  }
+
+  public override queueBankQuantityRender(item: AnyItem): void {
+    this.logger.debug('queueBankQuantityRender:', item);
+    this.renderQueue.ships = true;
+  }
+
+  public queueCurrencyQuantityRender(currency: Currency): void {
+    this.logger.debug('queueCurrencyQuantityRender:', currency);
+    this.renderQueue.ships = true;
   }
 }
 

@@ -1,23 +1,28 @@
 <template id="sailing-ship-template">
   <div class="col-6 col-lg-3" :id="ship.localID" @vue:mounted="mounted">
     <div
-      class="block block-rounded block-link-pop border-top border-danger border-4x justify-vertical-center"
-      v-show="isLocked"
+      class="block block-content block-content-full block-rounded block-link-pop border-top border-sailing border-4x text-center"
     >
-      <div class="block-content block-content-full bg-light pb-0">
+      <div class="block-content block-content-full bg-light pb-0" v-show="isLocked">
         <div class="font-size-sm font-w600 text-center text-muted">
           <span><lang-string lang-id="MENU_TEXT_LOCKED"></lang-string></span><br />
           <img class="mining-ore-img m-3" :src="lockedImgSrc" /><br />
-          <span class="badge badge-danger badge-pill w-100 mb-1">Level {{ ship.action.level }}</span>
+          <span class="badge badge-pill w-100 mb-1" :class="{ 'badge-success': hasLevel, 'badge-danger': !hasLevel }">Level {{ ship.action.level }}</span>
+          <div class="row justify-content-center icon-size-48">
+            <currency-quantity-icon id="sailing-ship-currency-cost"></currency-quantity-icon>
+          </div>
+          <button
+            type="button"
+            class="btn btn-lg m-2"
+            :class="{ 'btn-success': canUnlock, 'btn-danger': !canUnlock }"
+            :disabled="!canUnlock"
+          >
+            <lang-string lang-id="MENU_TEXT_UNLOCK" @click="unlockShip()"></lang-string>
+          </button>
           <!-- <span class="badge badge-danger badge-pill w-100 mb-1" id="next-abyssal-level">Abyssal Level 69</span> -->
         </div>
       </div>
-    </div>
-    <div
-      class="block block-content block-content-full block-rounded block-link-pop border-top border-sailing border-4x text-center"
-      v-show="!isLocked"
-    >
-      <div class="row gutters-tiny">
+      <div class="row gutters-tiny" v-show="!isLocked">
         <div class="col-12 p-2 font-w600">
           {{ ship.name }}
         </div>

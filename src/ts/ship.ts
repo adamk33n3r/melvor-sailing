@@ -25,9 +25,19 @@ export interface ShipActionData extends BasicSkillRecipeData {
 
 export class ShipAction extends BasicSkillRecipe {
   private _media: string;
-  constructor(namespace: DataNamespace, data: ShipActionData, game: Game) {
+  private _currencyCosts: CurrencyQuantity[];
+  private _itemCosts: ItemQuantity<AnyItem>[];
+  public get currencyCosts() {
+    return this._currencyCosts;
+  }
+  public get itemCosts() {
+    return this._itemCosts;
+  }
+  constructor(namespace: DataNamespace, data: ShipActionData, private game: Game) {
     super(namespace, data, game);
     this._media = data.media;
+    this._currencyCosts = game.getCurrencyQuantities(data.currencyCosts);
+    this._itemCosts = game.items.getQuantities(data.itemCosts);
   }
 
   public get name() {
@@ -37,6 +47,25 @@ export class ShipAction extends BasicSkillRecipe {
   public get media() {
     return this.getMediaURL(this._media);
   }
+
+  public getUnlockCosts() {
+    const costs = new Costs(this.game);
+
+    this._currencyCosts.forEach(({ currency, quantity }) => {
+      costs.addCurrency(currency, quantity);
+    });
+
+    this._itemCosts.forEach(({ item, quantity }) => {
+      costs.addItem(item, quantity);
+    });
+
+    return costs;
+  }
+}
+
+export enum LockState {
+  Locked,
+  Unlocked,
 }
 
 
@@ -44,6 +73,7 @@ export class Ship extends NamespacedObject {
     private _sailTimer: Timer;
     public state: ShipState = ShipState.ReadyToSail;
     private _action: ShipAction;
+    public lockState: LockState = LockState.Locked;
 
     get sailTimer() {
         return this._sailTimer;
@@ -85,6 +115,7 @@ export class Ship extends NamespacedObject {
         super(namespace, action.localID);
         this._sailTimer = new Timer('Skill', () => this.onReturn());
         this._action = action;
+        this.lockState = action.currencyCosts.length === 0 && action.itemCosts.length === 0 ? LockState.Unlocked : LockState.Locked;
     }
 
     private updateCallbacks: VoidFunction[] = [];
@@ -114,6 +145,7 @@ export class Ship extends NamespacedObject {
     public encode(writer: SaveWriter): SaveWriter {
         writer.writeUint32(this.state);
         this._sailTimer.encode(writer);
+        writer.writeUint32(this.lockState);
         writer.writeNamespacedObject(this.port);
 
         return writer;
@@ -136,6 +168,9 @@ export class Ship extends NamespacedObject {
         this.state = reader.getUint32();
         this._sailTimer = new Timer('Skill', () => this.onReturn());
         this._sailTimer.decode(reader, version);
+        if (this.game.sailing.saveVersion >= 2) {
+            this.lockState = reader.getUint32();
+        }
 
         this.port = this.decodePort(reader, version);
 

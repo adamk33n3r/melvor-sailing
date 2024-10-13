@@ -42,7 +42,14 @@ module.exports = {
         test: /\.tsx?$/,
         use: [
           'ts-loader',
-          'webpack-remove-code-blocks',
+          {
+            loader: 'webpack-remove-code-blocks',
+            options: {
+              blocks: process.env.NODE_ENV === 'production' ? [
+                'devblock'
+              ] : [],
+            }
+          }
         ],
         exclude: /node_modules/,
       },
