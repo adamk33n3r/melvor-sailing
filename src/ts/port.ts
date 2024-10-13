@@ -79,7 +79,7 @@ export class DummyPort extends Port {
                 id,
                 name: '',
                 description: '',
-                media: 'assets/media/main/question.png',
+                media: 'melvor:assets/media/main/question.png',
                 level: 1,
                 distance: 0,
                 minRolls: 1,

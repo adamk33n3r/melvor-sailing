@@ -1,4 +1,4 @@
-import { BoatAction } from '../ts/sailing';
+import { BoatAction } from '../ts/boat';
 
 export function LootComponent(
   action: BoatAction,

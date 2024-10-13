@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export class BoatEquipment {
-    public weapons: any[];
-    public sail: any;
+    public deckItems: any[] = [];
+    public hull: any;
     public rudder: any;
-    public crowsNest: any;
+    public ram: any;
 }

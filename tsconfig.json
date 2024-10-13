@@ -15,6 +15,8 @@
     "moduleResolution": "node",
     "noImplicitOverride": true,
     "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "resolveJsonModule": true,
     "strict": false,
     "skipLibCheck": true,

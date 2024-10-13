@@ -1,6 +1,12 @@
 import '../img/sailing-boat.png';
+import '../img/ship.png';
+import '../img/submarine.png';
+import '../img/container-ship.png';
+
+import '../img/mastery_token.png';
 import '../img/skillcape_sailing.png';
 import '../img/barrelchest_anchor.png';
+import '../img/golden_barrelchest_anchor.png';
 
 import '../img/hull_empty.png';
 import '../img/hull_bronze.png';

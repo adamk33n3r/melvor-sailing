@@ -1,12 +1,12 @@
 import { SailingPage } from '../components/sailing';
-import { Boat, BoatState, DummyBoat } from './boat';
+import { Boat, BoatAction, BoatState, DummyBoat } from './boat';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
 import { Port, PortData } from './port';
 import { LootComponent } from '../components/loot.component';
 
 class SailingRenderQueue extends MasterySkillRenderQueue<BoatAction> {
-  boats: boolean;
+  boats = true;
 }
 
 interface SailingSkillData extends BaseSkillData {
@@ -14,25 +14,8 @@ interface SailingSkillData extends BaseSkillData {
   ports?: PortData[];
 }
 
-interface BoatActionData extends BasicSkillRecipeData {
-}
-
-export class BoatAction extends BasicSkillRecipe {
-  private _name: string;
-  constructor(namespace: DataNamespace, data: BoatActionData, game: Game) {
-    super(namespace, data, game);
-  }
-
-  public get name() {
-    return getLangString(`${Constants.MOD_NAMESPACE}_Boat_${this.localID}`);
-  }
-
-  public get media() {
-    return this.getMediaURL('img/sailing-boat.png');
-  }
-}
-
 export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
+  /* devblock:start */
   public resetMasteries() {
     this.actionMastery.forEach((actionMastery) => {
       actionMastery.xp = 0;
@@ -45,19 +28,24 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.game.petManager.modifiers.entries.clear();
     this.game.petManager.modifiers.entriesByID.clear();
   }
+  public setLevel(level: number) {
+    this.setXP(exp.levelToXP(level) + 1);
+  }
+  /* devblock:end */
+
   public _media = 'img/sailing-boat.png';
   public renderQueue = new SailingRenderQueue();
-  public page: SailingPage;
+  public page = new SailingPage();
   public categories: NamespaceRegistry<SkillCategory>;
   public boats: NamespaceRegistry<Boat>;
   public ports: NamespaceRegistry<Port>;
 
-  public hullChain: ShopUpgradeChain;
-  public deckItemsChain: ShopUpgradeChain;
-  public rudderChain: ShopUpgradeChain;
-  public ramChain: ShopUpgradeChain;
+  public hullChain?: ShopUpgradeChain;
+  public deckItemsChain?: ShopUpgradeChain;
+  public rudderChain?: ShopUpgradeChain;
+  public ramChain?: ShopUpgradeChain;
 
-  public ui: UserInterface;
+  public ui?: UserInterface;
 
   private returnNotification = new SuccessNotification('sailing:Returned');
 
@@ -69,10 +57,10 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   }
 
   public generateLoot(boat: Boat, onClose: VoidFunction) {
-    const hullUpgrade = this.game.shop.getLowestUpgradeInChain(this.hullChain.rootUpgrade);
-    const deckItemUpgrade = this.game.shop.getLowestUpgradeInChain(this.deckItemsChain.rootUpgrade);
-    const rudderUpgrade = this.game.shop.getLowestUpgradeInChain(this.rudderChain.rootUpgrade);
-    const ramUpgrade = this.game.shop.getLowestUpgradeInChain(this.ramChain.rootUpgrade);
+    // const hullUpgrade = this.game.shop.getLowestUpgradeInChain(this.hullChain.rootUpgrade);
+    // const deckItemUpgrade = this.game.shop.getLowestUpgradeInChain(this.deckItemsChain.rootUpgrade);
+    // const rudderUpgrade = this.game.shop.getLowestUpgradeInChain(this.rudderChain.rootUpgrade);
+    // const ramUpgrade = this.game.shop.getLowestUpgradeInChain(this.ramChain.rootUpgrade);
 
     const rewards = new Rewards(this.game);
     rewards.setActionInterval(boat.interval);
@@ -158,6 +146,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       isImportant: true,
       isError: false,
     });
+    //@ts-expect-error The above addNotification call will cause this to not be undefined
     const quant = this.game.notifications.activeNotifications.get(this.returnNotification).quantity;
     if (quant > 0) {
       skillNav.setGlowing(this, true);
@@ -221,41 +210,6 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   public override registerData(namespace: DataNamespace, data: SailingSkillData): void {
     super.registerData(namespace, data);
 
-    this.actions.registerObject(new BoatAction(namespace, {
-      id: "Boat1",
-      level: 1,
-      baseExperience: 1,
-      realm: "melvorD:Melvor",
-    }, this.game))
-    this.actions.registerObject(new BoatAction(namespace, {
-      id: "Boat2",
-      level: 15,
-      baseExperience: 1,
-      realm: "melvorD:Melvor",
-    }, this.game))
-    this.actions.registerObject(new BoatAction(namespace, {
-      id: "Boat3",
-      level: 50,
-      baseExperience: 1,
-      realm: "melvorD:Melvor",
-    }, this.game))
-    this.actions.registerObject(new BoatAction(namespace, {
-      id: "Boat4",
-      level: 70,
-      baseExperience: 1,
-      realm: "melvorD:Melvor",
-    }, this.game))
-
-    this.actions.allObjects.forEach((action) => {
-      const boat = new Boat(namespace, action, this.game);
-      boat.registerOnUpdate(() => {
-        if (boat.state == BoatState.HasReturned) {
-          this.updateNotification(boat, 1);
-        }
-      });
-      this.boats.registerObject(boat);
-    });
-
     if (data.ports !== undefined) {
       console.log(`Registering ${data.ports.length} Ports`);
       data.ports.forEach((port) => {
@@ -263,8 +217,52 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       });
     }
 
-    this.boats.forEach((boat) => {
-      boat.port = this.ports.getObjectSafe('sailing:tinyIsland');
+    this.actions.registerObject(new BoatAction(namespace, {
+      id: "Boat1",
+      level: 1,
+      baseExperience: 1,
+      realm: "melvorD:Melvor",
+      media: 'img/sailing-boat.png',
+      currencyCosts: [],
+      itemCosts: [],
+    }, this.game))
+    this.actions.registerObject(new BoatAction(namespace, {
+      id: "Boat2",
+      level: 30,
+      baseExperience: 1,
+      realm: "melvorD:Melvor",
+      media: 'img/ship.png',
+      currencyCosts: [{id: 'melvorD:GP', quantity: 100}],
+      itemCosts: [],
+    }, this.game))
+    this.actions.registerObject(new BoatAction(namespace, {
+      id: "Boat3",
+      level: 50,
+      baseExperience: 1,
+      realm: "melvorD:Melvor",
+      media: 'img/submarine.png',
+      currencyCosts: [{id: 'melvorD:GP', quantity: 10000}],
+      itemCosts: [],
+    }, this.game))
+    this.actions.registerObject(new BoatAction(namespace, {
+      id: "Boat4",
+      level: 70,
+      baseExperience: 1,
+      realm: "melvorD:Melvor",
+      media: 'img/container-ship.png',
+      currencyCosts: [{id: 'melvorD:GP', quantity: 1000000}],
+      itemCosts: [{id: 'melvorD:Dragonite_Bar', quantity: 10000}],
+    }, this.game))
+    
+    const tinyIsland = this.ports.getObjectSafe('sailing:tinyIsland');
+    this.actions.allObjects.forEach((action) => {
+      const boat = new Boat(namespace, action, tinyIsland, this.game);
+      boat.registerOnUpdate(() => {
+        if (boat.state == BoatState.HasReturned) {
+          this.updateNotification(boat, 1);
+        }
+      });
+      this.boats.registerObject(boat);
     });
   }
 
@@ -286,10 +284,12 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
     this.sortMilestones();
 
     const chains = this.game.shop.upgradeChains.namespaceMaps.get(Constants.MOD_NAMESPACE);
-    this.hullChain = chains.get(Constants.HULL_CHAIN_ID);
-    this.deckItemsChain = chains.get(Constants.DECK_ITEMS_CHAIN_ID);
-    this.rudderChain = chains.get(Constants.RUDDER_CHAIN_ID);
-    this.ramChain = chains.get(Constants.RAM_CHAIN_ID);
+    if (chains) {
+      this.hullChain = chains.get(Constants.HULL_CHAIN_ID);
+      this.deckItemsChain = chains.get(Constants.DECK_ITEMS_CHAIN_ID);
+      this.rudderChain = chains.get(Constants.RUDDER_CHAIN_ID);
+      this.ramChain = chains.get(Constants.RAM_CHAIN_ID);
+    }
   }
 
   private decodeBoat(reader: SaveWriter, version: number): Boat {
@@ -308,6 +308,7 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
   public override decode(reader: SaveWriter, version: number): void {
     super.decode(reader, version);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const saveVersion = reader.getUint32();
 
     const numBoats = reader.getUint32();
@@ -315,10 +316,8 @@ export class Sailing extends SkillWithMastery<BoatAction, SailingSkillData> {
       this.decodeBoat(reader, version);
     }
     const numDummyBoats = reader.getUint32();
-    const tinyIsland = this.ports.getObjectSafe('sailing:tinyIsland');
     for (let i = 0; i < numDummyBoats; i++) {
-      const boat = this.decodeBoat(reader, version);
-      if (boat.port === undefined) boat.port = tinyIsland;
+      this.decodeBoat(reader, version);
     }
   }
 
@@ -360,6 +359,7 @@ Port: ${boat.port.name}
     return this.isBasicSkillRecipeUnlocked(action);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getActionIDFromOldID(oldActionID: number, idMap: NumericIDMap): string {
     return '';
   }

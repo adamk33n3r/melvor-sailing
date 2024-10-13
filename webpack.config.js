@@ -40,7 +40,10 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: [
+          'ts-loader',
+          'webpack-remove-code-blocks',
+        ],
         exclude: /node_modules/,
       },
       {

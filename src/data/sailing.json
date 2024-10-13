@@ -207,7 +207,7 @@
         "name": "Mastery Token (Sailing)",
         "category": "Mastery",
         "type": "Token",
-        "media": "img/sailing-boat.png",
+        "media": "img/mastery_token.png",
         "ignoreCompletion": true,
         "obtainFromItemLog": false,
         "golbinRaidExclusive": false,
@@ -238,15 +238,19 @@
           },
           {
             "key": "stabAttackBonus",
-            "value": -2
+            "value": -10
           },
           {
             "key": "slashAttackBonus",
-            "value": 92
+            "value": 130
+          },
+          {
+            "key": "blockAttackBonus",
+            "value": 130
           },
           {
             "key": "meleeStrengthBonus",
-            "value": 100
+            "value": 185
           }
         ],
         "attackType": "melee",
@@ -259,9 +263,84 @@
           {
             "type": "SkillLevel",
             "skillID": "melvorD:Strength",
-            "level": 60
+            "level": 80
           }
         ]
+      },
+      {
+        "id": "Golden_Barrelchest_Anchor",
+        "name": "Golden Barrelchest Anchor",
+        "category": "Sailing",
+        "type": "Equipment",
+        "itemType": "Weapon",
+        "media": "img/golden_barrelchest_anchor.png",
+        "ignoreCompletion": false,
+        "obtainFromItemLog": false,
+        "golbinRaidExclusive": false,
+        "sellsFor": 20000000,
+        "tier": "none",
+        "validSlots": ["melvorD:Weapon"],
+        "occupiesSlots": ["melvorD:Shield"],
+        "equipmentStats": [
+          {
+            "key": "attackSpeed",
+            "value": 3600
+          },
+          {
+            "key": "stabAttackBonus",
+            "value": -10
+          },
+          {
+            "key": "slashAttackBonus",
+            "value": 130
+          },
+          {
+            "key": "blockAttackBonus",
+            "value": 130
+          },
+          {
+            "key": "meleeStrengthBonus",
+            "value": 200
+          }
+        ],
+        "attackType": "melee",
+        "equipRequirements": [
+          {
+            "type": "SkillLevel",
+            "skillID": "melvorD:Attack",
+            "level": 80
+          },
+          {
+            "type": "SkillLevel",
+            "skillID": "melvorD:Strength",
+            "level": 80
+          }
+        ]
+      }
+    ],
+    "itemUpgrades": [
+      {
+        "upgradedItemID": "sailing:Golden_Barrelchest_Anchor",
+        "itemCosts": [
+          {
+            "id": "sailing:Barrelchest_Anchor",
+            "quantity": 1
+          },
+          {
+            "id": "melvorD:Gold_Bar",
+            "quantity": 1500
+          }
+        ],
+        "currencyCosts": [
+          {
+            "id": "melvorD:GP",
+            "quantity": 20000000
+          }
+        ],
+        "rootItemIDs": [
+          "sailing:Barrelchest_Anchor"
+        ],
+        "isDowngrade": false
       }
     ],
     "pages": [
@@ -347,14 +426,14 @@
               "lootTable": [
                 {
                   "itemID": "melvorD:Normal_Logs",
-                  "minQuantity": 1,
-                  "maxQuantity": 3,
+                  "minQuantity": 100,
+                  "maxQuantity": 1000,
                   "weight": 10
                 },
                 {
                   "itemID": "melvorD:Raw_Shrimp",
-                  "minQuantity": 1,
-                  "maxQuantity": 5,
+                  "minQuantity": 100,
+                  "maxQuantity": 1000,
                   "weight": 5
                 },
                 {
@@ -367,8 +446,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 10,
-                  "max": 50
+                  "min": 100,
+                  "max": 500
                 }
               ]
             },
@@ -387,20 +466,20 @@
               "lootTable": [
                 {
                   "itemID": "melvorD:Oak_Logs",
-                  "minQuantity": 1,
-                  "maxQuantity": 3,
+                  "minQuantity": 100,
+                  "maxQuantity": 1000,
                   "weight": 10
                 },
                 {
                   "itemID": "melvorD:Raw_Shrimp",
-                  "minQuantity": 1,
-                  "maxQuantity": 5,
+                  "minQuantity": 100,
+                  "maxQuantity": 1000,
                   "weight": 5
                 },
                 {
                   "itemID": "melvorD:Raw_Sardine",
-                  "minQuantity": 1,
-                  "maxQuantity": 2,
+                  "minQuantity": 100,
+                  "maxQuantity": 1000,
                   "weight": 5
                 },
                 {
@@ -413,8 +492,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 50,
-                  "max": 500
+                  "min": 500,
+                  "max": 1000
                 }
               ]
             },
@@ -447,8 +526,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 500,
-                  "max": 1000
+                  "min": 1000,
+                  "max": 2000
                 }
               ]
             },
@@ -475,7 +554,7 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
+                  "min": 2000,
                   "max": 5000
                 }
               ]

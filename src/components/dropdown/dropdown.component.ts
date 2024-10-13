@@ -23,8 +23,8 @@ export function DropdownComponent<T>(data: DropdownOptions<T>, onChange: (value:
     rightLabel: data.side === 'right',
     leftLabel: data.side === 'left',
     block: data.block,
-    dropdownButton: null as HTMLButtonElement,
-    optionsContainer: null as HTMLDivElement,
+    dropdownButton: null as unknown as HTMLButtonElement,
+    optionsContainer: null as unknown as HTMLDivElement,
     mounted() {
       self = this;
       self.dropdownButton = getElementByIdWithoutId('port-dropdown-button');
@@ -56,10 +56,8 @@ export function DropdownComponent<T>(data: DropdownOptions<T>, onChange: (value:
     },
     appendOptionToElement(option: DropdownOptionsData<T>, element: HTMLElement) {
       element.innerHTML = option.name;
-      if (option.media !== undefined) {
-        const image = createElement('img', { className: 'skill-icon-sm m-0', attributes: [['src', option.media]] });
-        element.prepend(image, ' ');
-      }
+      const image = createElement('img', { className: 'skill-icon-sm m-0', attributes: [['src', option.media]] });
+      element.prepend(image, ' ');
     },
     updateValue(newOption: DropdownOptionsData<T>) {
       self.appendOptionToElement(newOption, self.dropdownButton);

@@ -1,23 +1,23 @@
 import { Constants } from '../../ts/Constants';
-import { createTooltipComponent } from '../../ts/util';
-import { EquipmentEquipTooltipComponent } from '../equipment-equip-tooltip/equipment-equip-tooltip';
+// import { createTooltipComponent } from '../../ts/util';
+// import { EquipmentEquipTooltipComponent } from '../equipment-equip-tooltip/equipment-equip-tooltip';
 
 function getImgSrc(slot: string, emptyMedia: string) {
-    const upgradeChain = game.shop.upgradeChains.namespaceMaps.get('sailing').get(slot);
+    const upgradeChain = game.shop.upgradeChains.getObjectSafe(`${Constants.MOD_NAMESPACE}:${slot}`);
     const lowest = game.shop.getLowestUpgradeInChain(upgradeChain.rootUpgrade);
     return lowest !== undefined ? lowest.media : mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl(emptyMedia);
 }
 
 export interface EquipmentComponentProps {
     imgSrc: string;
-    quantity: number;
+    quantity: number | null;
     update(): void;
     mounted($el: HTMLElement): void;
 }
 
 export function EquipmentComponent(slot: string, emptyMedia: string): Component<EquipmentComponentProps> {
-    const upgradeChain = game.shop.upgradeChains.namespaceMaps.get(Constants.MOD_NAMESPACE).get(slot);
-    const equipped = new EquippedItem(new EquipmentSlot(game.registeredNamespaces.getNamespace(Constants.MOD_NAMESPACE), {
+    const upgradeChain = game.shop.upgradeChains.getObjectSafe(`${Constants.MOD_NAMESPACE}:${slot}`);
+    const equipped = new EquippedItem(new EquipmentSlot(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), {
         id: 'sailing_dummy_equipment_slot',
         emptyMedia: '',
         emptyName: '',
@@ -26,8 +26,8 @@ export function EquipmentComponent(slot: string, emptyMedia: string): Component<
         allowQuantity: false,
         gridPosition: {
             col: 0,
-            row: 69
-        }
+            row: 69,
+        },
     }, game), game.emptyEquipmentItem);
     const tooltipElem = new EquipmentTooltipElement();
     const quickEquip = new QuickEquipTooltipElement();
@@ -39,8 +39,7 @@ export function EquipmentComponent(slot: string, emptyMedia: string): Component<
         update() {
             this.imgSrc = getImgSrc(slot, emptyMedia);
             const lowest = game.shop.getLowestUpgradeInChain(upgradeChain.rootUpgrade);
-            const stats = game.shop.getTotalStatsInChain(lowest);
-            const equipmentItem = new EquipmentItem(game.registeredNamespaces.getNamespace(Constants.MOD_NAMESPACE), {
+            const equipmentItem = new EquipmentItem(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), {
                 id: 'sailing_dummy_equipment_item',
                 name: lowest ? lowest.name : upgradeChain.defaultName,
                 // customDescription: 'this is a description',
@@ -49,7 +48,8 @@ export function EquipmentComponent(slot: string, emptyMedia: string): Component<
                 media: '',
                 occupiesSlots: [],
                 equipRequirements: [],
-                equipmentStats: lowest ? stats.modifiers.toCondensedValues().map((mod) => ({key:mod.modifier.localID, value: mod.value})) as any : [],
+                equipmentStats: lowest ? game.shop.getTotalStatsInChain(lowest).modifiers.toCondensedValues()
+                    .map((mod) => ({ key: mod.modifier.localID, value: mod.value })) as AnyEquipStatData[] : [],
                 category: '',
                 type: '',
                 ignoreCompletion: false,
@@ -63,7 +63,7 @@ export function EquipmentComponent(slot: string, emptyMedia: string): Component<
             tooltipElem.setFromSlot(equipped);
         },
         mounted($el: HTMLElement) {
-            const imgEle = $el.querySelector('.sailing-equip-img') as HTMLImageElement;
+            const imgEle = $el.querySelector('.sailing-equip-img')!;
             quickEquip.init(MAX_QUICK_EQUIP_ITEMS);
 
             tooltipElem.setFromSlot(equipped);
@@ -117,6 +117,6 @@ export function EquipmentComponent(slot: string, emptyMedia: string): Component<
             //     onShow: () => equip.updateOptions(),
             //     // onShow: () => quickEquip.setEquipped(game.combat.player, equipped),
             // });
-        }
+        },
     };
 }

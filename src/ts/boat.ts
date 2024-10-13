@@ -1,5 +1,5 @@
+import { Constants } from './Constants';
 import { DummyPort, Port } from './port';
-import { BoatAction } from './sailing';
 
 export enum BoatState {
     ReadyToSail,
@@ -17,10 +17,32 @@ export interface TripData {
     ram: ShopPurchase;
 }
 
+interface BoatActionData extends BasicSkillRecipeData {
+    media: string;
+    currencyCosts: IDQuantity[];
+    itemCosts: IDQuantity[];
+}
+
+export class BoatAction extends BasicSkillRecipe {
+  private _media: string;
+  constructor(namespace: DataNamespace, data: BoatActionData, game: Game) {
+    super(namespace, data, game);
+    this._media = data.media;
+  }
+
+  public get name() {
+    return getLangString(`${Constants.MOD_NAMESPACE}_Boat_${this.localID}`);
+  }
+
+  public get media() {
+    return this.getMediaURL(this._media);
+  }
+}
+
+
 export class Boat extends NamespacedObject {
-    private _sailTimer: Timer = null;
+    private _sailTimer: Timer;
     public state: BoatState = BoatState.ReadyToSail;
-    public port: Port;
     private _action: BoatAction;
 
     get sailTimer() {
@@ -59,7 +81,7 @@ export class Boat extends NamespacedObject {
         return this._sailTimer.ticksLeft > 0;
     }
 
-    constructor(namespace: DataNamespace, action: BoatAction, private game: Game) {
+    constructor(namespace: DataNamespace, action: BoatAction, public port: Port, private game: Game) {
         super(namespace, action.localID);
         this._sailTimer = new Timer('Skill', () => this.onReturn());
         this._action = action;
@@ -97,7 +119,7 @@ export class Boat extends NamespacedObject {
         return writer;
     }
 
-    private decodePort(reader: SaveWriter, version: number): Port {
+    private decodePort(reader: SaveWriter, _version: number): Port {
         let port = reader.getNamespacedObject(game.sailing.ports);
         if (typeof port === 'string') {
             if (port.startsWith('sailing')) {
@@ -138,7 +160,11 @@ export class DummyBoat extends Boat {
                 id: localID,
                 baseExperience: 0,
                 level: 1,
+                media: 'img/sailing-boat.png',
+                currencyCosts: [],
+                itemCosts: [],
             }, game),
+            game.sailing.ports.getObjectSafe('sailing:tinyIsland'),
             game,
         );
     }

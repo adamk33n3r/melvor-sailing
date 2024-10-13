@@ -1,11 +1,13 @@
+import { Constants } from '../../ts/Constants';
+
 function getAllPurchasedInChain(chain: ShopUpgradeChain) {
     const purchased = new Set<ShopPurchase>();
-    let current = chain.rootUpgrade;
+    let current: ShopPurchase | undefined = chain.rootUpgrade;
     while (current !== undefined) {
         if (game.shop.isUpgradePurchased(current)) {
             purchased.add(current);
         }
-        current = current.unlockRequirements[0]?.purchase;
+        current = current.unlockRequirements.at(0)?.purchase;
     }
     return purchased;
 }
@@ -23,24 +25,22 @@ export function EquipmentEquipTooltipComponent(upgrade: string, onEquip: (button
             console.log('equip:', buttonData);
             onEquip(buttonData);
         },
-        init() {},
-        update() {},
         updateOptions() {
-            const upgradeChain = game.shop.upgradeChains.namespaceMaps.get('sailing').get(upgrade);
-            const lowest = game.shop.getLowestUpgradeInChain(upgradeChain.rootUpgrade);
-            console.log(lowest);
+            const upgradeChain = game.shop.upgradeChains.getObjectSafe(`${Constants.MOD_NAMESPACE}:${upgrade}`);
+            // const lowest = game.shop.getLowestUpgradeInChain(upgradeChain.rootUpgrade);
             // for testing, will just be lowest per chain in slot
 
             const allPurchased = getAllPurchasedInChain(upgradeChain);
             this.buttons = [];
             allPurchased.forEach((purchase) => {
-                (this.buttons as ButtonData[]).push({
+                this.buttons.push({
                     image: purchase.media,
                     upgrade: purchase,
                 });
             });
         },
         mounted($el: HTMLElement) {
+            console.log('mounted:', $el);
         },
     };
 }

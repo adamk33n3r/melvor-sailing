@@ -3,7 +3,7 @@ import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
 import { formatTime, getElementByIdWithoutId as getElementByIdAndRemoveId, tickToTime } from '../ts/util';
 import { DropdownComponent } from './dropdown/dropdown.component';
-import { EquipmentComponent, EquipmentComponentProps } from './equipment/equipment.component';
+import { EquipmentComponent } from './equipment/equipment.component';
 
 export function BoatComponent(boat: Boat) {
     let self = {} as ReturnType<typeof BoatComponent>;
@@ -41,11 +41,11 @@ export function BoatComponent(boat: Boat) {
             self.returnTime = tickToTime(boat.modifiedInterval / TICK_INTERVAL, true);
             self.updateGrants();
         }),
-        xpIcon: null as XpIconElement,
-        masteryIcon: null as MasteryXpIconElement,
-        masteryPoolIcon: null as MasteryPoolIconElement,
-        intervalIcon: null as IntervalIconElement,
-        progressBar: null as ProgressBarElement,
+        xpIcon: null as unknown as XpIconElement,
+        masteryIcon: null as unknown as MasteryXpIconElement,
+        masteryPoolIcon: null as unknown as MasteryPoolIconElement,
+        intervalIcon: null as unknown as IntervalIconElement,
+        progressBar: null as unknown as ProgressBarElement,
         update() {
             self.isLocked = game.sailing.level < boat.action.level;
             self.hull.update();
@@ -78,22 +78,25 @@ export function BoatComponent(boat: Boat) {
             self.masteryIcon.setXP(masteryXPToAdd, baseMasteryXPToAdd);
             self.masteryIcon.setSources(game.sailing.getMasteryXPSources(boat.action));
             self.masteryPoolIcon.setXP(masteryPoolXPToAdd);
-            game.unlockedRealms.length > 1 ? this.masteryPoolIcon.setRealm(game.defaultRealm) : this.masteryPoolIcon.hideRealms();
+            if (game.unlockedRealms.length > 1) {
+                this.masteryPoolIcon.setRealm(game.defaultRealm);
+             } else {
+                this.masteryPoolIcon.hideRealms();
+             }
             self.intervalIcon.setCustomInterval(formatTime(boat.modifiedInterval/1000), game.sailing.getIntervalSources(boat.action));
         },
         updateProgressBar() {
-            if (self.progressBar !== undefined) {
-                if (boat.onTrip) {
-                    self.progressBar.animateProgressFromTimer(boat.sailTimer);
-                } else {
-                    self.progressBar.stopAnimation();
-                }
+            if (boat.onTrip) {
+                self.progressBar.animateProgressFromTimer(boat.sailTimer);
+            } else {
+                self.progressBar.stopAnimation();
             }
         },
         mounted() {
             // HACK: This is so we can reference the reactive proxy object `this` in the dropdown callback
             self = this;
             const parent = document.getElementById(self.boat.localID);
+            if (!parent) throw new Error(`Could not find parent element with id: ${self.boat.localID}`);
             // ui.create(self.hull, getElementByIdAndRemoveId('hull-grid', parent));
             // ui.create(self.deckItems, getElementByIdAndRemoveId('deck-grid', parent));
             // ui.create(self.rudder, getElementByIdAndRemoveId('rudder-grid', parent));
@@ -136,14 +139,14 @@ export function BoatComponent(boat: Boat) {
         collectLoot() {
             boat.collectLoot();
         },
-        viewLoot() {
-            SwalLocale.fire({
-              iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
-              title: boat.port.name,
-              html: boat.port.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
-                `${boat.port.minRolls} - ${boat.port.maxRolls} Rolls<br>` +
-                boat.port.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
+        async viewLoot() {
+            return SwalLocale.fire({
+                iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
+                title: boat.port.name,
+                html: boat.port.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
+                    `${boat.port.minRolls} - ${boat.port.maxRolls} Rolls<br>` +
+                    boat.port.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
             });
-        }
+        },
     }
 }

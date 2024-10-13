@@ -12,13 +12,6 @@ import Sails from '../data/hulls.json';
 import '../css/styles.css';
 
 // Images
-// To bundle your mod's icon
-import '../img/icon.png';
-// Reference images using `ctx.getResourceUrl`
-import LargeIcon from '../img/icon_large.png';
-// import '../img/sail_adamant.png';
-// import '../img/sail_rune.png';
-// import '../img/sail_dragon.png';
 import './images';
 
 import { Sailing } from './sailing';
@@ -36,7 +29,7 @@ export async function setup(ctx: Modding.ModContext) {
   const trans = new Translation(ctx);
   trans.register();
 
-  const sailing = game.registerSkill(game.registeredNamespaces.getNamespace('sailing'), Sailing);
+  const sailing = game.registerSkill(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), Sailing);
 
   // Register our GameData
   await ctx.gameData.addPackage(ModData as GameDataPackage);
@@ -69,8 +62,8 @@ export async function setup(ctx: Modding.ModContext) {
         (gamemode) =>
           gamemode.defaultInitialLevelCap !== undefined &&
           gamemode.levelCapIncreases.length > 0 &&
-          gamemode.useDefaultSkillUnlockRequirements === true &&
-          gamemode.allowSkillUnlock === false,
+          gamemode.useDefaultSkillUnlockRequirements &&
+          !gamemode.allowSkillUnlock,
       );
 
       await ctx.gameData.addPackage({
@@ -102,8 +95,8 @@ export async function setup(ctx: Modding.ModContext) {
       });
 
       ctx.patch(EventManager, 'loadEvents').after(() => {
-        if(game.currentGamemode.startingSkills !== undefined && game.currentGamemode.startingSkills.has(game.sailing)) {
-            game.sailing.setUnlock(true);
+        if(game.currentGamemode.startingSkills?.has(game.sailing)) {
+          game.sailing.setUnlock(true);
         }
       });
     }

@@ -18,7 +18,7 @@
       v-show="!isLocked"
     >
       <div class="row gutters-tiny">
-        <div class="col-12 p-2">
+        <div class="col-12 p-2 font-w600">
           {{ boat.name }}
         </div>
         <img class="bank-img-detail" :src="boat.media"/>
@@ -47,16 +47,13 @@
           <div id="ram-grid"></div>
         </div> -->
         <div
-          class="col-12 row justify-content-center gutters-tiny text-center icon-size-48"
+          class="col-12 row mt-3 mb-3 justify-content-center gutters-tiny text-center icon-size-48"
           id="grants-container"
         >
           <xp-icon id="sailing-xp"></xp-icon>
           <mastery-xp-icon id="sailing-mastery-xp"></mastery-xp-icon>
           <mastery-pool-icon id="sailing-pool-xp"></mastery-pool-icon>
           <interval-icon id="sailing-interval"></interval-icon>
-        </div>
-        <div class="col-12 mt-2">
-          Port
         </div>
         <div class="col-12 mt-2 d-flex gap-2">
           <div id="dropdown" class="flex-grow-1"></div>

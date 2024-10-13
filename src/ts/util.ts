@@ -1,11 +1,11 @@
-export function createTooltipComponent(
+export function createTooltipComponent<T>(
     target: Element,
-    component: Component<any>,
+    component: Component<T>,
     tippyProps: Partial<TippyProps>,
 ) {
     const dummyHost = document.createElement('div');
     ui.create(component, dummyHost);
-    const addedEle = dummyHost.children.item(dummyHost.children.length - 1)
+    const addedEle = dummyHost.children.item(dummyHost.children.length - 1)!;
     const tooltip = tippy(target, {
         ...tippyProps,
         content: addedEle,
@@ -16,6 +16,7 @@ export function createTooltipComponent(
 export function getElementByIdWithoutId<T extends HTMLElement>(id: string, parent?: HTMLElement): T {
     if (parent !== undefined) {
         const ele = parent.querySelector<T>(`#${id}`);
+        if (ele === null) throw new Error(`Element with id ${id} not found`);
         ele.removeAttribute('id');
         return ele;
     }
