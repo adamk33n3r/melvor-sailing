@@ -1,19 +1,19 @@
 import { ComponentClass } from '../ts/component';
-import { BoatComponent } from './boat.component';
+import { ShipComponent } from './ship.component';
 
 export class SailingPage extends ComponentClass {
   override $template = '#sailing-page-template';
-  boatComponents: ReturnType<typeof BoatComponent>[] = []
+  shipComponents: ReturnType<typeof ShipComponent>[] = []
   mounted() {
-    game.sailing.boats.forEach((boat) => {
-      const boatComponent = BoatComponent(boat);
-      this.boatComponents.push(boatComponent);
-      ui.create(boatComponent, document.getElementById('boat-container')!);
+    game.sailing.ships.forEach((ship) => {
+      const shipComponent = ShipComponent(ship);
+      this.shipComponents.push(shipComponent);
+      ui.create(shipComponent, document.getElementById('ship-container')!);
     });
   }
   override update() {
-    this.boatComponents.forEach((boatComponent) => {
-      boatComponent.update();
+    this.shipComponents.forEach((shipComponent) => {
+      shipComponent.update();
     });
   }
 }

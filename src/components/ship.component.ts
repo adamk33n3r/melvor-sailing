@@ -1,21 +1,21 @@
-import { Boat, BoatState } from '../ts/boat';
+import { Ship, ShipState } from '../ts/ship';
 import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
 import { formatTime, getElementByIdWithoutId as getElementByIdAndRemoveId, tickToTime } from '../ts/util';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { EquipmentComponent } from './equipment/equipment.component';
 
-export function BoatComponent(boat: Boat) {
-    let self = {} as ReturnType<typeof BoatComponent>;
+export function ShipComponent(ship: Ship) {
+    let self = {} as ReturnType<typeof ShipComponent>;
     return {
-        $template: '#sailing-boat-template',
-        boat,
+        $template: '#sailing-ship-template',
+        ship,
         isLocked: true,
         lockedImgSrc: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl('img/sailing-boat.png'),
         readyToSail: true,
         onTrip: false,
         hasReturned: false,
-        returnTime: tickToTime(boat.modifiedInterval / TICK_INTERVAL, true),
+        returnTime: tickToTime(ship.modifiedInterval / TICK_INTERVAL, true),
         returnTimer: 'Done',
         lootImg: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl('melvor:assets/media/bank/pirate_booty.png'),
         hull: EquipmentComponent('Hull', 'img/hull_bronze.png'),
@@ -26,7 +26,7 @@ export function BoatComponent(boat: Boat) {
             name: '',
             side: 'left',
             block: true,
-            selected: { name: boat.port.name, value: boat.port, media: boat.port.media },
+            selected: { name: ship.port.name, value: ship.port, media: ship.port.media },
             options: game.sailing.ports.allObjects.map((p: Port) => {
                 const hasLevel = game.sailing.level >= p.level;
                 return {
@@ -37,8 +37,8 @@ export function BoatComponent(boat: Boat) {
                 };
             }),
         }, (port: Port) => {
-            boat.port = port;
-            self.returnTime = tickToTime(boat.modifiedInterval / TICK_INTERVAL, true);
+            ship.port = port;
+            self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
             self.updateGrants();
         }),
         xpIcon: null as unknown as XpIconElement,
@@ -47,15 +47,15 @@ export function BoatComponent(boat: Boat) {
         intervalIcon: null as unknown as IntervalIconElement,
         progressBar: null as unknown as ProgressBarElement,
         update() {
-            self.isLocked = game.sailing.level < boat.action.level;
+            self.isLocked = game.sailing.level < ship.action.level;
             self.hull.update();
             self.deckItems.update();
             self.rudder.update();
             self.ram.update();
             self.port.setEnabled(this.readyToSail);
-            self.returnTime = tickToTime(boat.modifiedInterval / TICK_INTERVAL, true);
+            self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
             self.port.setData({
-                selected: { name: boat.port.name, value: boat.port, media: boat.port.media },
+                selected: { name: ship.port.name, value: ship.port, media: ship.port.media },
                 options: game.sailing.ports.allObjects.map((p: Port) => {
                     const hasLevel = game.sailing.level >= p.level;
                     return {
@@ -70,24 +70,24 @@ export function BoatComponent(boat: Boat) {
             self.updateProgressBar();
         },
         updateGrants() {
-            const baseMasteryXPToAdd = game.sailing.getBaseMasteryXPToAddForAction(boat.action, boat.scaledForMasteryInterval);
-            const masteryXPToAdd = game.sailing.getMasteryXPToAddForAction(boat.action, boat.scaledForMasteryInterval);
+            const baseMasteryXPToAdd = game.sailing.getBaseMasteryXPToAddForAction(ship.action, ship.scaledForMasteryInterval);
+            const masteryXPToAdd = game.sailing.getMasteryXPToAddForAction(ship.action, ship.scaledForMasteryInterval);
             const masteryPoolXPToAdd = game.sailing.getMasteryXPToAddToPool(masteryXPToAdd);
-            self.xpIcon.setXP(game.sailing.modifyXP(boat.baseXP, boat.action), boat.baseXP);
-            self.xpIcon.setSources(game.sailing.getXPSources(boat.action));
+            self.xpIcon.setXP(game.sailing.modifyXP(ship.baseXP, ship.action), ship.baseXP);
+            self.xpIcon.setSources(game.sailing.getXPSources(ship.action));
             self.masteryIcon.setXP(masteryXPToAdd, baseMasteryXPToAdd);
-            self.masteryIcon.setSources(game.sailing.getMasteryXPSources(boat.action));
+            self.masteryIcon.setSources(game.sailing.getMasteryXPSources(ship.action));
             self.masteryPoolIcon.setXP(masteryPoolXPToAdd);
             if (game.unlockedRealms.length > 1) {
                 this.masteryPoolIcon.setRealm(game.defaultRealm);
              } else {
                 this.masteryPoolIcon.hideRealms();
              }
-            self.intervalIcon.setCustomInterval(formatTime(boat.modifiedInterval/1000), game.sailing.getIntervalSources(boat.action));
+            self.intervalIcon.setCustomInterval(formatTime(ship.modifiedInterval/1000), game.sailing.getIntervalSources(ship.action));
         },
         updateProgressBar() {
-            if (boat.onTrip) {
-                self.progressBar.animateProgressFromTimer(boat.sailTimer);
+            if (ship.onTrip) {
+                self.progressBar.animateProgressFromTimer(ship.sailTimer);
             } else {
                 self.progressBar.stopAnimation();
             }
@@ -95,8 +95,8 @@ export function BoatComponent(boat: Boat) {
         mounted() {
             // HACK: This is so we can reference the reactive proxy object `this` in the dropdown callback
             self = this;
-            const parent = document.getElementById(self.boat.localID);
-            if (!parent) throw new Error(`Could not find parent element with id: ${self.boat.localID}`);
+            const parent = document.getElementById(self.ship.localID);
+            if (!parent) throw new Error(`Could not find parent element with id: ${self.ship.localID}`);
             // ui.create(self.hull, getElementByIdAndRemoveId('hull-grid', parent));
             // ui.create(self.deckItems, getElementByIdAndRemoveId('deck-grid', parent));
             // ui.create(self.rudder, getElementByIdAndRemoveId('rudder-grid', parent));
@@ -104,17 +104,17 @@ export function BoatComponent(boat: Boat) {
             ui.create(self.port, getElementByIdAndRemoveId('dropdown', parent));
 
             setInterval(() => {
-                self.returnTimer = tickToTime(self.boat.sailTimer.ticksLeft);
-                if (self.boat.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
+                self.returnTimer = tickToTime(self.ship.sailTimer.ticksLeft);
+                if (self.ship.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
                 self.updateProgressBar();
             }, 1000);
 
-            self.boat.registerOnUpdate(() => {
-                self.readyToSail = self.boat.state == BoatState.ReadyToSail;
-                self.onTrip = self.boat.state == BoatState.OnTrip;
-                self.hasReturned = self.boat.state == BoatState.HasReturned;
-                self.returnTimer = tickToTime(self.boat.sailTimer.ticksLeft);
-                if (self.boat.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
+            self.ship.registerOnUpdate(() => {
+                self.readyToSail = self.ship.state == ShipState.ReadyToSail;
+                self.onTrip = self.ship.state == ShipState.OnTrip;
+                self.hasReturned = self.ship.state == ShipState.HasReturned;
+                self.returnTimer = tickToTime(self.ship.sailTimer.ticksLeft);
+                if (self.ship.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
                 self.port.setEnabled(self.readyToSail);
 
                 self.updateGrants();
@@ -133,19 +133,19 @@ export function BoatComponent(boat: Boat) {
         },
 
         setSail() {
-            boat.setSail();
+            ship.setSail();
             self.updateProgressBar();
         },
         collectLoot() {
-            boat.collectLoot();
+            ship.collectLoot();
         },
         async viewLoot() {
             return SwalLocale.fire({
                 iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
-                title: boat.port.name,
-                html: boat.port.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
-                    `${boat.port.minRolls} - ${boat.port.maxRolls} Rolls<br>` +
-                    boat.port.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
+                title: ship.port.name,
+                html: ship.port.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
+                    `${ship.port.minRolls} - ${ship.port.maxRolls} Rolls<br>` +
+                    ship.port.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
             });
         },
     }

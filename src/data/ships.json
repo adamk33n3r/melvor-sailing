@@ -1,0 +1,94 @@
+{
+  "$schema": "./gameDataEx.json",
+  "namespace": "sailing",
+  "data": {
+    "skillData": [
+      {
+        "skillID": "sailing:Sailing",
+        "data": {
+          "masteryLevelUnlocks": [
+            {
+              "level": 1,
+              "description": "Each level provides +1% GP acquired for this boat."
+            }
+          ],
+          "masteryLevelBonuses": [
+            {
+              "modifiers": {
+                "currencyGain": [
+                  {
+                    "currencyID": "melvorD:GP",
+                    "skillID": "sailing:Sailing",
+                    "actionID": "sailing:Boat1",
+                    "value": 1
+                  }
+                ]
+              },
+              "level": 1,
+              "levelScalingMax": 99,
+              "levelScalingSlope": 1
+            }
+          ],
+          "ships": [
+            {
+              "id": "Boat1",
+              "level": 1,
+              "baseExperience": 1,
+              "realm": "melvorD:Melvor",
+              "media": "img/sailing-boat.png",
+              "currencyCosts": [],
+              "itemCosts": []
+            },
+            {
+              "id": "Boat2",
+              "level": 30,
+              "baseExperience": 1,
+              "realm": "melvorD:Melvor",
+              "media": "img/ship.png",
+              "currencyCosts": [
+                {
+                  "id": "melvorD:GP",
+                  "quantity": 100
+                }
+              ],
+              "itemCosts": []
+            },
+            {
+              "id": "Boat3",
+              "level": 50,
+              "baseExperience": 1,
+              "realm": "melvorD:Melvor",
+              "media": "img/submarine.png",
+              "currencyCosts": [
+                {
+                  "id": "melvorD:GP",
+                  "quantity": 10000
+                }
+              ],
+              "itemCosts": []
+            },
+            {
+              "id": "Boat4",
+              "level": 70,
+              "baseExperience": 1,
+              "realm": "melvorD:Melvor",
+              "media": "img/container-ship.png",
+              "currencyCosts": [
+                {
+                  "id": "melvorD:GP",
+                  "quantity": 1000000
+                }
+              ],
+              "itemCosts": [
+                {
+                  "id": "melvorD:Dragonite_Bar",
+                  "quantity": 10000
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

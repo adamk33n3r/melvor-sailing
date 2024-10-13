@@ -1,7 +1,7 @@
-import { BoatAction } from '../ts/boat';
+import { ShipAction } from '../ts/ship';
 
 export function LootComponent(
-  action: BoatAction,
+  action: ShipAction,
   rewards: Rewards,
   masteryXP: number,
   masteryPoolXP: number,

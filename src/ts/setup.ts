@@ -2,6 +2,8 @@
 // Game data for registration
 import ModData from '../data/sailing.json';
 import AoDData from '../data/sailing-aod.json';
+import ShipsData from '../data/ships.json';
+import PortsData from '../data/ports.json';
 import DeckItems from '../data/deckItems.json';
 import Rams from '../data/rams.json';
 import Rudders from '../data/rudders.json';
@@ -34,6 +36,8 @@ export async function setup(ctx: Modding.ModContext) {
   // Register our GameData
   await ctx.gameData.addPackage(ModData as GameDataPackage);
   await Promise.all([
+    ctx.gameData.addPackage(ShipsData as GameDataPackage),
+    ctx.gameData.addPackage(PortsData as GameDataPackage),
     ctx.gameData.addPackage(DeckItems as GameDataPackage),
     ctx.gameData.addPackage(Rams as GameDataPackage),
     ctx.gameData.addPackage(Rudders as GameDataPackage),

@@ -1,14 +1,14 @@
 import { Constants } from './Constants';
 import { DummyPort, Port } from './port';
 
-export enum BoatState {
+export enum ShipState {
     ReadyToSail,
     OnTrip,
     HasReturned,
 }
 
 export interface TripData {
-    boat: Boat;
+    boat: Ship;
     port: Port;
     interval: number;
     hull: ShopPurchase;
@@ -17,15 +17,15 @@ export interface TripData {
     ram: ShopPurchase;
 }
 
-interface BoatActionData extends BasicSkillRecipeData {
+export interface ShipActionData extends BasicSkillRecipeData {
     media: string;
     currencyCosts: IDQuantity[];
     itemCosts: IDQuantity[];
 }
 
-export class BoatAction extends BasicSkillRecipe {
+export class ShipAction extends BasicSkillRecipe {
   private _media: string;
-  constructor(namespace: DataNamespace, data: BoatActionData, game: Game) {
+  constructor(namespace: DataNamespace, data: ShipActionData, game: Game) {
     super(namespace, data, game);
     this._media = data.media;
   }
@@ -40,10 +40,10 @@ export class BoatAction extends BasicSkillRecipe {
 }
 
 
-export class Boat extends NamespacedObject {
+export class Ship extends NamespacedObject {
     private _sailTimer: Timer;
-    public state: BoatState = BoatState.ReadyToSail;
-    private _action: BoatAction;
+    public state: ShipState = ShipState.ReadyToSail;
+    private _action: ShipAction;
 
     get sailTimer() {
         return this._sailTimer;
@@ -81,7 +81,7 @@ export class Boat extends NamespacedObject {
         return this._sailTimer.ticksLeft > 0;
     }
 
-    constructor(namespace: DataNamespace, action: BoatAction, public port: Port, private game: Game) {
+    constructor(namespace: DataNamespace, action: ShipAction, public port: Port, private game: Game) {
         super(namespace, action.localID);
         this._sailTimer = new Timer('Skill', () => this.onReturn());
         this._action = action;
@@ -100,13 +100,13 @@ export class Boat extends NamespacedObject {
         } else {
             this._sailTimer.start(1000*1);
         }
-        this.state = BoatState.OnTrip;
+        this.state = ShipState.OnTrip;
         this.callBackCallbacks();
     }
     
     public collectLoot() {
         game.sailing.generateLoot(this, () => {
-            this.state = BoatState.ReadyToSail;
+            this.state = ShipState.ReadyToSail;
             this.callBackCallbacks();
         });
     }
@@ -143,7 +143,7 @@ export class Boat extends NamespacedObject {
     }
 
     private onReturn() {
-        this.state = BoatState.HasReturned;
+        this.state = ShipState.HasReturned;
         this.callBackCallbacks();
     }
 
@@ -152,11 +152,11 @@ export class Boat extends NamespacedObject {
     }
 }
 
-export class DummyBoat extends Boat {
+export class DummyShip extends Ship {
     constructor(namespace: DataNamespace, localID: string, game: Game) {
         super(
             namespace,
-            new BoatAction(namespace, {
+            new ShipAction(namespace, {
                 id: localID,
                 baseExperience: 0,
                 level: 1,

@@ -1,5 +1,5 @@
-<template id="sailing-boat-template">
-  <div class="col-6 col-lg-3" :id="boat.localID" @vue:mounted="mounted">
+<template id="sailing-ship-template">
+  <div class="col-6 col-lg-3" :id="ship.localID" @vue:mounted="mounted">
     <div
       class="block block-rounded block-link-pop border-top border-danger border-4x justify-vertical-center"
       v-show="isLocked"
@@ -8,7 +8,7 @@
         <div class="font-size-sm font-w600 text-center text-muted">
           <span><lang-string lang-id="MENU_TEXT_LOCKED"></lang-string></span><br />
           <img class="mining-ore-img m-3" :src="lockedImgSrc" /><br />
-          <span class="badge badge-danger badge-pill w-100 mb-1">Level {{ boat.action.level }}</span>
+          <span class="badge badge-danger badge-pill w-100 mb-1">Level {{ ship.action.level }}</span>
           <!-- <span class="badge badge-danger badge-pill w-100 mb-1" id="next-abyssal-level">Abyssal Level 69</span> -->
         </div>
       </div>
@@ -19,9 +19,9 @@
     >
       <div class="row gutters-tiny">
         <div class="col-12 p-2 font-w600">
-          {{ boat.name }}
+          {{ ship.name }}
         </div>
-        <img class="bank-img-detail" :src="boat.media"/>
+        <img class="bank-img-detail" :src="ship.media"/>
         <!-- <div class="col-6">
           <div class="p-2">
             Hull
@@ -75,7 +75,7 @@
             <span>{{ returnTimer }}</span>
         </div>
         <div class="col-12">
-          <mastery-display class="mastery-6" data-skill-id="sailing:Sailing" :data-action-id="boat.id"></mastery-display>
+          <mastery-display class="mastery-6" data-skill-id="sailing:Sailing" :data-action-id="ship.id"></mastery-display>
         </div>
       </div>
     </div>
