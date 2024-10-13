@@ -16,7 +16,7 @@ import '../css/styles.css';
 // Images
 import './images';
 
-import { Sailing } from './sailing';
+import { Sailing, SailingNotification } from './sailing';
 import { Translation } from './translation';
 import { UserInterface } from './ui';
 import { Constants } from './Constants';
@@ -120,5 +120,15 @@ export async function setup(ctx: Modding.ModContext) {
     }
 
     return original();
+  });
+
+  ctx.patch(GameNotificationElement, 'setImportance').after(function (_, key, notification, game) {
+    if (key instanceof SailingNotification && notification.isImportant) {
+      const original = this.container.onclick!;
+      this.container.onclick = (ev: MouseEvent) => {
+        original.call(this, ev);
+        changePage(game.pages.getObjectSafe('sailing:Sailing'));
+      };
+    }
   });
 }

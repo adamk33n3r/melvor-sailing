@@ -4,6 +4,7 @@ import { Constants } from './Constants';
 import { UserInterface } from './ui';
 import { Port, PortData } from './port';
 import { LootComponent } from '../components/loot.component';
+import { Logger, LogLevel } from './logger';
 
 class SailingRenderQueue extends MasterySkillRenderQueue<ShipAction> {
   ships = true;
@@ -15,7 +16,14 @@ interface SailingSkillData extends BaseSkillData {
   ships?: ShipActionData[];
 }
 
+export class SailingNotification extends SuccessNotification {
+  constructor(public ship?: Ship) {
+    super('sailing:Returned');
+  }
+}
+
 export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
+  public logger = new Logger('Sailing');
   /* devblock:start */
   public resetMasteries() {
     this.actionMastery.forEach((actionMastery) => {
@@ -48,10 +56,15 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
 
   public ui?: UserInterface;
 
-  private returnNotification = new SuccessNotification('sailing:Returned');
+  private returnNotification = new SailingNotification();
 
   constructor(namespace: DataNamespace, game: Game) {
     super(namespace, 'Sailing', game);
+    if (process.env.NODE_ENV === 'production') {
+      this.logger.setLevel(LogLevel.Info);
+    } else {
+      this.logger.setLevel(LogLevel.Debug);
+    }
     this.categories = new NamespaceRegistry(game.registeredNamespaces, SkillCategory.name);
     this.ports = new NamespaceRegistry(game.registeredNamespaces, Port.name);
     this.ships = new NamespaceRegistry(game.registeredNamespaces, Ship.name);
@@ -210,17 +223,17 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
 
   public override registerData(namespace: DataNamespace, data: SailingSkillData): void {
     super.registerData(namespace, data);
-    console.log('Sailing#registerData');
+    this.logger.info('Sailing#registerData');
 
     if (data.ports !== undefined) {
-      console.log(`Registering ${data.ports.length} Ports`);
+      this.logger.info(`Registering ${data.ports.length} Ports`);
       data.ports.forEach((port) => {
         this.ports.registerObject(new Port(namespace, port, this.game));
       });
     }
 
     if (data.ships !== undefined) {
-      console.log(`Registering ${data.ships.length} Ships`);
+      this.logger.info(`Registering ${data.ships.length} Ships`);
       data.ships.forEach((ship) => {
         this.actions.registerObject(new ShipAction(namespace, ship, this.game));
       });
