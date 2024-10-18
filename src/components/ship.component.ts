@@ -1,7 +1,7 @@
 import { LockState, Ship, ShipState } from '../ts/ship';
 import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
-import { formatTime, getElementByIdWithoutId as getElementByIdAndRemoveId, tickToTime } from '../ts/util';
+import { formatTime, getElementByIdAndRemoveId, tickToTime } from '../ts/util';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { EquipmentComponent } from './equipment/equipment.component';
 
@@ -42,7 +42,9 @@ export function ShipComponent(ship: Ship) {
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
             self.updateGrants();
         }),
-        currencyQuantity: null as unknown as CurrencyQuantityIconElement,
+        unlockCosts: null as unknown as QuantityIconsElement,
+        itemCosts: ship.action.itemCosts,
+        currencyCosts: ship.action.currencyCosts,
         xpIcon: null as unknown as XpIconElement,
         masteryIcon: null as unknown as MasteryXpIconElement,
         masteryPoolIcon: null as unknown as MasteryPoolIconElement,
@@ -70,7 +72,7 @@ export function ShipComponent(ship: Ship) {
             self.hasLevel = game.sailing.level >= ship.action.level;
             self.isLocked = ship.lockState == LockState.Locked;
             self.canUnlock = self._canUnlock();
-            self.currencyQuantity.updateBorder();
+            self.unlockCosts.updateQuantities(game);
             self.hull.update();
             self.deckItems.update();
             self.rudder.update();
@@ -144,11 +146,27 @@ export function ShipComponent(ship: Ship) {
                 self.updateProgressBar();
             });
 
-            self.currencyQuantity = getElementByIdAndRemoveId('sailing-ship-currency-cost', parent);
-            if (ship.action.currencyCosts.length > 0) {
-                self.currencyQuantity.setCurrency(ship.action.currencyCosts[0].currency, ship.action.currencyCosts[0].quantity);
-                self.currencyQuantity.updateBorder();
-            }
+            self.unlockCosts = getElementByIdAndRemoveId('unlockCosts', parent) as QuantityIconsElement;
+            self.unlockCosts.addCurrencyIcons(ship.action.currencyCosts);
+            self.unlockCosts.addItemIcons(ship.action.itemCosts, false);
+            self.unlockCosts.currencies.forEach((currency) => {
+                currency.quantity.textContent = formatNumber(currency.currencyQuantity!.quantity);
+                currency.container.onmouseover = () => {
+                    currency.quantity.textContent = numberWithCommas(currency.currencyQuantity!.quantity);
+                };
+                currency.container.onmouseleave = () => {
+                    currency.quantity.textContent = formatNumber(currency.currencyQuantity!.quantity);
+                };
+            });
+            self.unlockCosts.items.forEach((item) => {
+                item.quantity.textContent = formatNumber(item.itemQuantity!.quantity);
+                item.container.onmouseover = () => {
+                    item.quantity.textContent = numberWithCommas(item.itemQuantity!.quantity);
+                };
+                item.container.onmouseleave = () => {
+                    item.quantity.textContent = formatNumber(item.itemQuantity!.quantity);
+                };
+            });
 
             const grantsContainer = getElementByIdAndRemoveId('grants-container', parent);
 

@@ -13,7 +13,7 @@ export function createTooltipComponent<T>(
     return tooltip;
 }
 
-export function getElementByIdWithoutId<T extends HTMLElement>(id: string, parent?: HTMLElement): T {
+export function getElementByIdAndRemoveId<T extends HTMLElement>(id: string, parent?: HTMLElement): T {
     if (parent !== undefined) {
         const ele = parent.querySelector<T>(`#${id}`);
         if (ele === null) throw new Error(`Element with id ${id} not found`);

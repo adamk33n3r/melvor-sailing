@@ -36,8 +36,26 @@
               "baseExperience": 1,
               "realm": "melvorD:Melvor",
               "media": "img/sailing-boat.png",
-              "currencyCosts": [],
-              "itemCosts": []
+              "currencyCosts": [
+                {
+                  "id": "melvorD:GP",
+                  "quantity": 100000
+                }
+              ],
+              "itemCosts": [
+                {
+                  "id": "melvorD:Normal_Logs",
+                  "quantity": 10000
+                },
+                {
+                  "id": "melvorD:Oak_Logs",
+                  "quantity": 10000
+                },
+                {
+                  "id": "melvorD:Willow_Logs",
+                  "quantity": 10000
+                }
+              ]
             },
             {
               "id": "Boat2",
@@ -48,10 +66,23 @@
               "currencyCosts": [
                 {
                   "id": "melvorD:GP",
-                  "quantity": 100
+                  "quantity": 1000000
                 }
               ],
-              "itemCosts": []
+              "itemCosts": [
+                {
+                  "id": "melvorD:Teak_Logs",
+                  "quantity": 10000
+                },
+                {
+                  "id": "melvorD:Maple_Logs",
+                  "quantity": 10000
+                },
+                {
+                  "id": "melvorD:Mahogany_Logs",
+                  "quantity": 10000
+                }
+              ]
             },
             {
               "id": "Boat3",
@@ -62,10 +93,23 @@
               "currencyCosts": [
                 {
                   "id": "melvorD:GP",
-                  "quantity": 10000
+                  "quantity": 10000000
                 }
               ],
-              "itemCosts": []
+              "itemCosts": [
+                {
+                  "id": "melvorD:Iron_Bar",
+                  "quantity": 10000
+                },
+                {
+                  "id": "melvorD:Steel_Bar",
+                  "quantity": 10000
+                },
+                {
+                  "id": "melvorD:Mithril_Bar",
+                  "quantity": 10000
+                }
+              ]
             },
             {
               "id": "Boat4",
@@ -76,10 +120,18 @@
               "currencyCosts": [
                 {
                   "id": "melvorD:GP",
-                  "quantity": 1000000
+                  "quantity": 100000000
                 }
               ],
               "itemCosts": [
+                {
+                  "id": "melvorD:Adamantite_Bar",
+                  "quantity": 10000
+                },
+                {
+                  "id": "melvorD:Runite_Bar",
+                  "quantity": 10000
+                },
                 {
                   "id": "melvorD:Dragonite_Bar",
                   "quantity": 10000

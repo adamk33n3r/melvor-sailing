@@ -9,7 +9,7 @@
           <img class="mining-ore-img m-3" :src="lockedImgSrc" /><br />
           <span class="badge badge-pill w-100 mb-1" :class="{ 'badge-success': hasLevel, 'badge-danger': !hasLevel }">Level {{ ship.action.level }}</span>
           <div class="row justify-content-center icon-size-48">
-            <currency-quantity-icon id="sailing-ship-currency-cost"></currency-quantity-icon>
+            <quantity-icons id="unlockCosts"></quantity-icons>
           </div>
           <button
             type="button"

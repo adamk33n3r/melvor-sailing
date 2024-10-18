@@ -1,4 +1,4 @@
-import { getElementByIdWithoutId } from '../../ts/util';
+import { getElementByIdAndRemoveId } from '../../ts/util';
 
 interface DropdownOptionsData<T> {
   name: string;
@@ -27,8 +27,8 @@ export function DropdownComponent<T>(data: DropdownOptions<T>, onChange: (value:
     optionsContainer: null as unknown as HTMLDivElement,
     mounted() {
       self = this;
-      self.dropdownButton = getElementByIdWithoutId('port-dropdown-button');
-      self.optionsContainer = getElementByIdWithoutId('port-options-container');
+      self.dropdownButton = getElementByIdAndRemoveId('port-dropdown-button');
+      self.optionsContainer = getElementByIdAndRemoveId('port-options-container');
 
       self.setData(data);
     },
