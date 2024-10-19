@@ -13,5 +13,5 @@ export const languages = {
     pt: en,
     ru: en,
     es: en,
-    tr: en
+    tr: en,
 };

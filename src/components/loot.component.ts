@@ -15,5 +15,5 @@ export function LootComponent(
     masteryXP: formatFixed(masteryXP, 0),
     masteryPoolXP: formatFixed(masteryPoolXP, 0),
     skillIcon: game.sailing.media,
-  }
+  };
 }

@@ -1,5 +1,5 @@
 import { SailingPage } from '../components/sailing';
-import { Ship, ShipAction, ShipState, DummyShip, ShipActionData } from './ship';
+import { Ship, ShipAction, ShipState, DummyShip, ShipActionData, ShipUpgrade, ShipUpgradeData } from './ship';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
 import { Port, PortData } from './port';
@@ -14,6 +14,7 @@ interface SailingSkillData extends BaseSkillData {
   categories?: SkillCategoryData[];
   ports?: PortData[];
   ships?: ShipActionData[];
+  shipUpgrades?: ShipUpgradeData[];
 }
 
 export class SailingNotification extends SuccessNotification {
@@ -48,6 +49,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
   public page = new SailingPage();
   public categories: NamespaceRegistry<SkillCategory>;
   public ships: NamespaceRegistry<Ship>;
+  public shipUpgrades: NamespaceRegistry<ShipUpgrade>;
   public ports: NamespaceRegistry<Port>;
 
   public hullChain?: ShopUpgradeChain;
@@ -69,6 +71,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     this.categories = new NamespaceRegistry(game.registeredNamespaces, SkillCategory.name);
     this.ports = new NamespaceRegistry(game.registeredNamespaces, Port.name);
     this.ships = new NamespaceRegistry(game.registeredNamespaces, Ship.name);
+    this.shipUpgrades = new NamespaceRegistry(game.registeredNamespaces, ShipUpgrade.name);
   }
 
   public generateLoot(ship: Ship, onClose: VoidFunction) {
@@ -82,19 +85,19 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
 
     const lootMap = new Map<AnyItem, number>();
 
-    const numRolls = rollInteger(ship.port.minRolls, ship.port.maxRolls);
+    const numRolls = rollInteger(ship.selectedPort.minRolls, ship.selectedPort.maxRolls);
     for (let i = 0; i < numRolls; i++) {
-      const lootItem = ship.port.lootTable.getDrop();
+      const lootItem = ship.selectedPort.lootTable.getDrop();
       const prev = lootMap.get(lootItem.item) ?? 0;
-      lootMap.set(lootItem.item, prev + lootItem.quantity)
+      lootMap.set(lootItem.item, prev + lootItem.quantity);
     }
     const items = Array.from(lootMap).map(([item, quantity]) => ({ item, quantity }));
 
     const currencies: CurrencyQuantity[] = [];
-    ship.port.currencyDrops.forEach(({ currency, min, max }) => {
+    ship.selectedPort.currencyDrops.forEach(({ currency, min, max }) => {
       currencies.push({ currency, quantity: this.modifyCurrencyReward(currency, rollInteger(min, max), ship.action) });
     });
-    rewards.addItemsAndCurrency({ items, currencies })
+    rewards.addItemsAndCurrency({ items, currencies });
 
     rewards.addXP(this, ship.baseXP, ship.action);
 
@@ -111,7 +114,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     ui.create(LootComponent(ship.action, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
     addModalToQueue({
       iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
-      title: ship.port.name,
+      title: ship.selectedPort.name,
       confirmButtonText: 'Collect',
       confirmButtonColor: '#3085d6',
       // Can't let cancel because loot is generated here instead of on ship return
@@ -125,7 +128,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
         rewards.giveRewards(true);
         this.addMasteryForAction(ship.action, ship.scaledForMasteryInterval);
 
-        this.updateNotification(ship, -1);
+        this.updateNotification(-1);
 
         onClose();
       },
@@ -153,7 +156,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     }
   }
 
-  private updateNotification(ship: Ship, quantity: number) {
+  private updateNotification(quantity: number) {
     this.game.notifications.addNotification(this.returnNotification, {
       text: `Ships have returned!`,
       media: this.media,
@@ -224,12 +227,18 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
 
   public override registerData(namespace: DataNamespace, data: SailingSkillData): void {
     super.registerData(namespace, data);
-    this.logger.info('Sailing#registerData');
 
     if (data.ports !== undefined) {
       this.logger.info(`Registering ${data.ports.length} Ports`);
       data.ports.forEach((port) => {
         this.ports.registerObject(new Port(namespace, port, this.game));
+      });
+    }
+
+    if (data.shipUpgrades !== undefined) {
+      this.logger.info(`Registering ${data.shipUpgrades.length} ShipUpgrades`);
+      data.shipUpgrades.forEach((upgradeData) => {
+        this.shipUpgrades.registerObject(new ShipUpgrade(namespace, upgradeData, this.game));
       });
     }
 
@@ -257,6 +266,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     this.milestones.unshift(...this.actions.allObjects);
     this.milestones.unshift(...this.ports.allObjects);
     this.sortMilestones();
+    this.logger.debug('postDataRegistration');
 
     const chains = this.game.shop.upgradeChains.namespaceMaps.get(Constants.MOD_NAMESPACE);
     if (chains) {
@@ -267,15 +277,17 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     }
     
     const tinyIsland = this.ports.getObjectSafe('sailing:tinyIsland');
+    const cutter = this.shipUpgrades.getObjectSafe('sailing:Cutter');
     this.actions.allObjects.forEach((action) => {
-      const ship = new Ship(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), action, tinyIsland, this.game);
+      const ship = new Ship(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), action, cutter, tinyIsland, this.game);
       ship.registerOnUpdate(() => {
         if (ship.state == ShipState.HasReturned) {
-          this.updateNotification(ship, 1);
+          this.updateNotification(1);
         }
       });
       this.ships.registerObject(ship);
     });
+    this.logger.debug('end of postDataRegistration');
   }
 
   private decodeShip(reader: SaveWriter, version: number): Ship {
@@ -287,6 +299,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
         ship = this.game.constructDummyObject(ship, DummyShip);
       }
     }
+
     ship.decode(reader, version);
     return ship;
   }
@@ -294,7 +307,6 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
   public override decode(reader: SaveWriter, version: number): void {
     super.decode(reader, version);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.saveVersion = reader.getUint32();
 
     const numShips = reader.getUint32();
@@ -336,7 +348,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     return this.ships.allObjects.map((ship) => {
       return `Ship: ${ship.name}
 State: ${ship.state}
-Port: ${ship.port.name}
+Port: ${ship.selectedPort.name}
 `;
     }).join('\n');
   }

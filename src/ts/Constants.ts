@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Constants {
     static readonly MOD_NAMESPACE = 'sailing';
     static readonly VERSION = 2;

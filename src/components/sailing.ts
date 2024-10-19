@@ -3,7 +3,7 @@ import { ShipComponent } from './ship.component';
 
 export class SailingPage extends ComponentClass {
   override $template = '#sailing-page-template';
-  shipComponents: ReturnType<typeof ShipComponent>[] = []
+  shipComponents: ReturnType<typeof ShipComponent>[] = [];
   mounted() {
     game.sailing.ships.forEach((ship) => {
       const shipComponent = ShipComponent(ship);

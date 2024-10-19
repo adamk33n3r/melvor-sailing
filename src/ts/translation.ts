@@ -1,4 +1,4 @@
-import { Constants } from './Constants'
+import { Constants } from './Constants';
 
 import { languages } from './language';
 
@@ -57,7 +57,7 @@ export class Translation {
                         if (monster.pet !== undefined) {
                             Translation.addOrUpdatePetHint(monster.pet.pet.localID, combatArea.name);
                         }
-                    })
+                    });
                 });
             }
             if (slayerAreas !== undefined) {
@@ -66,7 +66,7 @@ export class Translation {
                         if (monster.pet !== undefined) {
                             Translation.addOrUpdatePetHint(monster.pet.pet.localID, slayerArea.name);
                         }
-                    })
+                    });
                     if (slayerArea.pet !== undefined) {
                         Translation.addOrUpdatePetHint(slayerArea.pet.pet.localID, slayerArea.name);
                     }
@@ -79,6 +79,6 @@ export class Translation {
         const existingSource = loadedLangJson[`${Constants.MOD_NAMESPACE}_PET_HINT_${petLocalId}`];
         loadedLangJson[`${Constants.MOD_NAMESPACE}_PET_HINT_${petLocalId}`] = existingSource && existingSource.length > 0
             ? `${existingSource}, ${source}`
-            : `${source}`;
+            : source;
     }
 }

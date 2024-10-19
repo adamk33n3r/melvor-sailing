@@ -1,5 +1,3 @@
-import { Sailing } from '../sailing';
-
 export const en = {
     Oar: 'Oar',
     SKILL_NAME_Sailing: 'Sailing',

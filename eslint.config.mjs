@@ -8,6 +8,10 @@ export default tseslint.config(
     {
         ignores: [
             "dump/**",
+            "dist/**",
+            "scripts/**",
+            "**.js",
+            "src/ts/types/melvor/**",
             "eslint.config.mjs",
         ],
     },
@@ -21,7 +25,7 @@ export default tseslint.config(
                 tsconfigRootDir: import.meta.dirname,
             },
         },
-        files: ['*.ts', '*.tsx'],
+        files: ['**/*.ts', '**/*.tsx'],
         plugins: {
             '@stylistic': stylistic,
         },
@@ -47,6 +51,7 @@ export default tseslint.config(
                 'ignoreRestSiblings': true
             }],
             '@stylistic/comma-dangle': ['error', 'always-multiline'],
+            '@stylistic/semi': ['error', 'always'],
         }
     },
     // prettier,

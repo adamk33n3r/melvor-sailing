@@ -17,14 +17,45 @@ export interface TripData {
     ram: ShopPurchase;
 }
 
-export interface ShipActionData extends BasicSkillRecipeData {
+export interface ShipUpgradeData extends RealmedObjectData {
+    level: number;
     media: string;
     currencyCosts: IDQuantity[];
     itemCosts: IDQuantity[];
 }
 
+export class ShipUpgrade extends RealmedObject {
+    private _media: string;
+    private _level: number;
+    private _currencyCosts: CurrencyQuantity[];
+    private _itemCosts: ItemQuantity<AnyItem>[];
+    public get media() {
+        return this.getMediaURL(this._media);
+    }
+    public get level() {
+        return this._level;
+    }
+    public get currencyCosts() {
+        return this._currencyCosts;
+    }
+    public get itemCosts() {
+        return this._itemCosts;
+    }
+    constructor(namespace: DataNamespace, data: ShipUpgradeData, game: Game) {
+        super(namespace, data, game);
+        this._media = data.media;
+        this._level = data.level;
+        this._currencyCosts = game.getCurrencyQuantities(data.currencyCosts);
+        this._itemCosts = game.items.getQuantities(data.itemCosts);
+    }
+}
+
+export interface ShipActionData extends BasicSkillRecipeData {
+    currencyCosts: IDQuantity[];
+    itemCosts: IDQuantity[];
+}
+
 export class ShipAction extends BasicSkillRecipe {
-  private _media: string;
   private _currencyCosts: CurrencyQuantity[];
   private _itemCosts: ItemQuantity<AnyItem>[];
   public get currencyCosts() {
@@ -35,7 +66,6 @@ export class ShipAction extends BasicSkillRecipe {
   }
   constructor(namespace: DataNamespace, data: ShipActionData, private game: Game) {
     super(namespace, data, game);
-    this._media = data.media;
     this._currencyCosts = game.getCurrencyQuantities(data.currencyCosts);
     this._itemCosts = game.items.getQuantities(data.itemCosts);
   }
@@ -45,7 +75,7 @@ export class ShipAction extends BasicSkillRecipe {
   }
 
   public get media() {
-    return this.getMediaURL(this._media);
+    return this.getMediaURL('img/sailing-boat.png');
   }
 
   public getUnlockCosts() {
@@ -74,6 +104,8 @@ export class Ship extends NamespacedObject {
     public state: ShipState = ShipState.ReadyToSail;
     private _action: ShipAction;
     public lockState: LockState = LockState.Locked;
+    private _currentUpgrade: ShipUpgrade;
+    public selectedPort: Port;
 
     get sailTimer() {
         return this._sailTimer;
@@ -88,11 +120,12 @@ export class Ship extends NamespacedObject {
     }
 
     get media() {
-        return this.action.media;
+        console.log('getting ship media:', this._currentUpgrade.media);
+        return this._currentUpgrade.media;
     }
 
     get interval() {
-        return this.port.distance * 60 * 1000;
+        return this.selectedPort.distance * 60 * 1000;
     }
 
     get modifiedInterval() {
@@ -100,21 +133,27 @@ export class Ship extends NamespacedObject {
     }
 
     get scaledForMasteryInterval() {
-        return this.port.distance * 1000;
+        return this.selectedPort.distance * 1000;
     }
 
     get baseXP() {
-        return this.port.distance * (this.port.distance / 8);
+        return this.selectedPort.distance * (this.selectedPort.distance / 8);
     }
 
     get onTrip() {
         return this._sailTimer.ticksLeft > 0;
     }
 
-    constructor(namespace: DataNamespace, action: ShipAction, public port: Port, private game: Game) {
+    get currentUpgrade() {
+        return this._currentUpgrade;
+    }
+
+    constructor(namespace: DataNamespace, action: ShipAction, upgrade: ShipUpgrade, port: Port, private game: Game) {
         super(namespace, action.localID);
         this._sailTimer = new Timer('Skill', () => this.onReturn());
         this._action = action;
+        this._currentUpgrade = upgrade;
+        this.selectedPort = port;
         this.lockState = action.currencyCosts.length === 0 && action.itemCosts.length === 0 ? LockState.Unlocked : LockState.Locked;
     }
 
@@ -122,6 +161,21 @@ export class Ship extends NamespacedObject {
 
     public registerOnUpdate(action: VoidFunction) {
         this.updateCallbacks.push(action);
+    }
+
+    public upgrade() {
+        const nextUpgrade = this.getNextUpgrade();
+        if (nextUpgrade === undefined) return;
+        console.log(`upgradeShip: from ${this.currentUpgrade.id} to ${nextUpgrade.id}`);
+        this._currentUpgrade = nextUpgrade;
+    }
+
+    public getNextUpgrade() {
+        return this.game.sailing.shipUpgrades.allObjects
+            .sort((a, b) => a.level - b.level)
+            .find((upgrade) => {
+                return upgrade.level > this.currentUpgrade.level;
+            });
     }
 
     public setSail() {
@@ -142,11 +196,29 @@ export class Ship extends NamespacedObject {
         });
     }
 
+    public getUpgradeCosts() {
+        const nextUpgrade = this.getNextUpgrade();
+        if (nextUpgrade === undefined) return;
+
+        const costs = new Costs(this.game);
+
+        nextUpgrade.currencyCosts.forEach(({ currency, quantity }) => {
+            costs.addCurrency(currency, quantity);
+        });
+
+        nextUpgrade.itemCosts.forEach(({ item, quantity }) => {
+            costs.addItem(item, quantity);
+        });
+
+        return costs;
+    }
+
     public encode(writer: SaveWriter): SaveWriter {
         writer.writeUint32(this.state);
         this._sailTimer.encode(writer);
         writer.writeUint32(this.lockState);
-        writer.writeNamespacedObject(this.port);
+        writer.writeNamespacedObject(this.currentUpgrade);
+        writer.writeNamespacedObject(this.selectedPort);
 
         return writer;
     }
@@ -164,15 +236,24 @@ export class Ship extends NamespacedObject {
         return port;
     }
 
+    private decodeUpgrade(reader: SaveWriter, _version: number): ShipUpgrade {
+        let upgrade = reader.getNamespacedObject(game.sailing.shipUpgrades);
+        if (typeof upgrade === 'string') {
+            upgrade = game.sailing.shipUpgrades.getObjectSafe('sailing:Cutter');
+        }
+        return upgrade;
+    }
+
     public decode(reader: SaveWriter, version: number): void {
         this.state = reader.getUint32();
         this._sailTimer = new Timer('Skill', () => this.onReturn());
         this._sailTimer.decode(reader, version);
         if (this.game.sailing.saveVersion >= 2) {
             this.lockState = reader.getUint32();
+            this._currentUpgrade = this.decodeUpgrade(reader, version);
         }
 
-        this.port = this.decodePort(reader, version);
+        this.selectedPort = this.decodePort(reader, version);
 
         this.callBackCallbacks();
     }
@@ -195,10 +276,10 @@ export class DummyShip extends Ship {
                 id: localID,
                 baseExperience: 0,
                 level: 1,
-                media: 'img/sailing-boat.png',
                 currencyCosts: [],
                 itemCosts: [],
             }, game),
+            game.sailing.shipUpgrades.getObjectSafe('sailing:Cutter'),
             game.sailing.ports.getObjectSafe('sailing:tinyIsland'),
             game,
         );

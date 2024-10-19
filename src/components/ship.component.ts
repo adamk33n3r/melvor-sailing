@@ -27,7 +27,7 @@ export function ShipComponent(ship: Ship) {
             name: '',
             side: 'left',
             block: true,
-            selected: { name: ship.port.name, value: ship.port, media: ship.port.media },
+            selected: { name: ship.selectedPort.name, value: ship.selectedPort, media: ship.selectedPort.media },
             options: game.sailing.ports.allObjects.map((p: Port) => {
                 const hasLevel = game.sailing.level >= p.level;
                 return {
@@ -38,11 +38,12 @@ export function ShipComponent(ship: Ship) {
                 };
             }),
         }, (port: Port) => {
-            ship.port = port;
+            ship.selectedPort = port;
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
             self.updateGrants();
         }),
         unlockCosts: null as unknown as QuantityIconsElement,
+        upgradeCosts: null as unknown as QuantityIconsElement,
         itemCosts: ship.action.itemCosts,
         currencyCosts: ship.action.currencyCosts,
         xpIcon: null as unknown as XpIconElement,
@@ -54,7 +55,6 @@ export function ShipComponent(ship: Ship) {
             const abyssalLevelMet = ship.action.abyssalLevel === 0 ||  game.sailing.abyssalLevel >= ship.action.abyssalLevel;
             return (
                 game.sailing.level >= ship.action.level &&
-                game.sailing.abyssalLevel >= ship.action.abyssalLevel &&
                 ship.action.getUnlockCosts().checkIfOwned() &&
                 abyssalLevelMet
             );
@@ -68,19 +68,45 @@ export function ShipComponent(ship: Ship) {
             self.isLocked = false;
             ship.lockState = LockState.Unlocked;
         },
+        currentUpgrade: ship.currentUpgrade,
+        nextUpgrade: ship.getNextUpgrade(),
+        _canUpgrade(): boolean {
+            return  (
+                self.nextUpgrade &&
+                game.sailing.level >= self.nextUpgrade.level &&
+                ship.getUpgradeCosts()?.checkIfOwned()
+            ) ?? false;
+        },
+        canUpgrade: false,
+        upgradeShip() {
+            if (!self.nextUpgrade) return;
+            const costs = ship.getUpgradeCosts();
+            if (!costs) return;
+            costs.setSource(`Skill.${game.sailing.id}.UpgradeShip`);
+            if (!costs.checkIfOwned() || game.sailing.level < self.nextUpgrade.level) return;
+            costs.consumeCosts();
+            ship.upgrade();
+            self.currentUpgrade = ship.currentUpgrade;
+            self.nextUpgrade = ship.getNextUpgrade();
+            self.updateUpgradeCosts();
+        },
         update() {
             self.hasLevel = game.sailing.level >= ship.action.level;
             self.isLocked = ship.lockState == LockState.Locked;
             self.canUnlock = self._canUnlock();
             self.unlockCosts.updateQuantities(game);
+            self.canUpgrade = self._canUpgrade();
+            self.upgradeCosts.updateQuantities(game);
             self.hull.update();
             self.deckItems.update();
             self.rudder.update();
             self.ram.update();
+            self.currentUpgrade = ship.currentUpgrade;
+            self.nextUpgrade = ship.getNextUpgrade();
             self.port.setEnabled(this.readyToSail);
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
             self.port.setData({
-                selected: { name: ship.port.name, value: ship.port, media: ship.port.media },
+                selected: { name: ship.selectedPort.name, value: ship.selectedPort, media: ship.selectedPort.media },
                 options: game.sailing.ports.allObjects.map((p: Port) => {
                     const hasLevel = game.sailing.level >= p.level;
                     return {
@@ -93,6 +119,7 @@ export function ShipComponent(ship: Ship) {
             });
             self.updateGrants();
             self.updateProgressBar();
+            self.updateUpgradeCosts();
         },
         updateGrants() {
             const baseMasteryXPToAdd = game.sailing.getBaseMasteryXPToAddForAction(ship.action, ship.scaledForMasteryInterval);
@@ -109,6 +136,30 @@ export function ShipComponent(ship: Ship) {
                 this.masteryPoolIcon.hideRealms();
              }
             self.intervalIcon.setCustomInterval(formatTime(ship.modifiedInterval/1000), game.sailing.getIntervalSources(ship.action));
+        },
+        updateUpgradeCosts() {
+            const nextUpgrade = ship.getNextUpgrade();
+            if (nextUpgrade) {
+                self.upgradeCosts.setIcons(nextUpgrade.itemCosts, nextUpgrade.currencyCosts);
+                self.upgradeCosts.currencies.forEach((currency) => {
+                    currency.quantity.textContent = formatNumber(currency.currencyQuantity!.quantity);
+                    currency.container.onmouseover = () => {
+                        currency.quantity.textContent = numberWithCommas(currency.currencyQuantity!.quantity);
+                    };
+                    currency.container.onmouseleave = () => {
+                        currency.quantity.textContent = formatNumber(currency.currencyQuantity!.quantity);
+                    };
+                });
+                self.upgradeCosts.items.forEach((item) => {
+                    item.quantity.textContent = formatNumber(item.itemQuantity!.quantity);
+                    item.container.onmouseover = () => {
+                        item.quantity.textContent = numberWithCommas(item.itemQuantity!.quantity);
+                    };
+                    item.container.onmouseleave = () => {
+                        item.quantity.textContent = formatNumber(item.itemQuantity!.quantity);
+                    };
+                });
+            }
         },
         updateProgressBar() {
             if (ship.onTrip) {
@@ -144,9 +195,14 @@ export function ShipComponent(ship: Ship) {
 
                 self.updateGrants();
                 self.updateProgressBar();
+                self.currentUpgrade = self.ship.currentUpgrade;
+                // Important to not reference ship with self here
+                // so that it doesn't proxyfy the game
+                self.nextUpgrade = ship.getNextUpgrade();
+                self.updateUpgradeCosts();
             });
 
-            self.unlockCosts = getElementByIdAndRemoveId('unlockCosts', parent) as QuantityIconsElement;
+            self.unlockCosts = getElementByIdAndRemoveId('unlockCosts', parent);
             self.unlockCosts.addCurrencyIcons(ship.action.currencyCosts);
             self.unlockCosts.addItemIcons(ship.action.itemCosts, false);
             self.unlockCosts.currencies.forEach((currency) => {
@@ -168,6 +224,8 @@ export function ShipComponent(ship: Ship) {
                 };
             });
 
+            self.upgradeCosts = getElementByIdAndRemoveId('upgradeCosts', parent);
+
             const grantsContainer = getElementByIdAndRemoveId('grants-container', parent);
 
             self.xpIcon = getElementByIdAndRemoveId('sailing-xp', grantsContainer);
@@ -188,11 +246,11 @@ export function ShipComponent(ship: Ship) {
         async viewLoot() {
             return SwalLocale.fire({
                 iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
-                title: ship.port.name,
-                html: ship.port.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
-                    `${ship.port.minRolls} - ${ship.port.maxRolls} Rolls<br>` +
-                    ship.port.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
+                title: ship.selectedPort.name,
+                html: ship.selectedPort.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
+                    `${ship.selectedPort.minRolls} - ${ship.selectedPort.maxRolls} Rolls<br>` +
+                    ship.selectedPort.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
             });
         },
-    }
+    };
 }

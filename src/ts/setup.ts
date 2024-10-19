@@ -34,7 +34,9 @@ export async function setup(ctx: Modding.ModContext) {
   const sailing = game.registerSkill(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), Sailing);
 
   // Register our GameData
+  sailing.logger.debug('Adding base package...');
   await ctx.gameData.addPackage(ModData as GameDataPackage);
+  sailing.logger.debug('Adding extra packages...');
   await Promise.all([
     ctx.gameData.addPackage(ShipsData as GameDataPackage),
     ctx.gameData.addPackage(PortsData as GameDataPackage),
@@ -43,6 +45,7 @@ export async function setup(ctx: Modding.ModContext) {
     ctx.gameData.addPackage(Rudders as GameDataPackage),
     ctx.gameData.addPackage(Sails as GameDataPackage),
   ]);
+  sailing.logger.debug('Done adding packages');
 
   if (cloudManager.hasAoDEntitlementAndIsEnabled) {
     await ctx.gameData.addPackage(AoDData as GameDataPackage);

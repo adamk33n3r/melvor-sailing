@@ -29,11 +29,10 @@
               "levelScalingSlope": 1
             }
           ],
-          "ships": [
+          "shipUpgrades": [
             {
-              "id": "Boat1",
+              "id": "Cutter",
               "level": 1,
-              "baseExperience": 1,
               "realm": "melvorD:Melvor",
               "media": "img/sailing-boat.png",
               "currencyCosts": [
@@ -58,9 +57,8 @@
               ]
             },
             {
-              "id": "Boat2",
+              "id": "Frigate",
               "level": 30,
-              "baseExperience": 1,
               "realm": "melvorD:Melvor",
               "media": "img/ship.png",
               "currencyCosts": [
@@ -85,9 +83,8 @@
               ]
             },
             {
-              "id": "Boat3",
+              "id": "Submarine",
               "level": 50,
-              "baseExperience": 1,
               "realm": "melvorD:Melvor",
               "media": "img/submarine.png",
               "currencyCosts": [
@@ -112,9 +109,8 @@
               ]
             },
             {
-              "id": "Boat4",
+              "id": "Container",
               "level": 70,
-              "baseExperience": 1,
               "realm": "melvorD:Melvor",
               "media": "img/container-ship.png",
               "currencyCosts": [
@@ -137,6 +133,60 @@
                   "quantity": 10000
                 }
               ]
+            }
+          ],
+          "ships": [
+            {
+              "id": "Boat1",
+              "level": 1,
+              "baseExperience": 1,
+              "realm": "melvorD:Melvor",
+              "currencyCosts": [
+                {
+                  "id": "melvorD:GP",
+                  "quantity": 100000
+                }
+              ],
+              "itemCosts": []
+            },
+            {
+              "id": "Boat2",
+              "level": 30,
+              "baseExperience": 1,
+              "realm": "melvorD:Melvor",
+              "currencyCosts": [
+                {
+                  "id": "melvorD:GP",
+                  "quantity": 1000000
+                }
+              ],
+              "itemCosts": []
+            },
+            {
+              "id": "Boat3",
+              "level": 50,
+              "baseExperience": 1,
+              "realm": "melvorD:Melvor",
+              "currencyCosts": [
+                {
+                  "id": "melvorD:GP",
+                  "quantity": 10000000
+                }
+              ],
+              "itemCosts": []
+            },
+            {
+              "id": "Boat4",
+              "level": 70,
+              "baseExperience": 1,
+              "realm": "melvorD:Melvor",
+              "currencyCosts": [
+                {
+                  "id": "melvorD:GP",
+                  "quantity": 100000000
+                }
+              ],
+              "itemCosts": []
             }
           ]
         }

@@ -24,9 +24,20 @@
       </div>
       <div class="row gutters-tiny" v-show="!isLocked">
         <div class="col-12 p-2 font-w600">
-          {{ ship.name }}
+          {{ currentUpgrade.localID }}
         </div>
-        <img class="bank-img-detail" :src="ship.media"/>
+        <img class="bank-img-detail" :src="currentUpgrade.media"/>
+        <div class="col-12" v-if="nextUpgrade">
+          <span class="p-2 font-w600">Upgrades</span>
+          <div class="col-12 justify-content-center icon-size-48">
+            <quantity-icons id="upgradeCosts"></quantity-icons>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" @click="upgradeShip()" :disabled="!canUpgrade">
+            Upgrade to
+            {{ nextUpgrade?.localID ?? '' }}
+            <img class="skill-icon-sm m-0" :src="nextUpgrade?.media"/>
+          </button>
+        </div>
         <!-- <div class="col-6">
           <div class="p-2">
             Hull
