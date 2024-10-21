@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "webpack",
     "zip": "node scripts/zip.js",
-    "build": "webpack && node scripts/bundleHtml.js",
+    "build": "webpack --node-env development && node scripts/bundleHtml.js",
     "dev": "webpack --watch --progress",
-    "dist": "webpack --mode production && node scripts/bundleHtml.js && node scripts/zip.js"
+    "dist": "webpack --node-env production && node scripts/bundleHtml.js && node scripts/zip.js"
   },
   "keywords": [],
   "author": "Grynjolf",
@@ -48,6 +48,6 @@
     "uuid": "^9.0.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
-    "webpack-remove-code-blocks": "^0.1.6"
+    "webpack-remove-code-blocks": "kudashevs/webpack-remove-code-blocks#v0.9.0"
   }
 }

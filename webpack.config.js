@@ -2,7 +2,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  mode: 'development',
   entry: './src/ts/setup.ts',
   watchOptions: {
     poll: true
@@ -44,11 +43,6 @@ module.exports = {
           'ts-loader',
           {
             loader: 'webpack-remove-code-blocks',
-            options: {
-              blocks: process.env.NODE_ENV === 'production' ? [
-                'devblock'
-              ] : [],
-            }
           }
         ],
         exclude: /node_modules/,
