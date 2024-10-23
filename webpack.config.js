@@ -2,6 +2,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
+  mode: 'development',
   entry: './src/ts/setup.ts',
   watchOptions: {
     poll: true
