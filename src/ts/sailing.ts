@@ -2,7 +2,7 @@ import { SailingPage } from '../components/sailing';
 import { Ship, ShipAction, ShipState, DummyShip, ShipActionData, ShipUpgrade, ShipUpgradeData } from './ship';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
-import { Port, PortData } from './port';
+import { NormalPort, Port, PortData, SkillPort } from './port';
 import { LootComponent } from '../components/loot.component';
 import { Logger, LogLevel } from './logger';
 
@@ -40,6 +40,15 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
   }
   public setLevel(level: number) {
     this.setXP(exp.levelToXP(level) + 1);
+  }
+  public testLootGen(rolls: number = 5) {
+    const ship = this.ships.allObjects[0];
+    const rewards = new Rewards(this.game);
+    ship.selectedPort.generateLoot(rolls, rewards, ship.action);
+    console.log(rewards.getItemQuantityArray());
+    for (const reward of rewards.getItemQuantityArray().sort((a, b) => b.item.sellsFor.quantity - a.item.sellsFor.quantity)) {
+      console.log(reward.quantity, reward.item.name);
+    }
   }
   /* devblock:end */
 
@@ -83,21 +92,8 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     const rewards = new Rewards(this.game);
     rewards.setActionInterval(ship.interval);
 
-    const lootMap = new Map<AnyItem, number>();
-
     const numRolls = rollInteger(ship.selectedPort.minRolls, ship.selectedPort.maxRolls);
-    for (let i = 0; i < numRolls; i++) {
-      const lootItem = ship.selectedPort.lootTable.getDrop();
-      const prev = lootMap.get(lootItem.item) ?? 0;
-      lootMap.set(lootItem.item, prev + lootItem.quantity);
-    }
-    const items = Array.from(lootMap).map(([item, quantity]) => ({ item, quantity }));
-
-    const currencies: CurrencyQuantity[] = [];
-    ship.selectedPort.currencyDrops.forEach(({ currency, min, max }) => {
-      currencies.push({ currency, quantity: this.modifyCurrencyReward(currency, rollInteger(min, max), ship.action) });
-    });
-    rewards.addItemsAndCurrency({ items, currencies });
+    ship.selectedPort.generateLoot(numRolls, rewards, ship.action);
 
     rewards.addXP(this, ship.baseXP, ship.action);
 
@@ -231,7 +227,14 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     if (data.ports !== undefined) {
       this.logger.info(`Registering ${data.ports.length} Ports`);
       data.ports.forEach((port) => {
-        this.ports.registerObject(new Port(namespace, port, this.game));
+        switch (port.type) {
+          case 'normal':
+            this.ports.registerObject(new NormalPort(namespace, port, this.game));
+            break;
+          case 'skill':
+            this.ports.registerObject(new SkillPort(namespace, port, this.game));
+            break;
+        }
       });
     }
 
@@ -264,7 +267,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
 
     // Use unshift so that the skill mastery milestone is last after sort if there are lvl 99 actions or ports
     this.milestones.unshift(...this.actions.allObjects);
-    this.milestones.unshift(...this.ports.allObjects);
+    this.milestones.unshift(...this.ports.filter((port) => port instanceof NormalPort).map((port) => port as NormalPort));
     this.sortMilestones();
     this.logger.debug('postDataRegistration');
 

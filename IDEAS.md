@@ -16,4 +16,6 @@ new passives from shop
 - speed?
 - luck: add to level weighting
 
+dockhand + fisherman theiving loot - sailors top and fishing hook
+
 crew?

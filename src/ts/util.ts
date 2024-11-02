@@ -43,3 +43,93 @@ export function formatTime(seconds: number, truncate = false) {
     }
     return `${Math.floor(seconds)}s`;
 }
+
+/**
+ * Translated from osrs wiki, modified to not be as confusing
+ * Instead of low being "chance at level 1", it is "chance at level req"
+ * @deprecated
+ */
+export function interp(level: number, lowChance: number, highChance: number, req: number = 1) {
+    if (level < req) return 0;
+    return Math.min(Math.max((Math.floor(lowChance * ((99 - level) / (99-req)) + highChance * ((level - req) / (99 - req)) + 0.5) + 1) / 256, 0), 1);
+}
+
+/**
+ * Rewrote it to not be dumb, just takes in a straight percentage (0-100). Not something in relation to 256
+ * @param level The level to interpolate to
+ * @param lowChance The low chance (at requirement level)
+ * @param highChance The high chance (at 99)
+ * @param req The requirement level of the product
+ * @returns The interpolated chance
+ */
+export function interp2(level: number, lowChance: number, highChance: number, req: number) {
+    return Math.min(Math.max(lowChance + (highChance - lowChance) * ((level - req) / (99 - req)), 0), 100);
+}
+
+/**
+ * Data structure for a chance product
+ * @typeParam T The type of the object
+ */
+export interface ChanceData<T> {
+    /**
+     * The product
+     */
+    product: T;
+    /**
+     * The low chance (at requirement level)
+     */
+    low: number;
+    /**
+     * The high chance (at 99)
+     */
+    high: number;
+    /**
+     * The requirement level of the product
+     */
+    req: number;
+}
+
+/**
+ * 
+ * @param bounds ChanceData array. Expects percentages (0-100)
+ * @param level The level to calculate the chance for
+ * @param index The index of the obj you're calculating the chance for in `bounds`
+ * @returns The cascaded chance
+ */
+export function cascadeInterp2(bounds: ChanceData<unknown>[], level: number, index: number) {
+    let rate = 1;
+    for (let i = 0; i < bounds.length; i++) {
+        const v = bounds[i];
+        if (i === index) {
+            rate = rate * interp2(level, v.low, v.high, v.req) / 100;
+            return rate * 100;
+        }
+        if (level >= v.req) {
+            rate = rate * (1 - interp2(level, v.low, v.high, v.req)/100);
+        }
+    }
+    return rate;
+}
+
+export function getChance(chanceData: ChanceData<unknown>, level: number) {
+    return interp2(level, chanceData.low, chanceData.high, chanceData.req);
+}
+
+/**
+ * @deprecated 
+ */
+export function cascadeInterp(bounds: ChanceData<unknown>[], level: number, index: number) {
+    let rate = 1;
+    for (let i = 0; i < bounds.length; i++) {
+        const v = bounds[i];
+        if (i === index) {
+            // eslint-disable-next-line @typescript-eslint/no-deprecated
+            rate = rate * interp(level, v.low, v.high);
+            return rate;
+        }
+        if (level >= v.req) {
+            // eslint-disable-next-line @typescript-eslint/no-deprecated
+            rate = rate * (1 - interp(level, v.low, v.high));
+        }
+    }
+}

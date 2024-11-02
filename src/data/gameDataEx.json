@@ -30196,6 +30196,24 @@
             "data"
           ],
           "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "skillID": {
+              "description": "The ID of the skill to provide data with",
+              "type": "string",
+              "const": "sailing:Sailing"
+            },
+            "data": {
+              "$ref": "#/$defs/SailingSkillData"
+            }
+          },
+          "required": [
+            "skillID",
+            "data"
+          ],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -63205,6 +63223,249 @@
         "categoryID",
         "actionID"
       ],
+      "unevaluatedProperties": false
+    },
+    "SailingSkillData": {
+      "description": "Data for the Sailing Skill",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/MasterySkillData"
+        }
+      ],
+      "properties": {
+        "ports": {
+          "description": "Defines new ports for the skill",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SailingPortData"
+          },
+          "minItems": 1
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "SailingModificationData": {
+      "description": "Data modifications for the Sailing Skill",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/MasterySkillModificationData"
+        }
+      ],
+      "properties": {
+        "ports": {
+          "description": "Optional. Modifies the Ports registered to the skill",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SailingPortModificationData"
+          },
+          "minItems": 1
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "SailingPortData": {
+      "description": "Data for a Sailing Port",
+      "discriminator": {
+        "propertyName": "type"
+      },
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/RealmedObjectData"
+        }
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "normal"
+            },
+            "media": {
+              "description": "The port's icon",
+              "type": "string"
+            },
+            "requirements": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "SkillLevel"
+                    },
+                    "skillID": {
+                      "type": "string",
+                      "const": "sailing:Sailing"
+                    },
+                    "level": {
+                      "description": "The level requirement for the skill",
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              ],
+              "items": {
+                "$ref": "#/$defs/SkillLevelRequirementData"
+              },
+              "minItems": 1
+            },
+            "lootTable": {
+              "description": "The items to be rolled for the action",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/DropTableData"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "media",
+            "requirements",
+            "lootTable"
+          ]
+        },
+        {
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "skill"
+            },
+            "skillID": {
+              "description": "The skill ID to roll for resources",
+              "allOf": [
+                {
+                  "$ref": "#/$defs/SkillID"
+                }
+              ]
+            }
+          },
+          "required": [
+            "skillID"
+          ]
+        }
+      ],
+      "properties": {
+        "name": {
+          "description": "The name of the port",
+          "type": "string"
+        },
+        "description": {
+          "description": "The description of the port",
+          "type": "string"
+        },
+        "distance": {
+          "description": "The distance to the port, expressed in minutes",
+          "type": "integer",
+          "minimum": 0
+        },
+        "minRolls": {
+          "description": "The minimum number of rolls on the loot table",
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxRolls": {
+          "description": "The maximum number of rolls on the loot table",
+          "type": "integer",
+          "minimum": 0
+        },
+        "type": {
+          "description": "The type of the port",
+          "type": "string",
+          "enum": [
+            "normal",
+            "skill"
+          ]
+        },
+        "requirements": {
+          "description": "The requirements to make a trip to this port",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnyRequirementData"
+          }
+        },
+        "sailingStats": {
+          "description": "The requirements needed to guarantee a successful trip",
+          "type": "object",
+          "properties": {
+            "combat": {
+              "description": "The combat level required to make a successful trip",
+              "type": "integer",
+              "minimum": 0
+            },
+            "morale": {
+              "description": "The morale level required to make a successful trip",
+              "type": "integer",
+              "minimum": 0
+            },
+            "seafaring": {
+              "description": "The seafaring level required to make a successful trip",
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "currencyDrops": {
+          "description": "Optional. Defines the currencies that drop from this monster. Currencies always drop.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "currencyID": {
+                "description": "The ID of the currency to drop",
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/CurrencyID"
+                  }
+                ]
+              },
+              "min": {
+                "description": "The minimum amount of the currency to drop",
+                "type": "integer",
+                "minimum": 0
+              },
+              "max": {
+                "description": "The minimum amount of the currency to drop",
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "currencyID",
+              "min",
+              "max"
+            ],
+            "unevaluatedProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "distance",
+        "type",
+        "requirements",
+        "currencyDrops",
+        "minRolls",
+        "maxRolls"
+      ],
+      "unevaluatedProperties": false
+    },
+    "SailingPortModificationData": {
+      "description": "Data For modifying a Sailing Port object",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ModificationIDData"
+        }
+      ],
+      "properties": {
+      },
       "unevaluatedProperties": false
     }
   }

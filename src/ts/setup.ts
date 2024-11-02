@@ -21,9 +21,16 @@ import { Translation } from './translation';
 import { UserInterface } from './ui';
 import { Constants } from './Constants';
 
+/* devblock:start */
+import * as Util from './util';
+/* devblock:end */
+
 declare global {
   interface Game {
     sailing: Sailing;
+    /* devblock:start */
+    util: typeof Util;
+    /* devblock:end */
   }
 }
 
@@ -52,6 +59,9 @@ export async function setup(ctx: Modding.ModContext) {
   }
 
   game.sailing = sailing;
+  /* devblock:start */
+  game.util =  Util;
+  /* devblock:end */
 
   ctx.onInterfaceAvailable(() => {
     sailing.ui = new UserInterface(ctx, game, sailing);

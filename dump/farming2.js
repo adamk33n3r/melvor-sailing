@@ -72,18 +72,25 @@ class FarmingPlot extends NamespacedObject {
     this.farming = farming;
     this.currencyCosts = [];
     this.itemCosts = [];
-    this.state = 1;
+    /** Current state of the crop growing in the plot */
+    this.state = 1 /* FarmingPlotState.Empty */;
+    /** Current compost level. Ranges from 0-100 */
     this.compostLevel = 0;
+    /** Growth time of plot in seconds */
     this.growthTime = 0;
     this.abyssalLevel = 0;
     try {
       this.category = farming.categories.getObjectSafe(data.categoryID);
       this.level = data.level;
       if (data.currencyCosts !== undefined) this.currencyCosts.push(...game.getCurrencyQuantities(data.currencyCosts));
+      // TODO_D - deprecated property support
       if (data.gpCost) this.currencyCosts.push({ currency: game.gp, quantity: data.gpCost });
       if (data.itemCosts !== undefined) this.itemCosts.push(...game.items.getQuantities(data.itemCosts));
       if (data.abyssalLevel !== undefined) this.abyssalLevel = data.abyssalLevel;
-      this.state = this.currencyCosts.length === 0 && this.itemCosts.length === 0 && this.level === 1 ? 1 : 0;
+      this.state =
+        this.currencyCosts.length === 0 && this.itemCosts.length === 0 && this.level === 1
+          ? 1 /* FarmingPlotState.Empty */
+          : 0 /* FarmingPlotState.Locked */;
     } catch (e) {
       throw new DataConstructionError(FarmingPlot.name, e, this.id);
     }
@@ -124,8 +131,8 @@ class FarmingPlot extends NamespacedObject {
       } else this.selectedRecipe = selected;
     }
     this.growthTime = reader.getFloat64();
-    if (resetPlanted || (this.state === 3 && this.plantedRecipe === undefined)) {
-      this.state = 1;
+    if (resetPlanted || (this.state === 3 /* FarmingPlotState.Grown */ && this.plantedRecipe === undefined)) {
+      this.state = 1 /* FarmingPlotState.Empty */;
       this.growthTime = 0;
     }
     if (resetCompost) {
@@ -135,7 +142,11 @@ class FarmingPlot extends NamespacedObject {
 }
 class DummyFarmingPlot extends FarmingPlot {
   constructor(namespace, id, game) {
-    super(namespace, { id, categoryID: 'melvorD:Allotment', level: 1, itemCosts: [] }, game.farming);
+    super(
+      namespace,
+      { id, categoryID: 'melvorD:Allotment' /* FarmingCategoryIDs.Allotment */, level: 1, itemCosts: [] },
+      game.farming,
+    );
   }
   decode(reader, version) {
     super.decode(reader, version);
@@ -152,7 +163,9 @@ class FarmingRenderQueue extends MasterySkillRenderQueue {
     this.grants = new Set();
     this.growthIndicators = false;
     this.compostQuantity = false;
+    /** Updates which plots should be shown based on currently selected category */
     this.plotVisibility = false;
+    /** Updates the unlock cost quantities */
     this.plotUnlockQuantities = false;
   }
 }
@@ -175,13 +188,18 @@ class FarmingGrowthTimer extends Timer {
 class Farming extends SkillWithMastery {
   constructor(namespace, game) {
     super(namespace, 'Farming', game, FarmingRecipe.name);
-    this._media = 'assets/media/skills/farming/farming.png';
+    this._media = 'assets/media/skills/farming/farming.png' /* Assets.Farming */;
+    /** Map of herb seeds to herb items */
     this.herbSeedToProductMap = new Map();
+    /** Map of category to recipes in that category, sorted by level requirement */
     this.categoryRecipeMap = new Map();
     this.categoryPlotMap = new Map();
+    /** Save State Property */
     this.growthTimers = new Set();
+    /** Maps farming plots to growth timers */
     this.growthTimerMap = new Map();
     this.renderQueue = new FarmingRenderQueue();
+    /** Temporarily stores the bonus to harvest quantity from compost so it gets included in modifier calculations */
     this.tempCompostQuantityModifier = 0;
     this.categories = new NamespaceRegistry(game.registeredNamespaces, FarmingCategory.name);
     this.plots = new NamespaceRegistry(game.registeredNamespaces, FarmingPlot.name);
@@ -199,7 +217,9 @@ class Farming extends SkillWithMastery {
     return this.game.items.composts;
   }
   get isAnyPlotGrown() {
-    return this.plots.some((plot) => plot.state === 3 || plot.state === 4);
+    return this.plots.some(
+      (plot) => plot.state === 3 /* FarmingPlotState.Grown */ || plot.state === 4 /* FarmingPlotState.Dead */,
+    );
   }
   isMasteryActionUnlocked(action) {
     return this.isBasicSkillRecipeUnlocked(action);
@@ -262,13 +282,7 @@ class Farming extends SkillWithMastery {
     this.plots.forEach((plot) => {
       var _a, _b, _c;
       plotLog.push(
-        `id: ${plot.id}; state: ${plot.state}; plantedRecipe: ${
-          (_a = plot.plantedRecipe) === null || _a === void 0 ? void 0 : _a.id
-        }; compostItem: ${(_b = plot.compostItem) === null || _b === void 0 ? void 0 : _b.id}; compostLevel: ${
-          plot.compostLevel
-        }; selectedRecipe: ${(_c = plot.selectedRecipe) === null || _c === void 0 ? void 0 : _c.id}; growthTime: ${
-          plot.growthTime
-        };`,
+        `id: ${plot.id}; state: ${plot.state}; plantedRecipe: ${(_a = plot.plantedRecipe) === null || _a === void 0 ? void 0 : _a.id}; compostItem: ${(_b = plot.compostItem) === null || _b === void 0 ? void 0 : _b.id}; compostLevel: ${plot.compostLevel}; selectedRecipe: ${(_c = plot.selectedRecipe) === null || _c === void 0 ? void 0 : _c.id}; growthTime: ${plot.growthTime};`,
       );
     });
     const timerLog = [];
@@ -305,19 +319,24 @@ ${plotLog.join('\n')}`;
   postDataRegistration() {
     super.postDataRegistration();
     this.actions.forEach((recipe) => {
-      if (recipe.category.id === 'melvorD:Herb') this.herbSeedToProductMap.set(recipe.seedCost.item, recipe.product);
+      if (recipe.category.id === 'melvorD:Herb' /* FarmingCategoryIDs.Herb */)
+        this.herbSeedToProductMap.set(recipe.seedCost.item, recipe.product);
     });
+    // Set up sorted mastery
     this.sortedMasteryActions = sortRecipesByCategoryAndLevel(this.actions.allObjects, this.categories.allObjects);
+    // Add Milestones
     this.actions.forEach((action) => {
       if (action.abyssalLevel > 0) this.abyssalMilestones.push(action);
       else this.milestones.push(action);
     });
     this.sortMilestones();
+    // Populate category recipe map
     this.categories.forEach((category) => {
       const recipes = this.actions.filter((recipe) => recipe.category === category).sort((a, b) => a.level - b.level);
       this.categoryRecipeMap.set(category, recipes);
       const plots = this.plots.filter((plot) => plot.category === category).sort((a, b) => a.level - b.level);
       this.categoryPlotMap.set(category, plots);
+      // Populate selected seed for plots
       plots.forEach((plot) => {
         if (plot.selectedRecipe === undefined) plot.selectedRecipe = recipes[0];
       });
@@ -329,7 +348,7 @@ ${plotLog.join('\n')}`;
     timer.plots.forEach((plot) => {
       var _a;
       const success = rollPercentage(this.getPlotGrowthChance(plot));
-      plot.state = success ? 3 : 4;
+      plot.state = success ? 3 /* FarmingPlotState.Grown */ : 4 /* FarmingPlotState.Dead */;
       (_a = this.renderQueue).growthIndicators || (_a.growthIndicators = success);
       this.renderQueue.growthState.add(plot);
       this.growthTimerMap.delete(plot);
@@ -348,7 +367,10 @@ ${plotLog.join('\n')}`;
       });
     }
     if (anyGrown) {
-      this.game.combat.notifications.add({ type: 'Player', args: [this, getLangString('TOASTS_CROP_READY')] });
+      this.game.combat.notifications.add({
+        type: 'Player',
+        args: [this, getLangString('TOASTS_CROP_READY')],
+      });
     }
     this.removeGrowthTimer(timer);
   }
@@ -373,19 +395,26 @@ ${plotLog.join('\n')}`;
   getRecipeSeedCost(recipe) {
     let quantity = recipe.seedCost.quantity;
     const modQuery = this.getActionModifierQuery(recipe);
-    const modifier = this.game.modifiers.getValue('melvorD:farmingSeedCost', modQuery);
+    const modifier = this.game.modifiers.getValue(
+      'melvorD:farmingSeedCost' /* ModifierIDs.farmingSeedCost */,
+      modQuery,
+    );
     quantity *= 1 + modifier / 100;
     quantity = Math.floor(quantity);
-    quantity += this.game.modifiers.getValue('melvorD:flatFarmingSeedCost', modQuery);
+    quantity += this.game.modifiers.getValue(
+      'melvorD:flatFarmingSeedCost' /* ModifierIDs.flatFarmingSeedCost */,
+      modQuery,
+    );
     return Math.max(1, quantity);
   }
   getRecipeInterval(recipe) {
     return this.modifyInterval(recipe.baseInterval, recipe);
   }
+  /** Returns the chance for a plot to grow */
   getPlotGrowthChance(plot) {
     let chance = 50 + plot.compostLevel / 2;
     const cantDie = this.game.modifiers.getValue(
-      'melvorD:farmingCropsCannotDie',
+      'melvorD:farmingCropsCannotDie' /* ModifierIDs.farmingCropsCannotDie */,
       this.getActionModifierQuery(plot.plantedRecipe),
     );
     if (cantDie > 0) chance = 100;
@@ -420,7 +449,7 @@ ${plotLog.join('\n')}`;
     return quantity;
   }
   harvestPlot(plot) {
-    if (plot.state !== 3 || plot.plantedRecipe === undefined) return false;
+    if (plot.state !== 3 /* FarmingPlotState.Grown */ || plot.plantedRecipe === undefined) return false;
     const recipe = plot.plantedRecipe;
     const modifierQuery = this.getActionModifierQuery(recipe);
     let disableSeedRefund = false;
@@ -430,18 +459,27 @@ ${plotLog.join('\n')}`;
     }
     const harvestQuantity = this.modifyPrimaryProductQuantity(recipe.product, recipe.baseQuantity, recipe);
     this.tempCompostQuantityModifier = 0;
+    // Attempt to add the items to the bank
     if (!this.game.bank.addItem(recipe.product, harvestQuantity, false, true, false, true, `Skill.${this.id}`))
       return false;
+    // Give additional rewards
     const rewards = new Rewards(this.game);
     this.addCurrencyFromPrimaryProductGain(rewards, recipe.product, harvestQuantity, recipe);
     rewards.setActionInterval(plot.growthTime);
     this.rollForPets(plot.growthTime, recipe);
-    const maxSeeds = this.game.modifiers.getValue('melvorD:farmingSeedReturn', modifierQuery);
+    const maxSeeds = this.game.modifiers.getValue(
+      'melvorD:farmingSeedReturn' /* ModifierIDs.farmingSeedReturn */,
+      modifierQuery,
+    );
     if (recipe.category.returnSeeds && maxSeeds > 1 && !disableSeedRefund) {
       const seedQty = Math.round(Math.random() * maxSeeds);
       if (seedQty > 0) rewards.addItem(recipe.seedCost.item, seedQty);
     }
-    if (recipe.namespace === 'melvorItA' && recipe.category.id === 'melvorD:Tree' && !disableSeedRefund) {
+    if (
+      recipe.namespace === 'melvorItA' /* Namespaces.IntoTheAbyss */ &&
+      recipe.category.id === 'melvorD:Tree' /* FarmingCategoryIDs.Tree */ &&
+      !disableSeedRefund
+    ) {
       const chance = this.game.modifiers.regainAbyssalTreeSeedChance;
       if (rollPercentage(chance)) rewards.addItem(recipe.seedCost.item, 1);
     }
@@ -458,19 +496,20 @@ ${plotLog.join('\n')}`;
     this.addMasteryForAction(recipe, (plot.growthTime * harvestQuantity) / recipe.category.masteryXPDivider);
     rewards.setSource(this.id);
     rewards.giveRewards();
+    // Track stats
     switch (recipe.category.id) {
-      case 'melvorD:Allotment':
+      case 'melvorD:Allotment' /* FarmingCategoryIDs.Allotment */:
         this.game.stats.Farming.inc(FarmingStats.AllotmentsHarvested);
         this.game.stats.Farming.add(FarmingStats.FoodGained, harvestQuantity);
         break;
-      case 'melvorD:Tree':
+      case 'melvorD:Tree' /* FarmingCategoryIDs.Tree */:
         this.game.stats.Farming.inc(FarmingStats.TreesHarvested);
         this.game.stats.Farming.add(
           recipe.product instanceof FoodItem ? FarmingStats.FoodGained : FarmingStats.LogsGained,
           harvestQuantity,
         );
         break;
-      case 'melvorD:Herb':
+      case 'melvorD:Herb' /* FarmingCategoryIDs.Herb */:
         this.game.stats.Farming.inc(FarmingStats.HerbsHarvested);
         this.game.stats.Farming.add(FarmingStats.HerbsGained, harvestQuantity);
         break;
@@ -478,6 +517,7 @@ ${plotLog.join('\n')}`;
     this.game.stats.Items.add(recipe.seedCost.item, ItemStats.TimesGrown, 1);
     this.game.stats.Items.add(recipe.product, ItemStats.HarvestAmount, harvestQuantity);
     this.game.stats.Items.add(recipe.seedCost.item, ItemStats.TimeWaited, plot.growthTime);
+    // Reset the plot state and queue renders
     this.resetPlot(plot);
     const event = new FarmingHarvestActionEvent(this, recipe);
     event.productQuantity = harvestQuantity;
@@ -486,7 +526,7 @@ ${plotLog.join('\n')}`;
     return true;
   }
   clearDeadPlot(plot) {
-    if (plot.state !== 4 || plot.plantedRecipe === undefined) return;
+    if (plot.state !== 4 /* FarmingPlotState.Dead */ || plot.plantedRecipe === undefined) return;
     const event = new FarmingHarvestActionEvent(this, plot.plantedRecipe);
     this.resetPlot(plot);
     event.successful = false;
@@ -495,20 +535,21 @@ ${plotLog.join('\n')}`;
   resetPlot(plot) {
     const preserveChance =
       this.game.modifiers.getValue(
-        'melvorD:compostPreservationChance',
+        'melvorD:compostPreservationChance' /* ModifierIDs.compostPreservationChance */,
         this.getActionModifierQuery(plot.plantedRecipe),
       ) +
       this.game.modifiers.getValue(
-        'melvorD:bypassCompostPreservationChance',
+        'melvorD:bypassCompostPreservationChance' /* ModifierIDs.bypassCompostPreservationChance */,
         this.getActionModifierQuery(plot.plantedRecipe),
       );
-    plot.state = 1;
+    plot.state = 1 /* FarmingPlotState.Empty */;
     plot.plantedRecipe = undefined;
     plot.growthTime = 0;
     this.renderQueue.growthState.add(plot);
     this.renderQueue.growthChance.add(plot);
     this.renderQueue.grants.add(plot);
     this.renderQueue.growthIndicators = true;
+    // Chance to preserve compost
     if (!rollPercentage(preserveChance)) {
       this.removeCompostFromPlot(plot);
     }
@@ -519,7 +560,7 @@ ${plotLog.join('\n')}`;
     this.renderQueue.compost.add(plot);
   }
   plantPlot(plot, recipe, isSelected = false) {
-    if (plot.state !== 1) return -1;
+    if (plot.state !== 1 /* FarmingPlotState.Empty */) return -1;
     const costs = new Costs(this.game);
     costs.setSource(`Skill.${this.id}.PlantSeed`);
     const seedQuantity = this.getRecipeSeedCost(recipe);
@@ -543,10 +584,14 @@ ${plotLog.join('\n')}`;
       return -1;
     }
     const interval = this.modifyInterval(recipe.baseInterval, recipe);
-    plot.state = this.game.currentGamemode.enableInstantActions ? 3 : 2;
+    // Set Plot State
+    plot.state = this.game.currentGamemode.enableInstantActions
+      ? 3 /* FarmingPlotState.Grown */
+      : 2 /* FarmingPlotState.Growing */;
     plot.plantedRecipe = recipe;
     plot.growthTime = interval / 1000;
-    this.selectRealm(recipe.realm);
+    this.selectRealm(recipe.realm); //Used to handle default selected realms for popups. Does nothing else in the Skill.
+    // Queue Rendering
     this.renderQueue.growthState.add(plot);
     this.renderQueue.growthChance.add(plot);
     this.renderQueue.grants.add(plot);
@@ -696,7 +741,9 @@ ${plotLog.join('\n')}`;
     this.categories.forEach((category) => {
       var _a;
       const plots = this.getPlotsForCategory(category);
-      const hasGrown = plots.some((plot) => plot.state === 3 || plot.state === 4);
+      const hasGrown = plots.some(
+        (plot) => plot.state === 3 /* FarmingPlotState.Grown */ || plot.state === 4 /* FarmingPlotState.Dead */,
+      );
       (_a = farmingMenus.categoryButtons.get(category)) === null || _a === void 0 ? void 0 : _a.updateNotice(hasGrown);
       anyGrown || (anyGrown = hasGrown);
     });
@@ -724,16 +771,18 @@ ${plotLog.join('\n')}`;
     });
     this.renderQueue.plotUnlockQuantities = false;
   }
+  /** Shows all plots that are part of the category */
   showPlotsInCategory(category) {
     const plots = this.getPlotsForCategory(category);
     let unlockedPlots = 0;
     let lockedPlots = 0;
+    // Generate locked/unlocked plots, and arrange them correctly
     farmingMenus.plotMap.clear();
     farmingMenus.lockedPlotMap.clear();
     let lastPlotElement = farmingMenus.categoryOptions;
     let lastLevelLockedShown = false;
     plots.forEach((plot) => {
-      if (plot.state !== 0) {
+      if (plot.state !== 0 /* FarmingPlotState.Locked */) {
         let unlockedPlot = farmingMenus.plots[unlockedPlots];
         if (unlockedPlot === undefined) {
           unlockedPlot = createElement('farming-plot', { className: 'col-6 col-xl-3' });
@@ -761,6 +810,7 @@ ${plotLog.join('\n')}`;
         if (plot.level > this.level) lastLevelLockedShown = true;
       }
     });
+    // Hide Extra Locked/Unlocked Plots
     for (let i = unlockedPlots; i < farmingMenus.plots.length; i++) {
       hideElement(farmingMenus.plots[i]);
     }
@@ -770,6 +820,7 @@ ${plotLog.join('\n')}`;
     farmingMenus.categoryOptions.setCategory(category, this.game);
     this.visibleCategory = category;
   }
+  /** Callback function for the Harvest All button */
   harvestAllOnClick(category) {
     const cost = this.getHarvestAllCost(category);
     if (!this.game.gp.canAfford(cost)) {
@@ -781,10 +832,10 @@ ${plotLog.join('\n')}`;
     this.game.combat.notifications.disableMaxQueue();
     plots.forEach((plot) => {
       switch (plot.state) {
-        case 3:
+        case 3 /* FarmingPlotState.Grown */:
           if (this.harvestPlot(plot)) harvestCount++;
           break;
-        case 4:
+        case 4 /* FarmingPlotState.Dead */:
           this.clearDeadPlot(plot);
           harvestCount++;
           break;
@@ -796,12 +847,14 @@ ${plotLog.join('\n')}`;
     }
     this.game.combat.notifications.enableMaxQueue();
   }
+  /** Callback function for adding compost to a plot */
   compostPlot(plot, compost, amount) {
-    if (plot.state !== 1) return false;
-    const freeCompost = compost.id === 'melvorD:Compost' && this.game.modifiers.freeCompost > 0;
+    if (plot.state !== 1 /* FarmingPlotState.Empty */) return false;
+    const freeCompost = compost.id === 'melvorD:Compost' /* ItemIDs.Compost */ && this.game.modifiers.freeCompost > 0;
     const owned = freeCompost ? Infinity : this.game.bank.getQty(compost);
     if (plot.compostItem !== undefined && plot.compostItem.harvestBonus >= compost.harvestBonus) {
       if (plot.compostItem.harvestBonus > compost.harvestBonus || plot.compostLevel === 100) return false;
+      // Add to it
       const amountNeeded = Math.ceil((100 - plot.compostLevel) / compost.compostValue);
       amount = Math.min(amount, amountNeeded, owned);
       if (amount > 0) {
@@ -817,6 +870,7 @@ ${plotLog.join('\n')}`;
         return false;
       }
     } else {
+      // Replace it
       const amountNeeded = Math.ceil(100 / compost.compostValue);
       amount = Math.min(amount, amountNeeded, owned);
       if (amount > 0) {
@@ -837,24 +891,27 @@ ${plotLog.join('\n')}`;
   notifyNoCompost(compost) {
     let message;
     switch (compost.id) {
-      case 'melvorD:Compost':
+      case 'melvorD:Compost' /* ItemIDs.Compost */:
         message = getLangString('TOASTS_NEED_COMPOST');
         break;
-      case 'melvorD:Weird_Gloop':
+      case 'melvorD:Weird_Gloop' /* ItemIDs.Weird_Gloop */:
         message = getLangString('TOASTS_NEED_GLOOP');
         break;
       default:
         message = templateLangString('FARMING_MISC_NEED_ITEM_TO_APPLY', { itemName: compost.name });
     }
-    this.game.combat.notifications.add({ type: 'Player', args: [this, message, 'danger'] });
+    this.game.combat.notifications.add({
+      type: 'Player',
+      args: [this, message, 'danger'],
+    });
   }
   notifyCantAffordCompostAll(compost) {
     let message;
     switch (compost.id) {
-      case 'melvorD:Compost':
+      case 'melvorD:Compost' /* ItemIDs.Compost */:
         message = getLangString('TOASTS_COMPOST_ALL_GP');
         break;
-      case 'melvorD:Weird_Gloop':
+      case 'melvorD:Weird_Gloop' /* ItemIDs.Weird_Gloop */:
         message = getLangString('TOASTS_GLOOP_ALL_GP');
         break;
       default:
@@ -863,18 +920,22 @@ ${plotLog.join('\n')}`;
           itemName: compost.name,
         });
     }
-    this.game.combat.notifications.add({ type: 'Player', args: [this, message, 'danger'] });
+    this.game.combat.notifications.add({
+      type: 'Player',
+      args: [this, message, 'danger'],
+    });
   }
   recordCompostStat(compost, amount) {
     switch (compost.id) {
-      case 'melvorD:Compost':
+      case 'melvorD:Compost' /* ItemIDs.Compost */:
         this.game.stats.Farming.add(FarmingStats.CompostUsed, amount);
         break;
-      case 'melvorD:Weird_Gloop':
+      case 'melvorD:Weird_Gloop' /* ItemIDs.Weird_Gloop */:
         this.game.stats.Farming.add(FarmingStats.GloopUsed, amount);
         break;
     }
   }
+  /** Callback function for the Compost All button */
   compostAllOnClick(category, compost) {
     const cost = compost.compostAllCost;
     if (!cost.currency.canAfford(cost.quantity)) {
@@ -896,9 +957,10 @@ ${plotLog.join('\n')}`;
       }
     }
   }
+  /** Callback function for the Plant All button */
   plantAllOnClick(category) {
     const plots = this.getPlotsForCategory(category);
-    if (!plots.some((plot) => plot.state === 1)) {
+    if (!plots.some((plot) => plot.state === 1 /* FarmingPlotState.Empty */)) {
       notifyPlayer(this, getLangString('TOASTS_NO_EMPTY_PATCHES'), 'danger');
       return;
     }
@@ -906,9 +968,11 @@ ${plotLog.join('\n')}`;
     farmingMenus.seedSelect.setUnselectedRecipe();
     $('#modal-farming-seed').modal('show');
   }
+  /** Callback function for the Plant All Selected button */
   plantAllSelectedOnClick(category) {
     this.plantAllPlots(category);
   }
+  /** Callback function for changing recipe associated with the Plant All Selected for a plot */
   setPlantAllSelected(plot, recipe) {
     if (this.level >= recipe.level && (recipe.abyssalLevel === 0 || this.abyssalLevel >= recipe.abyssalLevel)) {
       plot.selectedRecipe = recipe;
@@ -937,8 +1001,9 @@ ${plotLog.join('\n')}`;
         });
     }
   }
+  /** Callback function for destroying an individual plot */
   destroyPlotOnClick(plot) {
-    if (plot.state !== 2) return;
+    if (plot.state !== 2 /* FarmingPlotState.Growing */) return;
     if (this.game.settings.showCropDestructionConfirmations) {
       SwalLocale.fire({
         title: getLangString('MENU_TEXT_DESTROY_CROP'),
@@ -956,8 +1021,9 @@ ${plotLog.join('\n')}`;
     }
   }
   destroyPlot(plot) {
-    if (plot.state !== 2) return;
+    if (plot.state !== 2 /* FarmingPlotState.Growing */) return;
     this.resetPlot(plot);
+    // Clean up timers
     const timer = this.growthTimerMap.get(plot);
     if (timer === undefined) throw new Error('Tried destroying plot, but no timer is set for it.');
     const plotIndex = timer.plots.findIndex((timerPlot) => timerPlot === plot);
@@ -969,18 +1035,20 @@ ${plotLog.join('\n')}`;
     }
     this.renderQueue.compost.add(plot);
   }
+  /** Callback function for the Plant a Seed button on a plot */
   plantPlotOnClick(plot) {
-    if (plot.state !== 1) return;
+    if (plot.state !== 1 /* FarmingPlotState.Empty */) return;
     farmingMenus.seedSelect.setSeedSelection(plot.category, this.game, this.currentRealm, plot);
     farmingMenus.seedSelect.setUnselectedRecipe();
     $('#modal-farming-seed').modal('show');
   }
+  /** Callback function for the Harvest button on a plot */
   harvestPlotOnClick(plot) {
     switch (plot.state) {
-      case 3:
+      case 3 /* FarmingPlotState.Grown */:
         this.harvestPlot(plot);
         break;
-      case 4:
+      case 4 /* FarmingPlotState.Dead */:
         this.clearDeadPlot(plot);
         break;
     }
@@ -995,6 +1063,7 @@ ${plotLog.join('\n')}`;
     });
     return costs;
   }
+  /** Returns if the plots requirements and costs are met */
   canUnlockPlot(plot) {
     const abyssalLevelMet = plot.abyssalLevel === 0 || this.abyssalLevel >= plot.abyssalLevel;
     return (
@@ -1004,19 +1073,23 @@ ${plotLog.join('\n')}`;
       abyssalLevelMet
     );
   }
+  /** Callback function for the Unlock button on a plot */
   unlockPlotOnClick(plot) {
     const costs = this.getPlotUnlockCosts(plot);
     costs.setSource(`Skill.${this.id}.UnlockPlot`);
     if (!costs.checkIfOwned() || this.level < plot.level || this.abyssalLevel < plot.abyssalLevel) return;
     costs.consumeCosts();
-    plot.state = 1;
+    plot.state = 1 /* FarmingPlotState.Empty */;
     this.showPlotsInCategory(plot.category);
   }
+  /** Callback function for the Plant button in the Plant a seed modal */
   plantRecipe(recipe, plot) {
     const plantInterval = this.plantPlot(plot, recipe);
     if (plantInterval <= 0) return;
+    // Set up timer
     this.createGrowthTimer([plot], plantInterval);
   }
+  /** Callback function for the Plant button in the Plant a seed modal */
   plantAllRecipe(recipe) {
     this.plantAllPlots(recipe.category, recipe);
   }
@@ -1028,6 +1101,7 @@ ${plotLog.join('\n')}`;
     });
     this.renderQueue.growthTime.add(timer);
     timer.start(interval);
+    // TODO: Implement push notifications
   }
   getRegistry(type) {
     switch (type) {
@@ -1091,7 +1165,7 @@ ${plotLog.join('\n')}`;
     this.growthTimers = reader.getSet((reader) => {
       const timer = new FarmingGrowthTimer([], this);
       timer.decode(reader, version);
-      if (timer.plots.length === 0) return undefined;
+      if (timer.plots.length === 0) return undefined; // Reject empty timers
       return timer;
     });
     this.growthTimers.forEach((timer) => {
@@ -1101,8 +1175,8 @@ ${plotLog.join('\n')}`;
     });
   }
   convertFromOldFormat(save, idMap) {
-    const compost = this.game.items.composts.getObjectByID('melvorD:Compost');
-    const gloop = this.game.items.composts.getObjectByID('melvorD:Weird_Gloop');
+    const compost = this.game.items.composts.getObjectByID('melvorD:Compost' /* ItemIDs.Compost */);
+    const gloop = this.game.items.composts.getObjectByID('melvorD:Weird_Gloop' /* ItemIDs.Weird_Gloop */);
     if (compost === undefined || gloop === undefined)
       throw new Error(`Error converting farming data. Compost not registered.`);
     const currentTime = new Date().getTime();
@@ -1118,14 +1192,14 @@ ${plotLog.join('\n')}`;
             if (patch.seedID > 0) {
               const recipe = this.actions.getObjectByID(idMap.farmingSeedToRecipe[patch.seedID]);
               if (recipe === undefined) {
-                plot.state = 1;
+                plot.state = 1 /* FarmingPlotState.Empty */;
                 return;
               }
               plot.plantedRecipe = recipe;
               if (patch.hasGrown) {
-                plot.state = 3;
+                plot.state = 3 /* FarmingPlotState.Grown */;
               } else {
-                plot.state = 2;
+                plot.state = 2 /* FarmingPlotState.Growing */;
                 const growthTime = (_a = patch.setInterval) !== null && _a !== void 0 ? _a : recipe.baseInterval / 1000;
                 plot.growthTime = growthTime;
                 let timeLeft = patch.timePlanted + growthTime * 1000 - currentTime;
@@ -1133,7 +1207,7 @@ ${plotLog.join('\n')}`;
                 this.createGrowthTimer([plot], timeLeft);
               }
             } else {
-              plot.state = 1;
+              plot.state = 1 /* FarmingPlotState.Empty */;
             }
           }
         });
@@ -1168,4 +1242,5 @@ ${plotLog.join('\n')}`;
     return obtainable;
   }
 }
-checkFileVersion('?11769');
+//# sourceMappingURL=farming2.js.map
+checkFileVersion('?11975');

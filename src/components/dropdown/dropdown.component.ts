@@ -1,3 +1,4 @@
+import { Content } from 'tippy.js';
 import { getElementByIdAndRemoveId } from '../../ts/util';
 
 interface DropdownOptionsData<T> {
@@ -5,6 +6,7 @@ interface DropdownOptionsData<T> {
   value: T;
   media: string;
   disabled?: boolean;
+  hover?: Content;
 }
 
 interface DropdownOptions<T> {
@@ -40,7 +42,32 @@ export function DropdownComponent<T>(data: DropdownOptions<T>, onChange: (value:
       data.options.forEach((option) => {
         const item = createElement('a', { className: 'dropdown-item pointer-enabled' });
         if (option.disabled) {
-          item.classList.add('disabled', 'text-danger');
+          item.classList.add('text-danger');
+          if (option.hover) {
+            tippy(item, {
+              content: option.hover,
+              placement: 'top',
+              interactive: false,
+              animation: false,
+              popperOptions: {
+                strategy: 'fixed',
+                modifiers: [{
+                  name: 'flip',
+                  options: {
+                    fallbackPlacements: ['top'],
+                  },
+                }, {
+                  name: 'preventOverflow',
+                  options: {
+                    altAxis: true,
+                    tether: false,
+                  },
+                }],
+              },
+            });
+          } else {
+            item.classList.add('disabled');
+          }
         } else {
           item.onclick = () => {
             self.updateValue(option);

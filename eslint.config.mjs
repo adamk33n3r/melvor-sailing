@@ -35,6 +35,7 @@ export default tseslint.config(
             '@typescript-eslint/no-this-alias': 'off',
             '@typescript-eslint/no-confusing-void-expression': 'off',
             '@typescript-eslint/no-unnecessary-type-parameters': 'off',
+            '@typescript-eslint/no-inferrable-types': 'off',
             '@typescript-eslint/no-empty-object-type': ['error', {
                 allowInterfaces: 'with-single-extends',
             }],

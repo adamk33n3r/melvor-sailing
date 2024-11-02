@@ -5,6 +5,31 @@ import { formatTime, getElementByIdAndRemoveId, tickToTime } from '../ts/util';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { EquipmentComponent } from './equipment/equipment.component';
 
+function getPortOptions() {
+    return game.sailing.ports.allObjects.map((p: Port) => {
+        const hasLevel = p.hasLevelRequirements();
+        const levelReqs = p.getLevelRequirements();
+        const hoverEle = createElement('div');
+        for (const req of levelReqs) {
+            const reqSpan = createElement('span', { className: 'font-size-sm' });
+            reqSpan.append(...req.getNodes('skill-icon-xs mr-1'));
+            toggleDangerSuccess(reqSpan, req.isMet());
+            hoverEle.append(reqSpan, createElement('br'));
+        }
+        return {
+            name: hasLevel ? p.name : (
+                p.isNormalPort() ? `Unlocked at Level ${p.level}` :
+                p.isSkillPort() ? `Unlocked at ${p.skill.name} Level ${p.getSkillLevelRequirement()}` :
+                'ERROR WITH REQUIREMENTS'
+            ),
+            value: p,
+            media: p.media,
+            disabled: !hasLevel,
+            hover: hoverEle,
+        };
+    });
+}
+
 export function ShipComponent(ship: Ship) {
     let self = {} as ReturnType<typeof ShipComponent>;
     return {
@@ -28,15 +53,7 @@ export function ShipComponent(ship: Ship) {
             side: 'left',
             block: true,
             selected: { name: ship.selectedPort.name, value: ship.selectedPort, media: ship.selectedPort.media },
-            options: game.sailing.ports.allObjects.map((p: Port) => {
-                const hasLevel = game.sailing.level >= p.level;
-                return {
-                    name: hasLevel ? p.name : `Unlocked at Level ${p.level}`,
-                    value: p,
-                    media: p.media,
-                    disabled: !hasLevel,
-                };
-            }),
+            options: getPortOptions(),
         }, (port: Port) => {
             ship.selectedPort = port;
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
@@ -107,15 +124,7 @@ export function ShipComponent(ship: Ship) {
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
             self.port.setData({
                 selected: { name: ship.selectedPort.name, value: ship.selectedPort, media: ship.selectedPort.media },
-                options: game.sailing.ports.allObjects.map((p: Port) => {
-                    const hasLevel = game.sailing.level >= p.level;
-                    return {
-                        name: hasLevel ? p.name : `Unlocked at Level ${p.level}`,
-                        value: p,
-                        media: p.media,
-                        disabled: !hasLevel,
-                    };
-                }),
+                options: getPortOptions(),
             });
             self.updateGrants();
             self.updateProgressBar();
@@ -245,11 +254,11 @@ export function ShipComponent(ship: Ship) {
         },
         async viewLoot() {
             return SwalLocale.fire({
-                iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
+                iconHtml: `<img class="mbts__logo-img" src="${ship.selectedPort.media}" />`,
                 title: ship.selectedPort.name,
                 html: ship.selectedPort.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
                     `${ship.selectedPort.minRolls} - ${ship.selectedPort.maxRolls} Rolls<br>` +
-                    ship.selectedPort.lootTable.sortedDropsArray.map((drop) => `${drop.minQuantity} - ${drop.maxQuantity} x <img class="skill-icon-xs" src="${drop.item.media}"/> ${drop.item.name}`).join('<br>'),
+                    ship.selectedPort.getPossibleLoot(),
             });
         },
     };
