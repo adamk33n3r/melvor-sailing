@@ -22,6 +22,7 @@
     "@types/eslint__js": "^8.42.3",
     "@types/ifvisible": "^1.1.0",
     "@types/ion-rangeslider": "^2.3.2",
+    "@types/jquery": "^3.5.32",
     "@types/node": "^18.11.13",
     "@types/sortablejs": "^1.10.6",
     "archiver": "^5.3.1",

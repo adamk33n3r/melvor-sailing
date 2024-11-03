@@ -5,7 +5,7 @@
     "modifiers": [
       {
         "id": "Speed",
-        "allowNegative": false,
+        "allowNegative": true,
         "inverted": true,
         "allowedScopes": [
           {
@@ -14,7 +14,15 @@
               {
                 "text": "+${value} Sailing Speed",
                 "lang": "sailing_Speed_Positive",
+                "inverted": true,
                 "above": 0,
+                "includeSign": false
+              },
+              {
+                "text": "-${value} Speed",
+                "lang": "sailing_Speed_Negative",
+                "inverted": true,
+                "below": 0,
                 "includeSign": false
               }
             ]
@@ -23,7 +31,7 @@
       },
       {
         "id": "Combat",
-        "allowNegative": false,
+        "allowNegative": true,
         "allowedScopes": [
           {
             "scopes": {},
@@ -33,6 +41,12 @@
                 "lang": "sailing_Combat_Positive",
                 "above": 0,
                 "includeSign": false
+              },
+              {
+                "text": "-${value} Combat",
+                "lang": "sailing_Combat_Negative",
+                "below": 0,
+                "includeSign": false
               }
             ]
           }
@@ -40,7 +54,7 @@
       },
       {
         "id": "Morale",
-        "allowNegative": false,
+        "allowNegative": true,
         "allowedScopes": [
           {
             "scopes": {},
@@ -50,6 +64,12 @@
                 "lang": "sailing_Morale_Positive",
                 "above": 0,
                 "includeSign": false
+              },
+              {
+                "text": "-${value} Morale",
+                "lang": "sailing_Morale_Negative",
+                "below": 0,
+                "includeSign": false
               }
             ]
           }
@@ -57,7 +77,7 @@
       },
       {
         "id": "Seafaring",
-        "allowNegative": false,
+        "allowNegative": true,
         "allowedScopes": [
           {
             "scopes": {},
@@ -66,6 +86,12 @@
                 "text": "+${value} Seafaring",
                 "lang": "sailing_Seafaring_Positive",
                 "above": 0,
+                "includeSign": false
+              },
+              {
+                "text": "-${value} Seafaring",
+                "lang": "sailing_Seafaring_Negative",
+                "below": 0,
                 "includeSign": false
               }
             ]
@@ -344,7 +370,7 @@
         "media": "img/sailing-boat.png",
         "containerID": "sailing-container",
         "headerBgClass": "bg-sailing",
-        "hasGameGuide": false,
+        "hasGameGuide": true,
         "canBeDefault": true,
         "skillSidebarCategoryID": "Passive",
         "action": "sailing:Sailing",

@@ -23,6 +23,7 @@ import { Constants } from './Constants';
 
 /* devblock:start */
 import * as Util from './util';
+import { GuideComponent } from '../components/guide.component';
 /* devblock:end */
 
 declare global {
@@ -37,6 +38,12 @@ declare global {
 export async function setup(ctx: Modding.ModContext) {
   const trans = new Translation(ctx);
   trans.register();
+
+  const origUpdateUIForLanguageChange = window.updateUIForLanguageChange;
+  window.updateUIForLanguageChange = function () {
+    trans.register();
+    origUpdateUIForLanguageChange();
+  };
 
   const sailing = game.registerSkill(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), Sailing);
 
@@ -64,6 +71,18 @@ export async function setup(ctx: Modding.ModContext) {
   /* devblock:end */
 
   ctx.onInterfaceAvailable(() => {
+    const parent = $('#tutorial-page-Woodcutting').parent().get(0);
+    const guideComponent = GuideComponent(sailing);
+    ui.create(guideComponent, parent!);
+
+    tippy('.modio-link', {
+      content: `<div class="font-size-sm">${getLangString('VIEW_ON_MODIO')}</div>`,
+      placement: 'top',
+      allowHTML: true,
+      interactive: false,
+      animation: false,
+    });
+
     sailing.ui = new UserInterface(ctx, game, sailing);
   });
 

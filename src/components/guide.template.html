@@ -1,0 +1,76 @@
+<template id="sailing-guide-template">
+  <div class="py-2 text-center d-none" id="tutorial-page-Sailing">
+    <h2 class="h1 mb-2">
+      <img class="m-2" height="64px" :src="skill.media">
+      Sailing
+      <a class="btn btn-sm btn-outline-secondary p-0 modio-link ml-2 pointer-enabled" onclick="openLink(`https://mod.io/g/melvoridle/m/mercantile-sailing`);">
+        <img class="skill-icon-xs" src="https://mod.io/images/branding/modio-cog-white.svg">
+      </a>
+    </h2>
+    <h5 class="font-w400">
+      Set sail on the open ocean, and explore the world. Sailing is a skill that allows you to travel across the world
+      to make trades with remote islands, ports, and kingdoms.
+    </h5>
+    <h5 class="font-w400">
+      There are multiple types of Ports that behave differently. See below to learn about the different types and how to discover them.
+    </h5>
+    <h5 class="font-w400 mb-5">You are able to perform all Sailing actions alongside any other Skill.</h5>
+    <div class="col-12">
+      <div class="row gutters-tiny">
+        <div class="col-md-6">
+          <div class="block-content">
+            <div class="py-2 text-left">
+              <h4 class="mb-2">Modifiers</h4>
+            </div>
+            <div class="media d-flex align-items-center push" v-for="modifier in modifiers">
+              <div class="mr-3">
+                <img class="m-2" :src="modifier.media" height="48px">
+              </div>
+              <div class="media-body text-left">
+                <div class="font-w600">{{ modifier.name }}</div>
+                <div class="font-w400 font-size-sm" v-html="modifier.description">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="block-content block-content-full">
+            <div class="py-2 text-left">
+              <h4 class="mb-2">Ship Upgrades</h4>
+            </div>
+            <div class="media d-flex align-items-center push" v-for="upgrade in upgrades">
+              <div class="mr-3">
+                <img class="m-2" height="48px" :src="upgrade.media">
+              </div>
+              <div class="media-body text-left">
+                <div class="font-w600">{{ upgrade.name }}</div>
+                <div class="font-w400 font-size-sm" v-html="upgrade.description"></div>
+                <div class="font-w400 font-size-sm" v-html="upgrade.stats"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="block-content block-content-full">
+            <div class="py-2 text-left">
+              <h4 class="mb-2">Ports</h4>
+            </div>
+            <div class="media d-flex align-items-center push" v-for="port in ports">
+              <div class="mr-3">
+                <img class="m-2" height="48px" :src="port.media">
+              </div>
+              <div class="media-body text-left">
+                <div class="font-w600">{{ port.name }}</div>
+                <div class="font-w400 font-size-sm" v-html="port.description"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-2 text-center d-none" id="tutorial-page-Sailing-1">
+    <span class="text-success">This is the Sailing Game Guide</span>
+  </div>
+</template>

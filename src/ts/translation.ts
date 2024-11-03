@@ -34,6 +34,7 @@ export class Translation {
             'PASSIVE_NAME',
             'PASSIVE_DESCRIPTION',
             'EQUIPMENT_STAT',
+            'VIEW_ON',
         ];
 
         // Based on how translation is retrieved,

@@ -33,6 +33,7 @@
             {
               "id": "Cutter",
               "level": 1,
+              "description": "The Cutter is the first ship you'll build. It is a small, fast ship that can be used to travel between islands.",
               "realm": "melvorD:Melvor",
               "media": "img/sailing-boat.png",
               "currencyCosts": [
@@ -59,8 +60,15 @@
             {
               "id": "Frigate",
               "level": 30,
+              "description": "The Frigate is a large, slower ship that can carry more cargo, has more firepower, and is better suited for traveling to distant islands.",
               "realm": "melvorD:Melvor",
               "media": "img/ship.png",
+              "modifiers": {
+                "sailing:Combat": 500,
+                "sailing:Morale": 500,
+                "sailing:Seafaring": 500,
+                "sailing:Speed": -500
+              },
               "currencyCosts": [
                 {
                   "id": "melvorD:GP",
@@ -85,8 +93,13 @@
             {
               "id": "Submarine",
               "level": 50,
+              "description": "The Submarine is a large submersible that can usually go undetected by enemies.",
               "realm": "melvorD:Melvor",
               "media": "img/submarine.png",
+              "modifiers": {
+                "sailing:Combat": 15000,
+                "sailing:Speed": 1000
+              },
               "currencyCosts": [
                 {
                   "id": "melvorD:GP",
@@ -111,8 +124,13 @@
             {
               "id": "Container",
               "level": 70,
+              "description": "The Container is a very large, very slow ship that can carry more cargo than you would ever need as a single person.",
               "realm": "melvorD:Melvor",
               "media": "img/container-ship.png",
+              "modifiers": {
+                "sailing:Combat": -400,
+                "sailing:Speed": -1000
+              },
               "currencyCosts": [
                 {
                   "id": "melvorD:GP",

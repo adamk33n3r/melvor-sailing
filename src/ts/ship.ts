@@ -18,8 +18,10 @@ export interface TripData {
 }
 
 export interface ShipUpgradeData extends RealmedObjectData {
-    level: number;
     media: string;
+    level: number;
+    description: string;
+    modifiers: ModifierValuesRecordData;
     currencyCosts: IDQuantity[];
     itemCosts: IDQuantity[];
 }
@@ -27,13 +29,18 @@ export interface ShipUpgradeData extends RealmedObjectData {
 export class ShipUpgrade extends RealmedObject {
     private _media: string;
     private _level: number;
+    private _description: string;
     private _currencyCosts: CurrencyQuantity[];
     private _itemCosts: ItemQuantity<AnyItem>[];
+    private _stats: StatObject;
     public get media() {
         return this.getMediaURL(this._media);
     }
     public get level() {
         return this._level;
+    }
+    public get description() {
+        return this._description;
     }
     public get currencyCosts() {
         return this._currencyCosts;
@@ -41,10 +48,18 @@ export class ShipUpgrade extends RealmedObject {
     public get itemCosts() {
         return this._itemCosts;
     }
+    public get stats() {
+        return this._stats;
+    }
+    public get modifiers() {
+        return this._stats.modifiers;
+    }
     constructor(namespace: DataNamespace, data: ShipUpgradeData, game: Game) {
         super(namespace, data, game);
         this._media = data.media;
         this._level = data.level;
+        this._description = data.description;
+        this._stats = new StatObject({ modifiers: data.modifiers }, game, `${ShipUpgrade.name} with id "${this.id}"`);
         this._currencyCosts = game.getCurrencyQuantities(data.currencyCosts);
         this._itemCosts = game.items.getQuantities(data.itemCosts);
     }
