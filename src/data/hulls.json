@@ -38,7 +38,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSeafaring": 100
+                    "sailing:Seafaring": 100
                 }
             },
             "cost": {
@@ -68,7 +68,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSeafaring": 200
+                    "sailing:Seafaring": 200
                 }
             },
             "cost": {
@@ -110,7 +110,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSeafaring": 300
+                    "sailing:Seafaring": 300
                 }
             },
             "cost": {
@@ -152,7 +152,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSeafaring": 400
+                    "sailing:Seafaring": 400
                 }
             },
             "cost": {
@@ -194,7 +194,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSeafaring": 500
+                    "sailing:Seafaring": 500
                 }
             },
             "cost": {
@@ -236,7 +236,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSeafaring": 600
+                    "sailing:Seafaring": 600
                 }
             },
             "cost": {
@@ -278,7 +278,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSeafaring": 700
+                    "sailing:Seafaring": 700
                 }
             },
             "cost": {
@@ -320,7 +320,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSeafaring": 800
+                    "sailing:Seafaring": 800
                 }
             },
             "cost": {

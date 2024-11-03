@@ -38,13 +38,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSpeed": 100,
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -1
-                        }
-                    ]
+                    "sailing:Speed": 100
                 }
             },
             "cost": {
@@ -70,13 +64,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSpeed": 200,
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -1
-                        }
-                    ]
+                    "sailing:Speed": 100
                 }
             },
             "cost": {
@@ -114,13 +102,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSpeed": 300,
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -1
-                        }
-                    ]
+                    "sailing:Speed": 100
                 }
             },
             "cost": {
@@ -158,13 +140,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSpeed": 400,
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -1
-                        }
-                    ]
+                    "sailing:Speed": 100
                 }
             },
             "cost": {
@@ -202,13 +178,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSpeed": 500,
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -1
-                        }
-                    ]
+                    "sailing:Speed": 100
                 }
             },
             "cost": {
@@ -246,13 +216,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSpeed": 600,
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -1
-                        }
-                    ]
+                    "sailing:Speed": 100
                 }
             },
             "cost": {
@@ -290,13 +254,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSpeed": 700,
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -2
-                        }
-                    ]
+                    "sailing:Speed": 200
                 }
             },
             "cost": {
@@ -334,13 +292,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingSpeed": 800,
-                    "skillInterval": [
-                        {
-                            "skillID": "sailing:Sailing",
-                            "value": -2
-                        }
-                    ]
+                    "sailing:Speed": 200
                 }
             },
             "cost": {

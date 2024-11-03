@@ -11480,7 +11480,11 @@
             "melvorAoD:mapChargePreservationChance",
             "melvorAoD:artefactValue",
             "melvorItA:maxHarvestingIntensity",
-            "melvorItA:noHarvestingIntensityDecay"
+            "melvorItA:noHarvestingIntensityDecay",
+            "sailing:Combat",
+            "sailing:Morale",
+            "sailing:Seafaring",
+            "sailing:Speed"
           ]
         }
       ]
@@ -61052,6 +61056,22 @@
             }
           ],
           "deprecated": true
+        },
+        "sailing:Combat": {
+          "description": "+${value} Combat",
+          "type": "number"
+        },
+        "sailing:Morale": {
+          "description": "+${value} Morale",
+          "type": "number"
+        },
+        "sailing:Seafaring": {
+          "description": "+${value} Seafaring",
+          "type": "number"
+        },
+        "sailing:Speed": {
+          "description": "+${value} Speed",
+          "type": "number"
         }
       },
       "unevaluatedProperties": false

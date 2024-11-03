@@ -92,7 +92,8 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     const rewards = new Rewards(this.game);
     rewards.setActionInterval(ship.interval);
 
-    const numRolls = rollInteger(ship.selectedPort.minRolls, ship.selectedPort.maxRolls);
+    const rollMod = this.getRollModifier(ship.action);
+    const numRolls = rollInteger(Math.round(ship.selectedPort.minRolls * rollMod), Math.round(ship.selectedPort.maxRolls * rollMod));
     ship.selectedPort.generateLoot(numRolls, rewards, ship.action);
 
     rewards.addXP(this, ship.baseXP, ship.action);
@@ -129,6 +130,33 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
         onClose();
       },
     });
+  }
+
+  public getRollModifier(action?: ShipAction): number {
+    const morale = this.game.modifiers.getValue('sailing:Morale', this.getActionModifierQuery(action));
+    // Every 100 morale is 1% more min and max rolls
+    return 1 + morale / 100 / 100;
+  }
+
+  public override getXPModifier(action?: NamedObject): number {
+    const mod = super.getXPModifier(action);
+    const seafaring = this.game.modifiers.getValue('sailing:Seafaring', this.getActionModifierQuery(action));
+    this.logger.debug('xp modifier seafaring:', seafaring);
+    // Every 100 seafaring is 1% more xp
+    return mod + seafaring / 100;
+  }
+
+  public override getPercentageIntervalModifier(action?: NamedObject): number {
+    const mod = super.getPercentageIntervalModifier(action);
+    const speed = this.game.modifiers.getValue('sailing:Speed', this.getActionModifierQuery(action));
+    // Every 100 speed is 1% less interval
+    return mod - speed / 100;
+  }
+
+  public override _buildPercentageIntervalSources(action?: NamedObject): ModifierSourceBuilder {
+    const builder = super._buildPercentageIntervalSources(action);
+    builder.addSources('sailing:Speed', this.getActionModifierQuery(action), -0.01);
+    return builder;
   }
 
   public override rollForPets(interval: number, action: ShipAction) {
@@ -298,6 +326,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     this.logger.error(ship);
     if (typeof ship === 'string') {
       if (ship.startsWith('sailing')) {
+        // Upgrade boats to new dock name
         if (ship.startsWith('sailing:Boat')) {
           ship = this.ships.getObjectSafe(`sailing:Dock${ship.slice(ship.indexOf(':Boat') + 5)}`);
         } else {

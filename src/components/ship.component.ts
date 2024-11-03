@@ -253,11 +253,12 @@ export function ShipComponent(ship: Ship) {
             ship.collectLoot();
         },
         async viewLoot() {
+            const rollMod = game.sailing.getRollModifier(ship.action);
             return SwalLocale.fire({
                 iconHtml: `<img class="mbts__logo-img" src="${ship.selectedPort.media}" />`,
                 title: ship.selectedPort.name,
                 html: ship.selectedPort.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
-                    `${ship.selectedPort.minRolls} - ${ship.selectedPort.maxRolls} Rolls<br>` +
+                    `${Math.round(ship.selectedPort.minRolls * rollMod)} - ${Math.round(ship.selectedPort.maxRolls * rollMod)} Rolls<br>` +
                     ship.selectedPort.getPossibleLoot(),
             });
         },

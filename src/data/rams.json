@@ -38,7 +38,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingMorale": 100
+                    "sailing:Morale": 100
                 }
             },
             "cost": {
@@ -66,7 +66,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingMorale": 200
+                    "sailing:Morale": 200
                 }
             },
             "cost": {
@@ -106,7 +106,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingMorale": 300
+                    "sailing:Morale": 300
                 }
             },
             "cost": {
@@ -146,7 +146,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingMorale": 400
+                    "sailing:Morale": 400
                 }
             },
             "cost": {
@@ -186,7 +186,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingMorale": 500
+                    "sailing:Morale": 500
                 }
             },
             "cost": {
@@ -226,7 +226,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingMorale": 600
+                    "sailing:Morale": 600
                 }
             },
             "cost": {
@@ -266,7 +266,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingMorale": 700
+                    "sailing:Morale": 700
                 }
             },
             "cost": {
@@ -306,7 +306,7 @@
             "contains": {
                 "items": [],
                 "modifiers": {
-                    "sailing:sailingMorale": 800
+                    "sailing:Morale": 800
                 }
             },
             "cost": {

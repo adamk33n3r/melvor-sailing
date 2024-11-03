@@ -4,8 +4,9 @@
   "data": {
     "modifiers": [
       {
-        "id": "sailingSpeed",
+        "id": "Speed",
         "allowNegative": false,
+        "inverted": true,
         "allowedScopes": [
           {
             "scopes": {},
@@ -21,7 +22,7 @@
         ]
       },
       {
-        "id": "sailingCombat",
+        "id": "Combat",
         "allowNegative": false,
         "allowedScopes": [
           {
@@ -38,7 +39,7 @@
         ]
       },
       {
-        "id": "sailingMorale",
+        "id": "Morale",
         "allowNegative": false,
         "allowedScopes": [
           {
@@ -55,7 +56,7 @@
         ]
       },
       {
-        "id": "sailingSeafaring",
+        "id": "Seafaring",
         "allowNegative": false,
         "allowedScopes": [
           {
@@ -190,16 +191,10 @@
           }
         ],
         "modifiers": {
-          "sailing:sailingSpeed": 100,
-          "sailing:sailingCombat": 100,
-          "sailing:sailingMorale": 100,
-          "sailing:sailingSeafaring": 100,
-          "skillInterval": [
-              {
-                  "skillID": "sailing:Sailing",
-                  "value": -10
-              }
-          ]
+          "sailing:Speed": 1000,
+          "sailing:Combat": 1000,
+          "sailing:Morale": 1000,
+          "sailing:Seafaring": 1000
         }
       },
       {
@@ -443,30 +438,17 @@
               "percent": 50,
               "realm": "melvorD:Melvor",
               "modifiers": {
-                "melvorD:skillInterval": [
-                  {
-                    "skillID": "sailing:Sailing",
-                    "realmID": "melvorD:Melvor",
-                    "value": -5
-                  }
-                ]
+                "sailing:Speed": 500
               }
             },
             {
               "percent": 95,
               "realm": "melvorD:Melvor",
               "modifiers": {
-                "sailing:sailingSpeed": 1000,
-                "sailing:sailingCombat": 1000,
-                "sailing:sailingMorale": 1000,
-                "sailing:sailingSeafaring": 1000,
-                "skillInterval": [
-                  {
-                    "skillID": "sailing:Sailing",
-                    "realmID": "melvorD:Melvor",
-                    "value": -10
-                  }
-                ]
+                "sailing:Speed": 1000,
+                "sailing:Combat": 1000,
+                "sailing:Morale": 1000,
+                "sailing:Seafaring": 1000
               }
             }
           ],
