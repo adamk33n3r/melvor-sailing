@@ -71,7 +71,7 @@ export class ShipAction extends BasicSkillRecipe {
   }
 
   public get name() {
-    return getLangString(`${Constants.MOD_NAMESPACE}_Boat_${this.localID}`);
+    return getLangString(`${Constants.MOD_NAMESPACE}_Dock_${this.localID}`);
   }
 
   public get media() {

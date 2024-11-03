@@ -19,7 +19,7 @@
                   {
                     "currencyID": "melvorD:GP",
                     "skillID": "sailing:Sailing",
-                    "actionID": "sailing:Boat1",
+                    "actionID": "sailing:Dock1",
                     "value": 1
                   }
                 ]
@@ -135,9 +135,9 @@
               ]
             }
           ],
-          "ships": [
+          "docks": [
             {
-              "id": "Boat1",
+              "id": "Dock1",
               "level": 1,
               "baseExperience": 1,
               "realm": "melvorD:Melvor",
@@ -150,7 +150,7 @@
               "itemCosts": []
             },
             {
-              "id": "Boat2",
+              "id": "Dock2",
               "level": 30,
               "baseExperience": 1,
               "realm": "melvorD:Melvor",
@@ -163,7 +163,7 @@
               "itemCosts": []
             },
             {
-              "id": "Boat3",
+              "id": "Dock3",
               "level": 50,
               "baseExperience": 1,
               "realm": "melvorD:Melvor",
@@ -176,7 +176,7 @@
               "itemCosts": []
             },
             {
-              "id": "Boat4",
+              "id": "Dock4",
               "level": 70,
               "baseExperience": 1,
               "realm": "melvorD:Melvor",

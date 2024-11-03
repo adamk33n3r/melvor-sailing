@@ -13,7 +13,7 @@ class SailingRenderQueue extends MasterySkillRenderQueue<ShipAction> {
 interface SailingSkillData extends BaseSkillData {
   categories?: SkillCategoryData[];
   ports?: PortData[];
-  ships?: ShipActionData[];
+  docks?: ShipActionData[];
   shipUpgrades?: ShipUpgradeData[];
 }
 
@@ -245,10 +245,10 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
       });
     }
 
-    if (data.ships !== undefined) {
-      this.logger.info(`Registering ${data.ships.length} Ships`);
-      data.ships.forEach((ship) => {
-        this.actions.registerObject(new ShipAction(namespace, ship, this.game));
+    if (data.docks !== undefined) {
+      this.logger.info(`Registering ${data.docks.length} Docks`);
+      data.docks.forEach((dock) => {
+        this.actions.registerObject(new ShipAction(namespace, dock, this.game));
       });
     }
   }
@@ -295,9 +295,14 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
 
   private decodeShip(reader: SaveWriter, version: number): Ship {
     let ship = reader.getNamespacedObject(this.ships);
+    this.logger.error(ship);
     if (typeof ship === 'string') {
       if (ship.startsWith('sailing')) {
-        ship = this.ships.getDummyObject(ship, DummyShip, this.game);
+        if (ship.startsWith('sailing:Boat')) {
+          ship = this.ships.getObjectSafe(`sailing:Dock${ship.slice(ship.indexOf(':Boat') + 5)}`);
+        } else {
+          ship = this.ships.getDummyObject(ship, DummyShip, this.game);
+        }
       } else {
         ship = this.game.constructDummyObject(ship, DummyShip);
       }

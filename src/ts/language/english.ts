@@ -10,8 +10,8 @@ export const en = {
     Combat_Positive: '+${value} Combat',
     Morale_Positive: '+${value} Morale',
     Seafaring_Positive: '+${value} Seafaring',
-    Boat_Boat1: 'Cutter',
-    Boat_Boat2: 'Frigate',
-    Boat_Boat3: 'Submarine',
-    Boat_Boat4: 'Container Ship',
+    Dock_Dock1: 'Ship Dock 1',
+    Dock_Dock2: 'Ship Dock 2',
+    Dock_Dock3: 'Ship Dock 3',
+    Dock_Dock4: 'Ship Dock 4',
 };
