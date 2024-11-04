@@ -36,16 +36,16 @@ export class Logger {
   public log(level: LogLevel, ...message: string[]) {
     switch (level) {
       case LogLevel.Debug:
-        if (this._level < LogLevel.Debug) return;
+        if (this._level > LogLevel.Debug) return;
         break;
       case LogLevel.Info:
-        if (this._level < LogLevel.Info) return;
+        if (this._level > LogLevel.Info) return;
         break;
       case LogLevel.Warning:
-        if (this._level < LogLevel.Warning) return;
+        if (this._level > LogLevel.Warning) return;
         break;
       case LogLevel.Error:
-        if (this._level < LogLevel.Error) return;
+        if (this._level > LogLevel.Error) return;
         break;
     }
     console.log(`[${this.name}]`, ...message);
