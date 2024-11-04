@@ -14,6 +14,8 @@ export class Translation {
         }
 
         const keysToNotPrefix: (string)[] = [
+            'SAILING',
+            '_MENU_',
             'SHOP_NAME',
             'SHOP_DESCRIPTION',
             'ITEM_NAME',

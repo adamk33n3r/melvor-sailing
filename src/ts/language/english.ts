@@ -1,6 +1,9 @@
 export const en = {
     VIEW_ON_MODIO: 'View on mod.io (External Link)',
     SKILL_NAME_Sailing: 'Sailing',
+    SAILING_MENU_SHIPS: 'Ships',
+    SAILING_MENU_PORTS: 'Ports',
+    MENU_TEXT_SELECT_SAILING_CATEGORY: 'Select Sailing Category',
     EQUIPMENT_STAT_Speed: '${statValue} Speed',
     EQUIPMENT_STAT_Combat: '${statValue} Combat',
     EQUIPMENT_STAT_Morale: '${statValue} Morale',

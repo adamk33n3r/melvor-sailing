@@ -1,4 +1,4 @@
-import { SailingPage } from '../components/sailing';
+import { SailingPageComponent } from '../components/sailing';
 import { Ship, ShipAction, ShipState, DummyShip, ShipActionData, ShipUpgrade, ShipUpgradeData } from './ship';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
@@ -55,7 +55,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
   public saveVersion = -1;
   public _media = 'img/sailing-boat.png';
   public renderQueue = new SailingRenderQueue();
-  public page = new SailingPage();
+  public page = SailingPageComponent();
   public categories: NamespaceRegistry<SkillCategory>;
   public ships: NamespaceRegistry<Ship>;
   public shipUpgrades: NamespaceRegistry<ShipUpgrade>;
@@ -141,7 +141,6 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
   public override getXPModifier(action?: NamedObject): number {
     const mod = super.getXPModifier(action);
     const seafaring = this.game.modifiers.getValue('sailing:Seafaring', this.getActionModifierQuery(action));
-    this.logger.debug('xp modifier seafaring:', seafaring);
     // Every 100 seafaring is 1% more xp
     return mod + seafaring / 100;
   }
@@ -290,6 +289,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
 
   public override postDataRegistration(): void {
     super.postDataRegistration();
+    const namespace = game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE);
 
     this.sortedMasteryActions = this.actions.allObjects.sort((a, b) => a.level - b.level);
 
@@ -310,7 +310,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     const tinyIsland = this.ports.getObjectSafe('sailing:tinyIsland');
     const cutter = this.shipUpgrades.getObjectSafe('sailing:Cutter');
     this.actions.allObjects.forEach((action) => {
-      const ship = new Ship(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), action, cutter, tinyIsland, this.game);
+      const ship = new Ship(namespace, action, cutter, tinyIsland, this.game);
       ship.registerOnUpdate(() => {
         if (ship.state == ShipState.HasReturned) {
           this.updateNotification(1);
@@ -318,6 +318,22 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
       });
       this.ships.registerObject(ship);
     });
+
+
+    for (const port of this.ports.filter((port) => port instanceof SkillPort)) {
+      this.game.items.registerObject(new Item(namespace, {
+        id: `navigationChart_${port.localID}`,
+        name: `Navigation Chart (${port.name})`,
+        category: "Sailing",
+        type: "Chart",
+        media: "img/navigation_chart.png",
+        ignoreCompletion: false,
+        obtainFromItemLog: false,
+        golbinRaidExclusive: false,
+        sellsFor: 100000,
+      }, this.game));
+    }
+
     this.logger.debug('end of postDataRegistration');
   }
 

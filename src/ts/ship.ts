@@ -135,24 +135,24 @@ export class Ship extends NamespacedObject {
     }
 
     get media() {
-        console.log('getting ship media:', this._currentUpgrade.media);
         return this._currentUpgrade.media;
     }
 
     get interval() {
-        return this.selectedPort.distance * 60 * 1000;
+        return this.selectedPort.interval;
     }
 
     get modifiedInterval() {
-        return this.game.sailing.modifyInterval(this.interval, this.action);
+        return this.selectedPort.modifiedInterval;
+        // return this.game.sailing.modifyInterval(this.interval, this.action);
     }
 
     get scaledForMasteryInterval() {
-        return this.selectedPort.distance * 1000;
+        return this.selectedPort.scaledForMasteryInterval;
     }
 
     get baseXP() {
-        return this.selectedPort.distance * (this.selectedPort.distance / 8);
+        return this.selectedPort.baseXP;
     }
 
     get onTrip() {

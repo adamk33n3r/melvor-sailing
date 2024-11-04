@@ -37,7 +37,16 @@ export function GuideComponent(sailing: Sailing) {
       description: upgrade.description,
       stats: upgrade.stats.describeAsSpanHTML(),
     })),
-    ports: [],
+    ports: [
+      {
+        name: 'Normal Port',
+        description: 'These ports are unlocked via your sailing level. They are generally how you gain the most xp and general rewards.',
+      },
+      {
+        name: 'Skill Port',
+        description: 'These ports are discovered randomly on your travels by finding Navigation Charts. They are often Skill Guilds that let you specifically target a resource type like Ore, Wood, or Cooked Food.',
+      },
+    ],
     mounted() {
       self = this;
     },

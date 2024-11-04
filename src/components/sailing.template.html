@@ -3,7 +3,36 @@
     <div class="skill-info">
       <skill-header data-skill-id="sailing:Sailing"></skill-header>
     </div>
+    <div class="row row-deck">
+      <div class="col-12 sticky-category-menu-mobile" id="SAILING_CATEGORY_MENU">
+        <div class="bg-white p-1 push content-justify-center" style="width: 100%;">
+          <div class="d-lg-none">
+            <button class="btn btn-block btn-light d-flex justify-content-between align-items-center text-combat-smoke" type="button" data-toggle="class-toggle" data-target="#horizontal-navigation-sailing" data-class="d-none">
+              <span><lang-string lang-id="MENU_TEXT_SELECT_SAILING_CATEGORY">Select Sailing Category</lang-string></span>
+              <i class="fa fa-bars"></i>
+            </button>
+          </div>
+          <div class="d-lg-block mt-2 mt-lg-0 d-none" id="horizontal-navigation-sailing">
+            <ul class="nav-main nav-main-horizontal nav-main-hover nav-main-horizontal-center">
+              <li class="nav-main-item">
+                <a @click="changeCategory($el, shipContainer)" class="nav-main-link active township-tab-selected" data-toggle="class-toggle" data-target="#horizontal-navigation-sailing" data-class="d-none" id="sailing-ship-menu">
+                  <img class="skill-icon-sm m-0 mr-2" data-src="assets/media/skills/archaeology/digsites.png">
+                  <span class="nav-main-link-name font-w600"><lang-string lang-id="SAILING_MENU_SHIPS">Ships</lang-string></span>
+                </a>
+              </li>
+              <li class="nav-main-item">
+                <a @click="changeCategory($el, portContainer)" class="nav-main-link" data-toggle="class-toggle" data-target="#horizontal-navigation-sailing" data-class="d-none" id="sailing-port-menu">
+                  <img class="skill-icon-sm m-0 mr-2" data-src="assets/media/skills/archaeology/museum.png">
+                  <span class="nav-main-link-name font-w600"><lang-string lang-id="SAILING_MENU_PORTS">Ports</lang-string></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row row-deck gutters-tiny" id="ship-container"></div>
+    <div class="row row-deck gutters-tiny" id="port-container"></div>
   </div>
 </template>
 

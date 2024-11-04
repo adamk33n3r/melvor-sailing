@@ -69,6 +69,25 @@ export abstract class Port extends NamespacedObject {
     protected get logger() {
         return this.game.sailing.logger;
     }
+    
+
+
+    get interval() {
+        return this.distance * 60 * 1000;
+    }
+
+    get modifiedInterval() {
+        return this.game.sailing.modifyInterval(this.interval, this);
+    }
+
+    get scaledForMasteryInterval() {
+        return this.distance * 1000;
+    }
+
+    get baseXP() {
+        return this.distance * (this.distance / 8);
+    }
+
 
     constructor(namespace: DataNamespace, data: PortData, protected game: Game) {
         super(namespace, data.id);
