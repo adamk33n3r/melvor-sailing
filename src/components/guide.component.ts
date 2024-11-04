@@ -37,6 +37,7 @@ export function GuideComponent(sailing: Sailing) {
       description: upgrade.description,
       stats: upgrade.stats.describeAsSpanHTML(),
     })),
+    ports: [],
     mounted() {
       self = this;
     },

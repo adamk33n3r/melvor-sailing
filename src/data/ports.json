@@ -632,8 +632,8 @@
                   "max": 2000
                 }
               ],
-              "minRolls": 200,
-              "maxRolls": 300
+              "minRolls": 100,
+              "maxRolls": 150
             }
           ]
         }

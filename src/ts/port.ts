@@ -194,9 +194,21 @@ export class SkillPort extends Port {
     }
 
     public getProductChances(minLevel?: number, maxLevel?: number): ChanceData<AnyItem>[] {
-        const recipes = this.getProductRecipes(minLevel, maxLevel).slice(0, 10);
+        const recipes = this.getProductRecipes(minLevel, maxLevel);
         let lowChance = 0;
-        return recipes.map((recipe, idx) => {
+        const chanceData = [] as ChanceData<AnyItem>[];
+        if (this.skill instanceof Mining) {
+            const coal = recipes.splice(recipes.findIndex((ore) => ore.product.localID === 'Coal_Ore'), 1)[0];
+            chanceData.push(
+                {
+                    product: coal.product,
+                    req: coal.level,
+                    low: 25,
+                    high: 50,
+                },
+            );
+        }
+        return chanceData.concat(recipes.slice(0, this.skill instanceof Cooking ? 5 : 10).map((recipe, idx) => {
             lowChance += 5;
             // Last recipe is always 100% so that you always get an item
             const isLast = idx === recipes.length - 1;
@@ -206,7 +218,7 @@ export class SkillPort extends Port {
                 low: isLast ? 100 : lowChance,
                 high: isLast ? 100 : lowChance * 2,
             };
-        });
+        }));
     }
 
     public getProductRecipes(minLevel?: number, maxLevel?: number): SingleProductRecipe[] {
