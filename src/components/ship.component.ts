@@ -4,6 +4,7 @@ import { Port } from '../ts/port';
 import { formatTime, getElementByIdAndRemoveId, tickToTime } from '../ts/util';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { EquipmentComponent } from './equipment/equipment.component';
+import { PortComponent } from './port.component';
 
 function getPortOptions() {
     return game.sailing.ports.allObjects.map((p: Port) => {
@@ -120,12 +121,12 @@ export function ShipComponent(ship: Ship) {
             self.ram.update();
             self.currentUpgrade = ship.currentUpgrade;
             self.nextUpgrade = ship.getNextUpgrade();
-            self.port.setEnabled(this.readyToSail);
+            // self.port.setEnabled(this.readyToSail);
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
-            self.port.setData({
-                selected: { name: ship.selectedPort.name, value: ship.selectedPort, media: ship.selectedPort.media },
-                options: getPortOptions(),
-            });
+            // self.port.setData({
+            //     selected: { name: ship.selectedPort.name, value: ship.selectedPort, media: ship.selectedPort.media },
+            //     options: getPortOptions(),
+            // });
             self.updateGrants();
             self.updateProgressBar();
             self.updateUpgradeCosts();
@@ -186,7 +187,8 @@ export function ShipComponent(ship: Ship) {
             // ui.create(self.deckItems, getElementByIdAndRemoveId('deck-grid', parent));
             // ui.create(self.rudder, getElementByIdAndRemoveId('rudder-grid', parent));
             // ui.create(self.ram, getElementByIdAndRemoveId('ram-grid', parent));
-            ui.create(self.port, getElementByIdAndRemoveId('dropdown', parent));
+
+            // ui.create(self.port, getElementByIdAndRemoveId('dropdown', parent));
 
             setInterval(() => {
                 self.returnTimer = tickToTime(self.ship.sailTimer.ticksLeft);
@@ -200,7 +202,7 @@ export function ShipComponent(ship: Ship) {
                 self.hasReturned = self.ship.state == ShipState.HasReturned;
                 self.returnTimer = tickToTime(self.ship.sailTimer.ticksLeft);
                 if (self.ship.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
-                self.port.setEnabled(self.readyToSail);
+                // self.port.setEnabled(self.readyToSail);
 
                 self.updateGrants();
                 self.updateProgressBar();
@@ -260,6 +262,53 @@ export function ShipComponent(ship: Ship) {
                 html: ship.selectedPort.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
                     `${Math.round(ship.selectedPort.minRolls * rollMod)} - ${Math.round(ship.selectedPort.maxRolls * rollMod)} Rolls<br>` +
                     ship.selectedPort.getPossibleLoot(),
+            });
+        },
+        async selectPort() {
+            const html = document.createElement('div');
+            html.classList.add(
+                'row',
+                'row-deck',
+                'gutters-tiny',
+                'row-cols-1',
+                'row-cols-md-2',
+                'row-cols-xl-3',
+                'row-cols-xxl-6',
+            );
+            const portComponents: ReturnType<typeof PortComponent>[] = [];
+            game.sailing.ports.forEach((port) => {
+                const portComponent = PortComponent(port, html, {
+                    onSelect: () => {
+                        for (const comp of portComponents) {
+                            if (comp === portComponent) continue;
+                            comp.deselect();
+                        }
+                    },
+                    ship,
+                    shipComponent: this,
+                });
+                portComponents.push(portComponent);
+                ui.create(portComponent, html);
+            });
+            return SwalLocale.fire<Port | undefined>({
+                iconHtml: `<img class="mbts__logo-img" src="${ship.media}" />`,
+                title: ship.name,
+                width: '75%',
+                customClass: {
+                    ...defaultSwalCustomClass,
+                    htmlContainer: 'container-fluid',
+                },
+                html,
+                showCancelButton: true,
+                preConfirm: () => {
+                    return portComponents.find((port) => port.isSelected)?.port;
+                },
+                confirmButtonText: 'Select',
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    ship.selectedPort = result.value;
+                    this.update();
+                }
             });
         },
     };

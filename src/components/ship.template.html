@@ -72,7 +72,8 @@
           <interval-icon id="sailing-interval"></interval-icon>
         </div>
         <div class="col-12 mt-2 d-flex gap-2">
-          <div id="dropdown" class="flex-grow-1"></div>
+          <!-- <div id="dropdown" class="flex-grow-1"></div> -->
+          <button class="btn btn-primary" @click="selectPort()">Select Port</button>
           <button class="btn btn-primary" @click="viewLoot()"><img class="skill-icon-sm m-0" :src="lootImg"/></button>
         </div>
         <div class="col-12 mt-2">

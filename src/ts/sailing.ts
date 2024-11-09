@@ -8,6 +8,7 @@ import { Logger, LogLevel } from './logger';
 
 class SailingRenderQueue extends MasterySkillRenderQueue<ShipAction> {
   ships = true;
+  ports = true;
 }
 
 interface SailingSkillData extends BaseSkillData {
@@ -201,11 +202,13 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     super.onLevelUp(oldLevel, newLevel);
 
     this.renderQueue.ships = true;
+    this.renderQueue.ports = true;
   }
 
   public override renderModifierChange(): void {
     super.renderModifierChange();
     this.renderQueue.ships = true;
+    this.renderQueue.ports = true;
   }
 
   public override onMasteryLevelUp(action: ShipAction, oldLevel: number, newLevel: number): void {
@@ -216,6 +219,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     super.render();
 
     this.renderShips();
+    this.renderPorts();
   }
 
   public renderShips() {
@@ -223,12 +227,23 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
       return;
     }
 
-
     this.page.shipComponents.forEach((shipComponent) => {
       shipComponent.update();
     });
 
     this.renderQueue.ships = false;
+  }
+
+  public renderPorts() {
+    if (!this.renderQueue.ports) {
+      return;
+    }
+
+    this.page.portComponents.forEach((portComponent) => {
+      portComponent.update();
+    });
+
+    this.renderQueue.ports = false;
   }
 
   public override onLoad(): void {
@@ -239,6 +254,7 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     }
 
     this.renderQueue.ships = true;
+    this.renderQueue.ports = true;
   }
 
   public override getRegistry(type: ScopeSourceType): NamespaceRegistry<NamedObject> | undefined {
@@ -418,17 +434,20 @@ Port: ${ship.selectedPort.name}
   public override onPageChange(): void {
     this.logger.debug('onPageChange');
     this.renderQueue.ships = true;
+    this.renderQueue.ports = true;
     super.onPageChange();
   }
 
   public override queueBankQuantityRender(item: AnyItem): void {
     this.logger.debug('queueBankQuantityRender:', item);
     this.renderQueue.ships = true;
+    this.renderQueue.ports = true;
   }
 
   public queueCurrencyQuantityRender(currency: Currency): void {
     this.logger.debug('queueCurrencyQuantityRender:', currency);
     this.renderQueue.ships = true;
+    this.renderQueue.ports = true;
   }
 }
 

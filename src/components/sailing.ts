@@ -24,8 +24,6 @@ export function SailingPageComponent() {
       this.portContainer = getElementByIdAndRemoveId('port-container', parent);
 
 
-      console.log(this.shipContainer, this.portContainer);
-
       game.sailing.ships.forEach((ship) => {
         const shipComponent = ShipComponent(ship);
         this.shipComponents.push(shipComponent);
@@ -33,7 +31,9 @@ export function SailingPageComponent() {
       });
 
       game.sailing.ports.forEach((port) => {
-        const portComponent = PortComponent(port);
+        const portComponent = PortComponent(port, this.portContainer, {
+          showLoot: true,
+        });
         this.portComponents.push(portComponent);
         ui.create(portComponent, this.portContainer);
       });
@@ -42,6 +42,7 @@ export function SailingPageComponent() {
       this.changeCategory(this.portMenu, this.portContainer);
     },
     update() {
+      game.sailing.logger.debug('SailingPageComponent.update');
       this.shipComponents.forEach((shipComponent) => {
         shipComponent.update();
       });
