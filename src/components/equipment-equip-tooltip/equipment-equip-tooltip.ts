@@ -22,7 +22,7 @@ export function EquipmentEquipTooltipComponent(upgrade: string, onEquip: (button
         $template: '#equipment-equip-tooltip-template',
         buttons: [] as ButtonData[],
         equip(buttonData: ButtonData) {
-            console.log('equip:', buttonData);
+            game.sailing.logger.debug('equip:', buttonData);
             onEquip(buttonData);
         },
         updateOptions() {
@@ -40,7 +40,7 @@ export function EquipmentEquipTooltipComponent(upgrade: string, onEquip: (button
             });
         },
         mounted($el: HTMLElement) {
-            console.log('mounted:', $el);
+            game.sailing.logger.debug('mounted:', $el);
         },
     };
 }

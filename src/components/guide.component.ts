@@ -1,7 +1,7 @@
 import { Sailing } from '../ts/sailing';
 
 export function GuideComponent(sailing: Sailing) {
-  let self = {} as ReturnType<typeof GuideComponent>;
+  // let self = {} as ReturnType<typeof GuideComponent>;
   return {
     $template: '#sailing-guide-template',
     skill: sailing,
@@ -48,7 +48,7 @@ export function GuideComponent(sailing: Sailing) {
       },
     ],
     mounted() {
-      self = this;
+      // self = this;
     },
   };
 }

@@ -5,8 +5,9 @@ import { UserInterface } from './ui';
 import { NormalPort, Port, PortData, SkillPort } from './port';
 import { LootComponent } from '../components/loot.component';
 import { Logger, LogLevel } from './logger';
+import { SailingAction } from './sailingaction';
 
-class SailingRenderQueue extends MasterySkillRenderQueue<ShipAction> {
+class SailingRenderQueue extends MasterySkillRenderQueue<SailingAction> {
   ships = true;
   ports = true;
 }
@@ -24,7 +25,7 @@ export class SailingNotification extends SuccessNotification {
   }
 }
 
-export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
+export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public logger = new Logger('Sailing');
   /* devblock:start */
   public resetMasteries() {
@@ -46,9 +47,9 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     const ship = this.ships.allObjects[0];
     const rewards = new Rewards(this.game);
     ship.selectedPort.generateLoot(rolls, rewards, ship.action);
-    console.log(rewards.getItemQuantityArray());
+    this.logger.log(rewards.getItemQuantityArray());
     for (const reward of rewards.getItemQuantityArray().sort((a, b) => b.item.sellsFor.quantity - a.item.sellsFor.quantity)) {
-      console.log(reward.quantity, reward.item.name);
+      this.logger.log(reward.quantity, reward.item.name);
     }
   }
   /* devblock:end */
@@ -153,6 +154,12 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     return mod - speed / 100;
   }
 
+  public getSuccessModifier(action?: NamedObject): number {
+    const combat = this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery(action));
+    // Every 100 combat is 1% more success
+    return combat / 100;
+  }
+
   public override _buildPercentageIntervalSources(action?: NamedObject): ModifierSourceBuilder {
     const builder = super._buildPercentageIntervalSources(action);
     builder.addSources('sailing:Speed', this.getActionModifierQuery(action), -0.01);
@@ -249,12 +256,16 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
   public override onLoad(): void {
     super.onLoad();
 
-    for (const action of this.actions.registeredObjects.values()) {
-      this.renderQueue.actionMastery.add(action);
-    }
+    this.updateActionMasteries();
 
     this.renderQueue.ships = true;
     this.renderQueue.ports = true;
+  }
+
+  public updateActionMasteries() {
+    for (const action of this.actions.registeredObjects.values()) {
+      this.renderQueue.actionMastery.add(action);
+    }
   }
 
   public override getRegistry(type: ScopeSourceType): NamespaceRegistry<NamedObject> | undefined {
@@ -271,12 +282,20 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
       this.logger.info(`Registering ${data.ports.length} Ports`);
       data.ports.forEach((port) => {
         switch (port.type) {
-          case 'normal':
-            this.ports.registerObject(new NormalPort(namespace, port, this.game));
+          case 'normal': {
+            this.logger.debug(`Registering Normal Port: ${port.name}`);
+            const normalPort = new NormalPort(namespace, port, this.game);
+            this.ports.registerObject(normalPort);
+            this.actions.registerObject(normalPort);
             break;
-          case 'skill':
-            this.ports.registerObject(new SkillPort(namespace, port, this.game));
+          }
+          case 'skill': {
+            this.logger.debug(`Registering Skill Port: ${port.name}`);
+            const skillPort = new SkillPort(namespace, port, this.game);
+            this.ports.registerObject(skillPort);
+            this.actions.registerObject(skillPort);
             break;
+          }
         }
       });
     }
@@ -307,11 +326,12 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     super.postDataRegistration();
     const namespace = game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE);
 
+    // TODO: filter out ports that you have not unlocked so they are a secret
     this.sortedMasteryActions = this.actions.allObjects.sort((a, b) => a.level - b.level);
 
     // Use unshift so that the skill mastery milestone is last after sort if there are lvl 99 actions or ports
-    this.milestones.unshift(...this.actions.allObjects);
-    this.milestones.unshift(...this.ports.filter((port) => port instanceof NormalPort).map((port) => port as NormalPort));
+    this.milestones.unshift(...this.actions.allObjects.filter((action) => !(action instanceof SkillPort)));
+    // this.milestones.unshift(...this.ports.filter((port) => port instanceof NormalPort).map((port) => port as NormalPort));
     this.sortMilestones();
     this.logger.debug('postDataRegistration');
 
@@ -325,14 +345,17 @@ export class Sailing extends SkillWithMastery<ShipAction, SailingSkillData> {
     
     const tinyIsland = this.ports.getObjectSafe('sailing:tinyIsland');
     const cutter = this.shipUpgrades.getObjectSafe('sailing:Cutter');
+    // TODO: migrate this data into ship action itself
     this.actions.allObjects.forEach((action) => {
-      const ship = new Ship(namespace, action, cutter, tinyIsland, this.game);
-      ship.registerOnUpdate(() => {
-        if (ship.state == ShipState.HasReturned) {
-          this.updateNotification(1);
-        }
-      });
-      this.ships.registerObject(ship);
+      if (action instanceof ShipAction) {
+        const ship = new Ship(namespace, action, cutter, tinyIsland, this.game);
+        ship.registerOnUpdate(() => {
+          if (ship.state == ShipState.HasReturned) {
+            this.updateNotification(1);
+          }
+        });
+        this.ships.registerObject(ship);
+      }
     });
 
 

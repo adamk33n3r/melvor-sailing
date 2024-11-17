@@ -3,7 +3,6 @@ import { PortComponent } from './port.component';
 import { ShipComponent } from './ship.component';
 
 export function SailingPageComponent() {
-  // let self = {} as ReturnType<typeof SailingPage>;
   return {
     $template: '#sailing-page-template',
     shipComponents: [] as ReturnType<typeof ShipComponent>[],
@@ -13,8 +12,6 @@ export function SailingPageComponent() {
     shipContainer: null as unknown as HTMLElement,
     portContainer: null as unknown as HTMLElement,
     mounted() {
-      // self = this;
-      console.log('MOUNTED');
       const parent = document.getElementById('sailing-container')!;
 
       this.shipMenu = getElementByIdAndRemoveId('sailing-ship-menu', parent);

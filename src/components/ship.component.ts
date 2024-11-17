@@ -20,7 +20,7 @@ function getPortOptions() {
         return {
             name: hasLevel ? p.name : (
                 p.isNormalPort() ? `Unlocked at Level ${p.level}` :
-                p.isSkillPort() ? `Unlocked at ${p.skill.name} Level ${p.getSkillLevelRequirement()}` :
+                p.isSkillPort() ? `Unlocked at ${p.skill.name} Level ${p.level}` :
                 'ERROR WITH REQUIREMENTS'
             ),
             value: p,
@@ -290,6 +290,7 @@ export function ShipComponent(ship: Ship) {
                 portComponents.push(portComponent);
                 ui.create(portComponent, html);
             });
+            game.sailing.updateActionMasteries();
             return SwalLocale.fire<Port | undefined>({
                 iconHtml: `<img class="mbts__logo-img" src="${ship.media}" />`,
                 title: ship.name,

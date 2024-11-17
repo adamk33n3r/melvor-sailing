@@ -4,13 +4,9 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: './src/ts/setup.ts',
-  watchOptions: {
-    poll: true
-  },
   experiments: {
     outputModule: true
   },
-  devtool: 'inline-source-map',
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },

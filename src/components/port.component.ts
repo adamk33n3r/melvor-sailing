@@ -60,7 +60,6 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
         intervalIcon: null as unknown as IntervalIconElement,
         isSelected: options?.ship?.selectedPort === port,
         update() {
-            console.log('PORT COMPONENT UPDATE');
             this.hasLevel = port.hasLevelRequirements();
             this.isLocked = !this.hasLevel || port.type === 'skill'; // AND you haven't gotten the associated nav chart
             // self.isLocked = ship.lockState == LockState.Locked;
@@ -91,7 +90,7 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
                 hideElement(this.masteryIcon);
                 hideElement(this.masteryPoolIcon);
             }
-            this.xpIcon.setXP(game.sailing.modifyXP(port.baseXP, options?.ship?.action), port.baseXP);
+            this.xpIcon.setXP(game.sailing.modifyXP(port.baseExperience, options?.ship?.action), port.baseExperience);
             this.xpIcon.setSources(game.sailing.getXPSources(options?.ship?.action));
             this.intervalIcon.setCustomInterval(formatTime(port.modifiedInterval/1000), game.sailing.getIntervalSources(port));
         },

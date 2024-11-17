@@ -16,15 +16,15 @@ import '../css/styles.css';
 // Images
 import './images';
 
+/* devblock:start */
+import * as Util from './util';
+/* devblock:end */
+
 import { Sailing, SailingNotification } from './sailing';
 import { Translation } from './translation';
 import { UserInterface } from './ui';
 import { Constants } from './Constants';
-
-/* devblock:start */
-import * as Util from './util';
 import { GuideComponent } from '../components/guide.component';
-/* devblock:end */
 
 declare global {
   interface Game {
@@ -46,6 +46,11 @@ export async function setup(ctx: Modding.ModContext) {
   };
 
   const sailing = game.registerSkill(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), Sailing);
+  game.sailing = sailing;
+
+  /* devblock:start */
+  game.util = Util;
+  /* devblock:end */
 
   // Register our GameData
   sailing.logger.debug('Adding base package...');
@@ -64,11 +69,6 @@ export async function setup(ctx: Modding.ModContext) {
   if (cloudManager.hasAoDEntitlementAndIsEnabled) {
     await ctx.gameData.addPackage(AoDData as GameDataPackage);
   }
-
-  game.sailing = sailing;
-  /* devblock:start */
-  game.util =  Util;
-  /* devblock:end */
 
   ctx.onInterfaceAvailable(() => {
     const parent = $('#tutorial-page-Woodcutting').parent().get(0);

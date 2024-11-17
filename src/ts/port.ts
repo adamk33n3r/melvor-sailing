@@ -1,7 +1,8 @@
+import { SailingAction } from './sailingaction';
 import { ShipAction } from './ship';
 import { cascadeInterp2, ChanceData, getChance } from './util';
 
-interface BasePortData extends RealmedObjectData {
+interface BasePortData extends BasicSkillRecipeData {
     name: string;
     type: string;
     description: string;
@@ -22,7 +23,7 @@ export interface SkillPortData extends BasePortData {
 }
 export type PortData = NormalPortData | SkillPortData;
 
-export abstract class Port extends NamespacedObject {
+export abstract class Port extends SailingAction {
     private _name: string;
     private _type: PortData['type'];
     private _description: string;
@@ -43,8 +44,6 @@ export abstract class Port extends NamespacedObject {
     public get description() {
         return this._description;
     }
-
-    public abstract get media(): string;
 
     public get distance() {
         return this._distance;
@@ -70,8 +69,6 @@ export abstract class Port extends NamespacedObject {
         return this.game.sailing.logger;
     }
     
-
-
     get interval() {
         return this.distance * 60 * 1000;
     }
@@ -84,13 +81,8 @@ export abstract class Port extends NamespacedObject {
         return this.distance * 1000;
     }
 
-    get baseXP() {
-        return this.distance * (this.distance / 8);
-    }
-
-
     constructor(namespace: DataNamespace, data: PortData, protected game: Game) {
-        super(namespace, data.id);
+        super(namespace, data, game);
         this._name = data.name;
         this._type = data.type;
         this._description = data.description;
@@ -98,6 +90,7 @@ export abstract class Port extends NamespacedObject {
         this._requirements = this.game.getRequirementsFromData(data.requirements);
         this._minRolls = data.minRolls;
         this._maxRolls = data.maxRolls;
+        this.baseExperience = this.distance * (this.distance / 8);
 
         this._currencyDrops = data.currencyDrops.map(({ currencyID, min, max }) => {
             return { currency: game.currencies.getObjectSafe(currencyID), min, max };
@@ -137,11 +130,6 @@ export class NormalPort extends Port {
     private _media: string;
     private _lootTable: DropTable;
 
-    public get level(): number {
-        // Schema requires there to be a sailing skill level requirement for normal ports
-        return this.getLevelRequirements().find((req) => req.skill === this.game.sailing)!.level;
-    }
-
     public get media() {
         return this.getMediaURL(this._media);
     }
@@ -154,6 +142,8 @@ export class NormalPort extends Port {
         super(namespace, data, game);
         this._media = data.media;
         this._lootTable = new DropTable(game, data.lootTable);
+        // Schema requires there to be a sailing skill level requirement for normal ports
+        this.level = this.getLevelRequirements().find((req) => req.skill === this.game.sailing)!.level;
     }
 
     public generateLoot(numRolls: number, rewards: Rewards, action: ShipAction): void {
@@ -189,13 +179,14 @@ export class SkillPort extends Port {
     constructor(namespace: DataNamespace, data: SkillPortData, game: Game) {
         super(namespace, data, game);
         this._skill = game.skills.getObjectSafe(data.skillID);
+        this.level = this.getLevelRequirements().find((req) => req.skill === this.skill)?.level ?? 1;
     }
 
     public override generateLoot(numRolls: number, rewards: Rewards, action: ShipAction): void {
         const currencies = this.generateCurrencyLoot(action);
         rewards.addItemsAndCurrency({ currencies });
 
-        const chanceData = this.getProductChances(this.getSkillLevelRequirement(), this.skill.level);
+        const chanceData = this.getProductChances(this.level, this.skill.level);
         this.logger.debug('chanceData', chanceData);
 
         for (let n = 0; n < numRolls; n++) {
@@ -254,16 +245,12 @@ export class SkillPort extends Port {
     }
 
     public getPossibleLoot(): string {
-        const chances = this.getProductChances(this.getSkillLevelRequirement(), this.skill.level);
+        const chances = this.getProductChances(this.level, this.skill.level);
         return chances.map((chance, idx) => `%${formatFixed(cascadeInterp2(chances, this.skill.level, idx), 2)} - <img class="skill-icon-xs" src="${chance.product.media}"/> ${chance.product.name}`).join('<br>');
     }
 
     public hasLevelRequirements(): boolean {
         return this.game.checkRequirements(this.getLevelRequirements());
-    }
-
-    public getSkillLevelRequirement(): number {
-        return this.getLevelRequirements().find((req) => req.skill === this.skill)?.level ?? 1;
     }
 }
 
@@ -280,6 +267,8 @@ export class DummyPort extends NormalPort {
                 type: 'normal',
                 minRolls: 1,
                 maxRolls: 1,
+                baseExperience: 0,
+                level: 1,
                 lootTable: [],
                 requirements: [
                     {

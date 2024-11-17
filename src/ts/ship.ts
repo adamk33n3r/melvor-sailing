@@ -1,5 +1,6 @@
 import { Constants } from './Constants';
 import { DummyPort, Port } from './port';
+import { SailingAction } from './sailingaction';
 
 export enum ShipState {
     ReadyToSail,
@@ -70,7 +71,7 @@ export interface ShipActionData extends BasicSkillRecipeData {
     itemCosts: IDQuantity[];
 }
 
-export class ShipAction extends BasicSkillRecipe {
+export class ShipAction extends SailingAction {
   private _currencyCosts: CurrencyQuantity[];
   private _itemCosts: ItemQuantity<AnyItem>[];
   public get currencyCosts() {
@@ -152,7 +153,7 @@ export class Ship extends NamespacedObject {
     }
 
     get baseXP() {
-        return this.selectedPort.baseXP;
+        return this.selectedPort.baseExperience;
     }
 
     get onTrip() {
@@ -181,7 +182,7 @@ export class Ship extends NamespacedObject {
     public upgrade() {
         const nextUpgrade = this.getNextUpgrade();
         if (nextUpgrade === undefined) return;
-        console.log(`upgradeShip: from ${this.currentUpgrade.id} to ${nextUpgrade.id}`);
+        this.game.sailing.logger.debug(`upgradeShip: from ${this.currentUpgrade.id} to ${nextUpgrade.id}`);
         this._currentUpgrade = nextUpgrade;
     }
 
