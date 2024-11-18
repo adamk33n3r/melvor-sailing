@@ -1,5 +1,5 @@
 import { SailingPageComponent } from '../components/sailing';
-import { Ship, ShipAction, ShipState, DummyShip, ShipActionData, ShipUpgrade, ShipUpgradeData } from './ship';
+import { Ship, Dock, ShipState, DummyShip, DockData, ShipUpgrade, ShipUpgradeData } from './ship';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
 import { NormalPort, Port, PortData, SkillPort } from './port';
@@ -15,7 +15,7 @@ class SailingRenderQueue extends MasterySkillRenderQueue<SailingAction> {
 interface SailingSkillData extends BaseSkillData {
   categories?: SkillCategoryData[];
   ports?: PortData[];
-  docks?: ShipActionData[];
+  docks?: DockData[];
   shipUpgrades?: ShipUpgradeData[];
 }
 
@@ -46,7 +46,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public testLootGen(rolls: number = 5) {
     const ship = this.ships.allObjects[0];
     const rewards = new Rewards(this.game);
-    ship.selectedPort.generateLoot(rolls, rewards, ship.action);
+    ship.selectedPort.generateLoot(rolls, rewards, ship.dock);
     this.logger.log(rewards.getItemQuantityArray());
     for (const reward of rewards.getItemQuantityArray().sort((a, b) => b.item.sellsFor.quantity - a.item.sellsFor.quantity)) {
       this.logger.log(reward.quantity, reward.item.name);
@@ -94,23 +94,23 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     const rewards = new Rewards(this.game);
     rewards.setActionInterval(ship.interval);
 
-    const rollMod = this.getRollModifier(ship.action);
+    const rollMod = this.getRollModifier(ship.dock);
     const numRolls = rollInteger(Math.round(ship.selectedPort.minRolls * rollMod), Math.round(ship.selectedPort.maxRolls * rollMod));
-    ship.selectedPort.generateLoot(numRolls, rewards, ship.action);
+    ship.selectedPort.generateLoot(numRolls, rewards, ship.dock);
 
-    rewards.addXP(this, ship.baseXP, ship.action);
+    rewards.addXP(this, ship.baseXP, ship.dock);
 
-    const masteryXPToAdd = this.getMasteryXPToAddForAction(ship.action, ship.scaledForMasteryInterval);
+    const masteryXPToAdd = this.getMasteryXPToAddForAction(ship.dock, ship.scaledForMasteryInterval);
     const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd);
 
-    this.rollForMasteryTokens(rewards, ship.action.realm);
-    this.rollForRareDrops(ship.action.level, rewards, ship.action);
+    this.rollForMasteryTokens(rewards, ship.dock.realm);
+    this.rollForRareDrops(ship.dock.level, rewards, ship.dock);
     this.rollForAdditionalItems(rewards, ship.interval);
-    this.rollForAncientRelics(ship.action.level, ship.action.realm);
-    this.rollForPets(ship.interval, ship.action);
+    this.rollForAncientRelics(ship.dock.level, ship.dock.realm);
+    this.rollForPets(ship.interval, ship.dock);
 
     const dummyHost = document.createElement('div');
-    ui.create(LootComponent(ship.action, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
+    ui.create(LootComponent(ship.dock, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
     addModalToQueue({
       iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
       title: ship.selectedPort.name,
@@ -125,7 +125,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
         // }
         rewards.setSource('Sailing.Loot');
         rewards.giveRewards(true);
-        this.addMasteryForAction(ship.action, ship.scaledForMasteryInterval);
+        this.addMasteryForAction(ship.dock, ship.scaledForMasteryInterval);
 
         this.updateNotification(-1);
 
@@ -134,7 +134,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     });
   }
 
-  public getRollModifier(action?: ShipAction): number {
+  public getRollModifier(action?: Dock): number {
     const morale = this.game.modifiers.getValue('sailing:Morale', this.getActionModifierQuery(action));
     // Every 100 morale is 1% more min and max rolls
     return 1 + morale / 100 / 100;
@@ -166,7 +166,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     return builder;
   }
 
-  public override rollForPets(interval: number, action: ShipAction) {
+  public override rollForPets(interval: number, action: Dock) {
     super.rollForPets(interval / 100, action);
   }
 
@@ -218,7 +218,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     this.renderQueue.ports = true;
   }
 
-  public override onMasteryLevelUp(action: ShipAction, oldLevel: number, newLevel: number): void {
+  public override onMasteryLevelUp(action: Dock, oldLevel: number, newLevel: number): void {
     super.onMasteryLevelUp(action, oldLevel, newLevel);
   }
 
@@ -310,7 +310,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     if (data.docks !== undefined) {
       this.logger.info(`Registering ${data.docks.length} Docks`);
       data.docks.forEach((dock) => {
-        this.actions.registerObject(new ShipAction(namespace, dock, this.game));
+        this.actions.registerObject(new Dock(namespace, dock, this.game));
       });
     }
   }
@@ -347,7 +347,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     const cutter = this.shipUpgrades.getObjectSafe('sailing:Cutter');
     // TODO: migrate this data into ship action itself
     this.actions.allObjects.forEach((action) => {
-      if (action instanceof ShipAction) {
+      if (action instanceof Dock) {
         const ship = new Ship(namespace, action, cutter, tinyIsland, this.game);
         ship.registerOnUpdate(() => {
           if (ship.state == ShipState.HasReturned) {
@@ -378,7 +378,6 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
 
   private decodeShip(reader: SaveWriter, version: number): Ship {
     let ship = reader.getNamespacedObject(this.ships);
-    this.logger.error(ship);
     if (typeof ship === 'string') {
       if (ship.startsWith('sailing')) {
         // Upgrade boats to new dock name
@@ -445,7 +444,7 @@ Port: ${ship.selectedPort.name}
     }).join('\n');
   }
 
-  public isMasteryActionUnlocked(action: ShipAction): boolean {
+  public isMasteryActionUnlocked(action: Dock): boolean {
     return this.isBasicSkillRecipeUnlocked(action);
   }
 

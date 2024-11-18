@@ -2,7 +2,7 @@ import { Ship } from '../ts/ship';
 import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
 import { formatTime, getElementByIdAndRemoveId } from '../ts/util';
-import { ShipComponent } from './ship.component';
+import { ExploreComponent } from './explore/explore.component';
 // import { DropdownComponent } from './dropdown/dropdown.component';
 
 // function getShipOptions() {
@@ -31,7 +31,7 @@ import { ShipComponent } from './ship.component';
 interface PortComponentOptions {
     onSelect?: () => void;
     ship?: Ship;
-    shipComponent?: ReturnType<typeof ShipComponent>;
+    exploreComponent?: ReturnType<typeof ExploreComponent>;
     showLoot?: boolean;
 }
 
@@ -75,11 +75,11 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
             if (options?.ship) {
                 showElement(this.masteryIcon);
                 showElement(this.masteryPoolIcon);
-                const baseMasteryXPToAdd = game.sailing.getBaseMasteryXPToAddForAction(options.ship.action, port.scaledForMasteryInterval);
-                const masteryXPToAdd = game.sailing.getMasteryXPToAddForAction(options.ship.action, port.scaledForMasteryInterval);
+                const baseMasteryXPToAdd = game.sailing.getBaseMasteryXPToAddForAction(options.ship.dock, port.scaledForMasteryInterval);
+                const masteryXPToAdd = game.sailing.getMasteryXPToAddForAction(options.ship.dock, port.scaledForMasteryInterval);
                 const masteryPoolXPToAdd = game.sailing.getMasteryXPToAddToPool(masteryXPToAdd);
                 this.masteryIcon.setXP(masteryXPToAdd, baseMasteryXPToAdd);
-                this.masteryIcon.setSources(game.sailing.getMasteryXPSources(options.ship.action));
+                this.masteryIcon.setSources(game.sailing.getMasteryXPSources(options.ship.dock));
                 this.masteryPoolIcon.setXP(masteryPoolXPToAdd);
                 if (game.unlockedRealms.length > 1) {
                     this.masteryPoolIcon.setRealm(game.defaultRealm);
@@ -90,8 +90,8 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
                 hideElement(this.masteryIcon);
                 hideElement(this.masteryPoolIcon);
             }
-            this.xpIcon.setXP(game.sailing.modifyXP(port.baseExperience, options?.ship?.action), port.baseExperience);
-            this.xpIcon.setSources(game.sailing.getXPSources(options?.ship?.action));
+            this.xpIcon.setXP(game.sailing.modifyXP(port.baseExperience, options?.ship?.dock), port.baseExperience);
+            this.xpIcon.setSources(game.sailing.getXPSources(options?.ship?.dock));
             this.intervalIcon.setCustomInterval(formatTime(port.modifiedInterval/1000), game.sailing.getIntervalSources(port));
         },
         // updateProgressBar() {
@@ -137,8 +137,8 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
                     `${Math.round(port.minRolls * rollMod)} - ${Math.round(port.maxRolls * rollMod)} Rolls<br>` +
                     port.getPossibleLoot(),
             }).then(async () => {
-                if (options?.shipComponent) {
-                    await options.shipComponent.selectPort();
+                if (options?.exploreComponent) {
+                    await options.exploreComponent.selectPort();
                 }
             });
         },

@@ -5,13 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Melvor",
+            "name": "Launch Melvor (Desktop)",
             "type": "nwjs",
             "request": "launch",
             "runtimeExecutable": "D:\\SteamLibrary\\steamapps\\common\\Melvor Idle\\Melvor Idle.exe",
-            "webRoot": "D:\\SteamLibrary\\steamapps\\common\\Melvor Idle\\package.nw",
+            "webRoot": "${workspaceFolder}/..",
+            "sourceMapPathOverrides": {
+                "https://steam.melvoridle.com/*": "",
+                "webpack:\\*": "${webRoot}/*",
+                "webpack:///./*": "${webRoot}/*",
+                "webpack:///src/*": "${webRoot}/*",
+                "webpack:///*": "*",
+                "webpack:///./~/*": "${webRoot}/node_modules/*",
+                "meteor://💻app/*": "${webRoot}/*"
+            },
             "runtimeArgs": [
-                "D:\\SteamLibrary\\steamapps\\common\\Melvor Idle\\package.nw",
+                "${workspaceFolder}",
                 "--remote-debugging-port=9222"
             ],
             "sourceMaps": true,

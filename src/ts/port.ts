@@ -1,5 +1,5 @@
 import { SailingAction } from './sailingaction';
-import { ShipAction } from './ship';
+import { Dock } from './ship';
 import { cascadeInterp2, ChanceData, getChance } from './util';
 
 interface BasePortData extends BasicSkillRecipeData {
@@ -97,9 +97,9 @@ export abstract class Port extends SailingAction {
         });
     }
 
-    public abstract generateLoot(numRolls: number, rewards: Rewards, action: ShipAction): void;
+    public abstract generateLoot(numRolls: number, rewards: Rewards, action: Dock): void;
     public abstract getPossibleLoot(): string;
-    protected generateCurrencyLoot(action: ShipAction) {
+    protected generateCurrencyLoot(action: Dock) {
         const currencies: CurrencyQuantity[] = [];
         this.currencyDrops.forEach(({ currency, min, max }) => {
             currencies.push({ currency, quantity: this.game.sailing.modifyCurrencyReward(currency, rollInteger(min, max), action) });
@@ -146,7 +146,7 @@ export class NormalPort extends Port {
         this.level = this.getLevelRequirements().find((req) => req.skill === this.game.sailing)!.level;
     }
 
-    public generateLoot(numRolls: number, rewards: Rewards, action: ShipAction): void {
+    public generateLoot(numRolls: number, rewards: Rewards, action: Dock): void {
         const currencies = this.generateCurrencyLoot(action);
 
         const items = [] as AnyItemQuantity[];
@@ -176,13 +176,21 @@ export class SkillPort extends Port {
         return this._skill.media;
     }
 
+    public get isCrafting() {
+        return this._skill instanceof CraftingSkill;
+    }
+
+    public get isGathering() {
+        return this._skill instanceof GatheringSkill;
+    }
+
     constructor(namespace: DataNamespace, data: SkillPortData, game: Game) {
         super(namespace, data, game);
         this._skill = game.skills.getObjectSafe(data.skillID);
         this.level = this.getLevelRequirements().find((req) => req.skill === this.skill)?.level ?? 1;
     }
 
-    public override generateLoot(numRolls: number, rewards: Rewards, action: ShipAction): void {
+    public override generateLoot(numRolls: number, rewards: Rewards, action: Dock): void {
         const currencies = this.generateCurrencyLoot(action);
         rewards.addItemsAndCurrency({ currencies });
 

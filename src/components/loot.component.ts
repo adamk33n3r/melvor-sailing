@@ -1,7 +1,7 @@
-import { ShipAction } from '../ts/ship';
+import { Dock } from '../ts/ship';
 
 export function LootComponent(
-  action: ShipAction,
+  action: Dock,
   rewards: Rewards,
   masteryXP: number,
   masteryPoolXP: number,

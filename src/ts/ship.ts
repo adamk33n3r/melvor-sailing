@@ -66,12 +66,12 @@ export class ShipUpgrade extends RealmedObject {
     }
 }
 
-export interface ShipActionData extends BasicSkillRecipeData {
+export interface DockData extends BasicSkillRecipeData {
     currencyCosts: IDQuantity[];
     itemCosts: IDQuantity[];
 }
 
-export class ShipAction extends SailingAction {
+export class Dock extends SailingAction {
   private _currencyCosts: CurrencyQuantity[];
   private _itemCosts: ItemQuantity<AnyItem>[];
   public get currencyCosts() {
@@ -80,7 +80,7 @@ export class ShipAction extends SailingAction {
   public get itemCosts() {
     return this._itemCosts;
   }
-  constructor(namespace: DataNamespace, data: ShipActionData, private game: Game) {
+  constructor(namespace: DataNamespace, data: DockData, private game: Game) {
     super(namespace, data, game);
     this._currencyCosts = game.getCurrencyQuantities(data.currencyCosts);
     this._itemCosts = game.items.getQuantities(data.itemCosts);
@@ -118,7 +118,7 @@ export enum LockState {
 export class Ship extends NamespacedObject {
     private _sailTimer: Timer;
     public state: ShipState = ShipState.ReadyToSail;
-    private _action: ShipAction;
+    private _dock: Dock;
     public lockState: LockState = LockState.Locked;
     private _currentUpgrade: ShipUpgrade;
     public selectedPort: Port;
@@ -127,12 +127,12 @@ export class Ship extends NamespacedObject {
         return this._sailTimer;
     }
 
-    get action() {
-        return this._action;
+    get dock() {
+        return this._dock;
     }
 
     get name() {
-        return this.action.name;
+        return this.dock.name;
     }
 
     get media() {
@@ -164,10 +164,10 @@ export class Ship extends NamespacedObject {
         return this._currentUpgrade;
     }
 
-    constructor(namespace: DataNamespace, action: ShipAction, upgrade: ShipUpgrade, port: Port, private game: Game) {
+    constructor(namespace: DataNamespace, action: Dock, upgrade: ShipUpgrade, port: Port, private game: Game) {
         super(namespace, action.localID);
         this._sailTimer = new Timer('Skill', () => this.onReturn());
-        this._action = action;
+        this._dock = action;
         this._currentUpgrade = upgrade;
         this.selectedPort = port;
         this.lockState = action.currencyCosts.length === 0 && action.itemCosts.length === 0 ? LockState.Unlocked : LockState.Locked;
@@ -288,7 +288,7 @@ export class DummyShip extends Ship {
     constructor(namespace: DataNamespace, localID: string, game: Game) {
         super(
             namespace,
-            new ShipAction(namespace, {
+            new Dock(namespace, {
                 id: localID,
                 baseExperience: 0,
                 level: 1,

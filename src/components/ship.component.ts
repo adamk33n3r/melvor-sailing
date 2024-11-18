@@ -1,10 +1,9 @@
 import { LockState, Ship, ShipState } from '../ts/ship';
 import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
-import { formatTime, getElementByIdAndRemoveId, tickToTime } from '../ts/util';
+import { getElementByIdAndRemoveId, tickToTime } from '../ts/util';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { EquipmentComponent } from './equipment/equipment.component';
-import { PortComponent } from './port.component';
 
 function getPortOptions() {
     return game.sailing.ports.allObjects.map((p: Port) => {
@@ -58,30 +57,24 @@ export function ShipComponent(ship: Ship) {
         }, (port: Port) => {
             ship.selectedPort = port;
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
-            self.updateGrants();
         }),
         unlockCosts: null as unknown as QuantityIconsElement,
         upgradeCosts: null as unknown as QuantityIconsElement,
-        itemCosts: ship.action.itemCosts,
-        currencyCosts: ship.action.currencyCosts,
-        xpIcon: null as unknown as XpIconElement,
-        masteryIcon: null as unknown as MasteryXpIconElement,
-        masteryPoolIcon: null as unknown as MasteryPoolIconElement,
-        intervalIcon: null as unknown as IntervalIconElement,
-        progressBar: null as unknown as ProgressBarElement,
+        itemCosts: ship.dock.itemCosts,
+        currencyCosts: ship.dock.currencyCosts,
         _canUnlock() {
-            const abyssalLevelMet = ship.action.abyssalLevel === 0 ||  game.sailing.abyssalLevel >= ship.action.abyssalLevel;
+            const abyssalLevelMet = ship.dock.abyssalLevel === 0 ||  game.sailing.abyssalLevel >= ship.dock.abyssalLevel;
             return (
-                game.sailing.level >= ship.action.level &&
-                ship.action.getUnlockCosts().checkIfOwned() &&
+                game.sailing.level >= ship.dock.level &&
+                ship.dock.getUnlockCosts().checkIfOwned() &&
                 abyssalLevelMet
             );
         },
         canUnlock: false,
         unlockShip() {
-            const costs = ship.action.getUnlockCosts();
+            const costs = ship.dock.getUnlockCosts();
             costs.setSource(`Skill.${game.sailing.id}.UnlockShip`);
-            if (!costs.checkIfOwned() || game.sailing.level < ship.action.level || game.sailing.abyssalLevel < ship.action.abyssalLevel) return;
+            if (!costs.checkIfOwned() || game.sailing.level < ship.dock.level || game.sailing.abyssalLevel < ship.dock.abyssalLevel) return;
             costs.consumeCosts();
             self.isLocked = false;
             ship.lockState = LockState.Unlocked;
@@ -109,7 +102,7 @@ export function ShipComponent(ship: Ship) {
             self.updateUpgradeCosts();
         },
         update() {
-            self.hasLevel = game.sailing.level >= ship.action.level;
+            self.hasLevel = game.sailing.level >= ship.dock.level;
             self.isLocked = ship.lockState == LockState.Locked;
             self.canUnlock = self._canUnlock();
             self.unlockCosts.updateQuantities(game);
@@ -127,25 +120,7 @@ export function ShipComponent(ship: Ship) {
             //     selected: { name: ship.selectedPort.name, value: ship.selectedPort, media: ship.selectedPort.media },
             //     options: getPortOptions(),
             // });
-            self.updateGrants();
-            self.updateProgressBar();
             self.updateUpgradeCosts();
-        },
-        updateGrants() {
-            const baseMasteryXPToAdd = game.sailing.getBaseMasteryXPToAddForAction(ship.action, ship.scaledForMasteryInterval);
-            const masteryXPToAdd = game.sailing.getMasteryXPToAddForAction(ship.action, ship.scaledForMasteryInterval);
-            const masteryPoolXPToAdd = game.sailing.getMasteryXPToAddToPool(masteryXPToAdd);
-            self.xpIcon.setXP(game.sailing.modifyXP(ship.baseXP, ship.action), ship.baseXP);
-            self.xpIcon.setSources(game.sailing.getXPSources(ship.action));
-            self.masteryIcon.setXP(masteryXPToAdd, baseMasteryXPToAdd);
-            self.masteryIcon.setSources(game.sailing.getMasteryXPSources(ship.action));
-            self.masteryPoolIcon.setXP(masteryPoolXPToAdd);
-            if (game.unlockedRealms.length > 1) {
-                this.masteryPoolIcon.setRealm(game.defaultRealm);
-             } else {
-                this.masteryPoolIcon.hideRealms();
-             }
-            self.intervalIcon.setCustomInterval(formatTime(ship.modifiedInterval/1000), game.sailing.getIntervalSources(ship.action));
         },
         updateUpgradeCosts() {
             const nextUpgrade = ship.getNextUpgrade();
@@ -171,13 +146,6 @@ export function ShipComponent(ship: Ship) {
                 });
             }
         },
-        updateProgressBar() {
-            if (ship.onTrip) {
-                self.progressBar.animateProgressFromTimer(ship.sailTimer);
-            } else {
-                self.progressBar.stopAnimation();
-            }
-        },
         mounted() {
             // HACK: This is so we can reference the reactive proxy object `this` in the dropdown callback
             self = this;
@@ -190,12 +158,6 @@ export function ShipComponent(ship: Ship) {
 
             // ui.create(self.port, getElementByIdAndRemoveId('dropdown', parent));
 
-            setInterval(() => {
-                self.returnTimer = tickToTime(self.ship.sailTimer.ticksLeft);
-                if (self.ship.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
-                self.updateProgressBar();
-            }, 1000);
-
             self.ship.registerOnUpdate(() => {
                 self.readyToSail = self.ship.state == ShipState.ReadyToSail;
                 self.onTrip = self.ship.state == ShipState.OnTrip;
@@ -204,8 +166,6 @@ export function ShipComponent(ship: Ship) {
                 if (self.ship.sailTimer.ticksLeft <= 0) self.returnTimer = 'Done';
                 // self.port.setEnabled(self.readyToSail);
 
-                self.updateGrants();
-                self.updateProgressBar();
                 self.currentUpgrade = self.ship.currentUpgrade;
                 // Important to not reference ship with self here
                 // so that it doesn't proxyfy the game
@@ -214,8 +174,8 @@ export function ShipComponent(ship: Ship) {
             });
 
             self.unlockCosts = getElementByIdAndRemoveId('unlockCosts', parent);
-            self.unlockCosts.addCurrencyIcons(ship.action.currencyCosts);
-            self.unlockCosts.addItemIcons(ship.action.itemCosts, false);
+            self.unlockCosts.addCurrencyIcons(ship.dock.currencyCosts);
+            self.unlockCosts.addItemIcons(ship.dock.itemCosts, false);
             self.unlockCosts.currencies.forEach((currency) => {
                 currency.quantity.textContent = formatNumber(currency.currencyQuantity!.quantity);
                 currency.container.onmouseover = () => {
@@ -236,80 +196,15 @@ export function ShipComponent(ship: Ship) {
             });
 
             self.upgradeCosts = getElementByIdAndRemoveId('upgradeCosts', parent);
-
-            const grantsContainer = getElementByIdAndRemoveId('grants-container', parent);
-
-            self.xpIcon = getElementByIdAndRemoveId('sailing-xp', grantsContainer);
-            self.masteryIcon = getElementByIdAndRemoveId('sailing-mastery-xp', grantsContainer);
-            self.masteryPoolIcon = getElementByIdAndRemoveId('sailing-pool-xp', grantsContainer);
-            self.intervalIcon = getElementByIdAndRemoveId('sailing-interval', grantsContainer);
-
-            self.progressBar = getElementByIdAndRemoveId('sailing-progress-bar', parent);
-        },
-
-        setSail() {
-            ship.setSail();
-            self.updateProgressBar();
-        },
-        collectLoot() {
-            ship.collectLoot();
         },
         async viewLoot() {
-            const rollMod = game.sailing.getRollModifier(ship.action);
+            const rollMod = game.sailing.getRollModifier(ship.dock);
             return SwalLocale.fire({
                 iconHtml: `<img class="mbts__logo-img" src="${ship.selectedPort.media}" />`,
                 title: ship.selectedPort.name,
                 html: ship.selectedPort.currencyDrops.map((drop) => `Always Drops:<br>${formatNumber(drop.min)} - ${formatNumber(drop.max)} <img class="skill-icon-xs" src="${drop.currency.media}"> ${drop.currency.name}`).join('<br>') + '<hr>' +
                     `${Math.round(ship.selectedPort.minRolls * rollMod)} - ${Math.round(ship.selectedPort.maxRolls * rollMod)} Rolls<br>` +
                     ship.selectedPort.getPossibleLoot(),
-            });
-        },
-        async selectPort() {
-            const html = document.createElement('div');
-            html.classList.add(
-                'row',
-                'row-deck',
-                'gutters-tiny',
-                'row-cols-1',
-                'row-cols-md-2',
-                'row-cols-xl-3',
-                'row-cols-xxl-6',
-            );
-            const portComponents: ReturnType<typeof PortComponent>[] = [];
-            game.sailing.ports.forEach((port) => {
-                const portComponent = PortComponent(port, html, {
-                    onSelect: () => {
-                        for (const comp of portComponents) {
-                            if (comp === portComponent) continue;
-                            comp.deselect();
-                        }
-                    },
-                    ship,
-                    shipComponent: this,
-                });
-                portComponents.push(portComponent);
-                ui.create(portComponent, html);
-            });
-            game.sailing.updateActionMasteries();
-            return SwalLocale.fire<Port | undefined>({
-                iconHtml: `<img class="mbts__logo-img" src="${ship.media}" />`,
-                title: ship.name,
-                width: '75%',
-                customClass: {
-                    ...defaultSwalCustomClass,
-                    htmlContainer: 'container-fluid',
-                },
-                html,
-                showCancelButton: true,
-                preConfirm: () => {
-                    return portComponents.find((port) => port.isSelected)?.port;
-                },
-                confirmButtonText: 'Select',
-            }).then((result) => {
-                if (result.isConfirmed && result.value) {
-                    ship.selectedPort = result.value;
-                    this.update();
-                }
             });
         },
     };
