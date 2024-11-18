@@ -48,6 +48,7 @@ export function ExploreComponent(ship: Ship) {
       this.progressBar = getElementByIdAndRemoveId('sailing-progress-bar', parent);
     },
     update() {
+      game.sailing.updateActionMasteries();
       this.updateGrants();
       this.updateProgressBar();
     },

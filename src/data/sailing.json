@@ -49,6 +49,26 @@
                 "includeSign": false
               }
             ]
+          },
+          {
+            "scopes": {
+              "skill": true,
+              "action": true
+            },
+            "descriptions": [
+              {
+                "text": "+${value} Combat",
+                "lang": "sailing_Combat_Positive",
+                "above": 0,
+                "includeSign": false
+              },
+              {
+                "text": "-${value} Combat",
+                "lang": "sailing_Combat_Negative",
+                "below": 0,
+                "includeSign": false
+              }
+            ]
           }
         ]
       },

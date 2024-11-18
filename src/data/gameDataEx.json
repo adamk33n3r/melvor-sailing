@@ -61059,7 +61059,17 @@
         },
         "sailing:Combat": {
           "description": "+${value} Combat",
-          "type": "number"
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ScopedModifierValue33"
+              }
+            }
+          ]
         },
         "sailing:Morale": {
           "description": "+${value} Morale",
@@ -63469,6 +63479,7 @@
         "description",
         "distance",
         "type",
+        "sailingStats",
         "requirements",
         "currencyDrops",
         "minRolls",

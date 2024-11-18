@@ -1,6 +1,7 @@
 each ship slot starts with cutter and can be upgraded to further ships, further ships can send more resources at once?
 move equipment back to ships
 make the shop upgrades be your own port upgrades
+- could have an upgrade that increases the percentage of loot you get on a failure
 trading goods
 - ports accept types of raw items and can return processed items like ore to bars, essence to runes
 - combine crafting steps. shortcut from base items to finished items like gem+iron bar to gemmed bolts

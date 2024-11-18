@@ -511,7 +511,9 @@
               "distance": 1,
               "type": "skill",
               "skillID": "melvorD:Mining",
-              "sailingStats": {},
+              "sailingStats": {
+                "combat": 100
+              },
               "requirements": [
                 {
                   "type": "SkillLevel",
@@ -536,6 +538,9 @@
               "distance": 1,
               "type": "skill",
               "skillID": "melvorD:Woodcutting",
+              "sailingStats": {
+                "combat": 100
+              },
               "requirements": [
                 {
                   "type": "SkillLevel",
@@ -560,6 +565,9 @@
               "distance": 1,
               "type": "skill",
               "skillID": "melvorD:Fletching",
+              "sailingStats": {
+                "combat": 100
+              },
               "requirements": [
                 {
                   "type": "SkillLevel",
@@ -594,6 +602,9 @@
               "distance": 1,
               "type": "skill",
               "skillID": "melvorD:Fishing",
+              "sailingStats": {
+                "combat": 100
+              },
               "requirements": [
                 {
                   "type": "SkillLevel",
@@ -618,6 +629,9 @@
               "distance": 1,
               "type": "skill",
               "skillID": "melvorD:Cooking",
+              "sailingStats": {
+                "combat": 100
+              },
               "requirements": [
                 {
                   "type": "SkillLevel",

@@ -7,6 +7,11 @@ interface BasePortData extends BasicSkillRecipeData {
     type: string;
     description: string;
     distance: number;
+    sailingStats: {
+        combat: number;
+        morale: number;
+        seafaring: number;
+    };
     requirements: AnyRequirementData[];
     minRolls: number;
     maxRolls: number;
@@ -28,6 +33,11 @@ export abstract class Port extends SailingAction {
     private _type: PortData['type'];
     private _description: string;
     private _distance: number;
+    private _sailingStats: {
+        combat: number;
+        morale: number;
+        seafaring: number;
+    };
     private _requirements: AnyRequirement[];
     private _minRolls: number;
     private _maxRolls: number;
@@ -47,6 +57,10 @@ export abstract class Port extends SailingAction {
 
     public get distance() {
         return this._distance;
+    }
+
+    public get sailingStats() {
+        return this._sailingStats;
     }
 
     public get requirements() {
@@ -87,6 +101,7 @@ export abstract class Port extends SailingAction {
         this._type = data.type;
         this._description = data.description;
         this._distance = data.distance;
+        this._sailingStats = data.sailingStats;
         this._requirements = this.game.getRequirementsFromData(data.requirements);
         this._minRolls = data.minRolls;
         this._maxRolls = data.maxRolls;
@@ -99,10 +114,10 @@ export abstract class Port extends SailingAction {
 
     public abstract generateLoot(numRolls: number, rewards: Rewards, action: Dock): void;
     public abstract getPossibleLoot(): string;
-    protected generateCurrencyLoot(action: Dock) {
+    protected generateCurrencyLoot(dock: Dock) {
         const currencies: CurrencyQuantity[] = [];
         this.currencyDrops.forEach(({ currency, min, max }) => {
-            currencies.push({ currency, quantity: this.game.sailing.modifyCurrencyReward(currency, rollInteger(min, max), action) });
+            currencies.push({ currency, quantity: this.game.sailing.modifySailingCurrencyReward(currency, rollInteger(min, max), dock, this) });
         });
         return currencies;
     }
@@ -111,7 +126,6 @@ export abstract class Port extends SailingAction {
     public getLevelRequirements(): SkillLevelRequirement[] {
         return this.requirements.filter((req) => req.type === 'SkillLevel');
     }
-
 
     public meetsRequirements(): boolean {
         return this.game.checkRequirements(this.requirements);
@@ -146,8 +160,8 @@ export class NormalPort extends Port {
         this.level = this.getLevelRequirements().find((req) => req.skill === this.game.sailing)!.level;
     }
 
-    public generateLoot(numRolls: number, rewards: Rewards, action: Dock): void {
-        const currencies = this.generateCurrencyLoot(action);
+    public generateLoot(numRolls: number, rewards: Rewards, dock: Dock): void {
+        const currencies = this.generateCurrencyLoot(dock);
 
         const items = [] as AnyItemQuantity[];
         for (let i = 0; i < numRolls; i++) {
@@ -190,8 +204,8 @@ export class SkillPort extends Port {
         this.level = this.getLevelRequirements().find((req) => req.skill === this.skill)?.level ?? 1;
     }
 
-    public override generateLoot(numRolls: number, rewards: Rewards, action: Dock): void {
-        const currencies = this.generateCurrencyLoot(action);
+    public override generateLoot(numRolls: number, rewards: Rewards, dock: Dock): void {
+        const currencies = this.generateCurrencyLoot(dock);
         rewards.addItemsAndCurrency({ currencies });
 
         const chanceData = this.getProductChances(this.level, this.skill.level);
@@ -278,6 +292,11 @@ export class DummyPort extends NormalPort {
                 baseExperience: 0,
                 level: 1,
                 lootTable: [],
+                sailingStats: {
+                    combat: 100,
+                    morale: 100,
+                    seafaring: 100,
+                },
                 requirements: [
                     {
                         type: 'SkillLevel',

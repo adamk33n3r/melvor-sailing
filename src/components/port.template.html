@@ -20,7 +20,7 @@
 
       <div class="row gutters-tiny justify-content-center" v-show="!isLocked">
         <button class="btn btn-primary port-loot-btn" @click="viewLoot()" v-if="options?.showLoot"><img class="skill-icon-sm m-0" :src="lootImg"/></button>
-        <div class="align-items-center d-flex" :class="{ 'mt-3': options?.showLoot }">
+        <div class="col-12 align-items-center d-flex" :class="{ 'mt-3': options?.showLoot }">
           <div class="mr-3">
             <img class="shop-img" :src="port.media"/>
           </div>
@@ -28,8 +28,13 @@
             {{ port.name }}
           </div>
         </div>
+        <div class="col-12">
+          <div class="font-size-2sm badge badge-pill mt-2" :class="{ 'badge-success': hasCombat, 'badge-danger': !hasCombat }">
+            <span>Combat: {{ port.sailingStats.combat }}</span>
+          </div>
+        </div>
         <div
-          class="col-12 row mt-3 mb-3 justify-content-center gutters-tiny text-center icon-size-48"
+          class="col-12 row mt-2 justify-content-center gutters-tiny text-center icon-size-48"
           id="grants-container"
         >
           <xp-icon id="sailing-xp"></xp-icon>

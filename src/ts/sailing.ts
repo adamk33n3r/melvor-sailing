@@ -19,6 +19,33 @@ interface SailingSkillData extends BaseSkillData {
   shipUpgrades?: ShipUpgradeData[];
 }
 
+class SailingRewards extends Rewards {
+  public applyRate(rate: number) {
+    this._items.forEach((quantity, item, m) => {
+      m.set(item, Math.ceil(quantity * rate));
+    });
+    this._currencies.forEach((quantity, currency, m) => {
+      m.set(currency, Math.ceil(quantity * rate));
+    });
+    this._xp.forEach((quantity) => {
+      if (quantity.noAction > 0) {
+        quantity.noAction = Math.ceil(quantity.noAction * rate);
+      }
+      quantity.action.forEach((amount, action, m) => {
+        m.set(action, Math.ceil(amount * rate));
+      });
+    });
+    this._abyssalXP.forEach((quantity) => {
+      if (quantity.noAction > 0) {
+        quantity.noAction = Math.ceil(quantity.noAction * rate);
+      }
+      quantity.action.forEach((amount, action, m) => {
+        m.set(action, Math.ceil(amount * rate));
+      });
+    });
+  }
+}
+
 export class SailingNotification extends SuccessNotification {
   constructor(public ship?: Ship) {
     super('sailing:Returned');
@@ -45,7 +72,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   }
   public testLootGen(rolls: number = 5) {
     const ship = this.ships.allObjects[0];
-    const rewards = new Rewards(this.game);
+    const rewards = new SailingRewards(this.game);
     ship.selectedPort.generateLoot(rolls, rewards, ship.dock);
     this.logger.log(rewards.getItemQuantityArray());
     for (const reward of rewards.getItemQuantityArray().sort((a, b) => b.item.sellsFor.quantity - a.item.sellsFor.quantity)) {
@@ -91,7 +118,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     // const rudderUpgrade = this.game.shop.getLowestUpgradeInChain(this.rudderChain.rootUpgrade);
     // const ramUpgrade = this.game.shop.getLowestUpgradeInChain(this.ramChain.rootUpgrade);
 
-    const rewards = new Rewards(this.game);
+    const rewards = new SailingRewards(this.game);
     rewards.setActionInterval(ship.interval);
 
     const rollMod = this.getRollModifier(ship.dock);
@@ -101,7 +128,8 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     rewards.addXP(this, ship.baseXP, ship.dock);
 
     const masteryXPToAdd = this.getMasteryXPToAddForAction(ship.dock, ship.scaledForMasteryInterval);
-    const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd);
+    const portMasteryXPToAdd = this.getMasteryXPToAddForAction(ship.selectedPort, ship.scaledForMasteryInterval);
+    const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd + portMasteryXPToAdd);
 
     this.rollForMasteryTokens(rewards, ship.dock.realm);
     this.rollForRareDrops(ship.dock.level, rewards, ship.dock);
@@ -110,7 +138,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     this.rollForPets(ship.interval, ship.dock);
 
     const dummyHost = document.createElement('div');
-    ui.create(LootComponent(ship.dock, rewards, masteryXPToAdd, masteryPoolXPToAdd), dummyHost);
+    ui.create(LootComponent(ship.dock, ship.selectedPort, rewards, masteryXPToAdd, portMasteryXPToAdd, masteryPoolXPToAdd), dummyHost);
     addModalToQueue({
       iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
       title: ship.selectedPort.name,
@@ -124,8 +152,16 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
         //   return;
         // }
         rewards.setSource('Sailing.Loot');
+
+        const combatMod = this.getCombatModifier(ship.dock, ship.selectedPort);
+        const chance = Math.min(1, combatMod / ship.selectedPort.sailingStats.combat);
+        if (rollPercentage(chance * 100)) {
+          rewards.applyRate(0.5);
+        }
+
         rewards.giveRewards(true);
         this.addMasteryForAction(ship.dock, ship.scaledForMasteryInterval);
+        this.addMasteryForAction(ship.selectedPort, ship.scaledForMasteryInterval);
 
         this.updateNotification(-1);
 
@@ -154,10 +190,19 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     return mod - speed / 100;
   }
 
-  public getSuccessModifier(action?: NamedObject): number {
-    const combat = this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery(action));
-    // Every 100 combat is 1% more success
-    return combat / 100;
+  public getCombatModifier(dock?: Dock, port?: Port): number {
+    const dockCombat = this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery(dock));
+    const portCombat = this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery(port));
+    const baseCombat = this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery());
+    // Subtracting 1 base combat so that it doesn't count it twice
+    return dockCombat + portCombat - baseCombat;
+  }
+
+  public modifySailingCurrencyReward(currency: Currency, amount: number, dock: Dock, port: Port): number {
+    amount *= 1 + (this.getCurrencyModifier(currency, dock), this.getCurrencyModifier(currency, port)) / 100;
+    amount = Math.floor(amount);
+    if (this.id !== 'melvorD:Magic') amount += this.getFlatCurrencyModifier(currency, dock) + this.getFlatCurrencyModifier(currency, port);
+    return Math.max(amount, 0);
   }
 
   public override _buildPercentageIntervalSources(action?: NamedObject): ModifierSourceBuilder {

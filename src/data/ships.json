@@ -9,7 +9,7 @@
           "masteryLevelUnlocks": [
             {
               "level": 1,
-              "description": "Each level provides +1% GP acquired for this boat."
+              "description": "Each level provides +1% GP acquired and +10 Combat."
             }
           ],
           "masteryLevelBonuses": [
@@ -21,6 +21,13 @@
                     "skillID": "sailing:Sailing",
                     "actionID": "sailing:Dock1",
                     "value": 1
+                  }
+                ],
+                "sailing:Combat": [
+                  {
+                    "skillID": "sailing:Sailing",
+                    "actionID": "sailing:Dock1",
+                    "value": 10
                   }
                 ]
               },

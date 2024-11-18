@@ -52,6 +52,7 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
         selectMode: options?.onSelect !== undefined && options.ship !== undefined,
         isLocked: true,
         hasLevel: false,
+        hasCombat: false,
         lockedImgSrc: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl('img/sailing-boat.png'),
         lootImg: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl('melvor:assets/media/bank/pirate_booty.png'),
         xpIcon: null as unknown as XpIconElement,
@@ -62,6 +63,7 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
         update() {
             this.hasLevel = port.hasLevelRequirements();
             this.isLocked = !this.hasLevel || port.type === 'skill'; // AND you haven't gotten the associated nav chart
+            this.hasCombat = game.sailing.getCombatModifier(undefined, port) >= port.sailingStats.combat;
             // self.isLocked = ship.lockState == LockState.Locked;
             // self.ship.setData({
             //     selected: { name: self.selectedShip.name, value: self.selectedShip, media: self.selectedShip.media },
