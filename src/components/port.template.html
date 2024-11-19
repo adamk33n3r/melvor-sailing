@@ -1,5 +1,5 @@
 <template id="sailing-port-template">
-  <div class="col" :id="port.localID" @vue:mounted="mounted">
+  <div class="col" :id="port.localID" @vue:mounted="mounted" v-show="!isHidden">
     <div
       @click="selectPort()"
       class="block block-content block-content-full block-rounded block-link-pop border-top border-sailing border-4x text-center"

@@ -198,6 +198,14 @@ export class SkillPort extends Port {
         return this._skill instanceof GatheringSkill;
     }
 
+    private _unlockItem?: Item;
+    public get unlockItem() {
+        return this._unlockItem!;
+    }
+    public set unlockItem(value: Item) {
+        this._unlockItem = value;
+    }
+
     constructor(namespace: DataNamespace, data: SkillPortData, game: Game) {
         super(namespace, data, game);
         this._skill = game.skills.getObjectSafe(data.skillID);

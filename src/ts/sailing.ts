@@ -410,8 +410,8 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     });
 
 
-    for (const port of this.ports.filter((port) => port instanceof SkillPort)) {
-      this.game.items.registerObject(new Item(namespace, {
+    for (const port of this.ports.filter((port) => port.isSkillPort())) {
+      const unlockItem = new Item(namespace, {
         id: `navigationChart_${port.localID}`,
         name: `Navigation Chart (${port.name})`,
         category: "Sailing",
@@ -421,7 +421,10 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
         obtainFromItemLog: false,
         golbinRaidExclusive: false,
         sellsFor: 100000,
-      }, this.game));
+      }, this.game);
+      this.logger.debug(`Registering unlock item: ${unlockItem.name}`);
+      this.game.items.registerObject(unlockItem);
+      (port as SkillPort).unlockItem = unlockItem;
     }
 
     this.logger.debug('end of postDataRegistration');

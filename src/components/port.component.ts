@@ -51,6 +51,7 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
         options,
         selectMode: options?.onSelect !== undefined && options.ship !== undefined,
         isLocked: true,
+        isHidden: true,
         hasLevel: false,
         hasCombat: false,
         lockedImgSrc: mod.getContext(Constants.MOD_NAMESPACE).getResourceUrl('img/sailing-boat.png'),
@@ -62,7 +63,8 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
         isSelected: options?.ship?.selectedPort === port,
         update() {
             this.hasLevel = port.hasLevelRequirements();
-            this.isLocked = !this.hasLevel || port.type === 'skill'; // AND you haven't gotten the associated nav chart
+            this.isHidden = port.isSkillPort() && game.stats.itemFindCount(port.unlockItem) === 0;
+            this.isLocked = !this.hasLevel || this.isHidden;
             this.hasCombat = game.sailing.getCombatModifier() >= port.sailingStats.combat;
             // self.isLocked = ship.lockState == LockState.Locked;
             // self.ship.setData({

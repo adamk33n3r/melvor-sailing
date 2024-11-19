@@ -17,7 +17,7 @@ export class Logger {
   
   private buildLogFunctions() {
     this.log = console.log.bind(console) as (...message: unknown[]) => void;
-    this.debug = this._level < LogLevel.Debug ? noop : console.log.bind(console, this._prefix) as (...message: unknown[]) => void;
+    this.debug = this._level < LogLevel.Debug ? noop : console.debug.bind(console, this._prefix) as (...message: unknown[]) => void;
     this.info = this._level < LogLevel.Info ? noop : console.info.bind(console, this._prefix) as (...message: unknown[]) => void;
     this.warn = this._level < LogLevel.Warning ? noop : console.warn.bind(console, this._prefix) as (...message: unknown[]) => void;
     this.error = this._level < LogLevel.Error ? noop : console.error.bind(console, this._prefix) as (...message: unknown[]) => void;
