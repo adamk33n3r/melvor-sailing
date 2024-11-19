@@ -425,6 +425,19 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
       this.logger.debug(`Registering unlock item: ${unlockItem.name}`);
       this.game.items.registerObject(unlockItem);
       (port as SkillPort).unlockItem = unlockItem;
+      const rareDrop: RareSkillDrop = {
+          item: unlockItem,
+          quantity: 1,
+          chance: {
+            type: 'LevelScaling',
+            baseChance: 1,
+            scalingFactor: 0.5,
+            maxChance: 20,
+          },
+          requirements: port.requirements,
+          realms: new Set(),
+      };
+      this.rareDrops.push(rareDrop);
     }
 
     this.logger.debug('end of postDataRegistration');

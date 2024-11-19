@@ -1,6 +1,6 @@
 # v2 Items left
 + implement unlocking the skill ports via the items
-- add navigation charts to rare drops and make sure they only drop if you have all skill requirements
++ add navigation charts to rare drops and make sure they only drop if you have all skill requirements
 - make the ship stats do things (might need to scope them to the ship if they are just going to be added like other modifiers)
 + dont show locked ships in the explore tab
 - filter out locked skill ports from sorted mastery actions
