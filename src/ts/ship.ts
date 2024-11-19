@@ -117,9 +117,9 @@ export enum LockState {
 
 export class Ship extends NamespacedObject {
     private _sailTimer: Timer;
-    public state: ShipState = ShipState.ReadyToSail;
+    private _state: ShipState = ShipState.ReadyToSail;
     private _dock: Dock;
-    public lockState: LockState = LockState.Locked;
+    private _lockState: LockState = LockState.Locked;
     private _currentUpgrade: ShipUpgrade;
     public selectedPort: Port;
 
@@ -127,8 +127,21 @@ export class Ship extends NamespacedObject {
         return this._sailTimer;
     }
 
+    get state() {
+        return this._state;
+    }
+
     get dock() {
         return this._dock;
+    }
+
+    get lockState() {
+        return this._lockState;
+    }
+
+    set lockState(value: LockState) {
+        this._lockState = value;
+        this.callBackCallbacks();
     }
 
     get name() {
@@ -170,7 +183,7 @@ export class Ship extends NamespacedObject {
         this._dock = action;
         this._currentUpgrade = upgrade;
         this.selectedPort = port;
-        this.lockState = action.currencyCosts.length === 0 && action.itemCosts.length === 0 ? LockState.Unlocked : LockState.Locked;
+        this._lockState = action.currencyCosts.length === 0 && action.itemCosts.length === 0 ? LockState.Unlocked : LockState.Locked;
     }
 
     private updateCallbacks: VoidFunction[] = [];
@@ -201,13 +214,13 @@ export class Ship extends NamespacedObject {
         } else {
             this._sailTimer.start(1000*1);
         }
-        this.state = ShipState.OnTrip;
+        this._state = ShipState.OnTrip;
         this.callBackCallbacks();
     }
     
     public collectLoot() {
         game.sailing.generateLoot(this, () => {
-            this.state = ShipState.ReadyToSail;
+            this._state = ShipState.ReadyToSail;
             this.callBackCallbacks();
         });
     }
@@ -230,9 +243,9 @@ export class Ship extends NamespacedObject {
     }
 
     public encode(writer: SaveWriter): SaveWriter {
-        writer.writeUint32(this.state);
+        writer.writeUint32(this._state);
         this._sailTimer.encode(writer);
-        writer.writeUint32(this.lockState);
+        writer.writeUint32(this._lockState);
         writer.writeNamespacedObject(this.currentUpgrade);
         writer.writeNamespacedObject(this.selectedPort);
 
@@ -261,11 +274,11 @@ export class Ship extends NamespacedObject {
     }
 
     public decode(reader: SaveWriter, version: number): void {
-        this.state = reader.getUint32();
+        this._state = reader.getUint32();
         this._sailTimer = new Timer('Skill', () => this.onReturn());
         this._sailTimer.decode(reader, version);
         if (this.game.sailing.saveVersion >= 2) {
-            this.lockState = reader.getUint32();
+            this._lockState = reader.getUint32();
             this._currentUpgrade = this.decodeUpgrade(reader, version);
         }
 
@@ -275,7 +288,7 @@ export class Ship extends NamespacedObject {
     }
 
     private onReturn() {
-        this.state = ShipState.HasReturned;
+        this._state = ShipState.HasReturned;
         this.callBackCallbacks();
     }
 

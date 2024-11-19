@@ -63,7 +63,7 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
         update() {
             this.hasLevel = port.hasLevelRequirements();
             this.isLocked = !this.hasLevel || port.type === 'skill'; // AND you haven't gotten the associated nav chart
-            this.hasCombat = game.sailing.getCombatModifier(undefined, port) >= port.sailingStats.combat;
+            this.hasCombat = game.sailing.getCombatModifier() >= port.sailingStats.combat;
             // self.isLocked = ship.lockState == LockState.Locked;
             // self.ship.setData({
             //     selected: { name: self.selectedShip.name, value: self.selectedShip, media: self.selectedShip.media },

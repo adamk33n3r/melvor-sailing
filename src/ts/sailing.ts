@@ -153,7 +153,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
         // }
         rewards.setSource('Sailing.Loot');
 
-        const combatMod = this.getCombatModifier(ship.dock, ship.selectedPort);
+        const combatMod = this.getCombatModifier(ship.dock);
         const chance = Math.min(1, combatMod / ship.selectedPort.sailingStats.combat);
         if (rollPercentage(chance * 100)) {
           rewards.applyRate(0.5);
@@ -190,12 +190,8 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     return mod - speed / 100;
   }
 
-  public getCombatModifier(dock?: Dock, port?: Port): number {
-    const dockCombat = this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery(dock));
-    const portCombat = this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery(port));
-    const baseCombat = this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery());
-    // Subtracting 1 base combat so that it doesn't count it twice
-    return dockCombat + portCombat - baseCombat;
+  public getCombatModifier(dock?: Dock): number {
+    return this.game.modifiers.getValue('sailing:Combat', this.getActionModifierQuery(dock));
   }
 
   public modifySailingCurrencyReward(currency: Currency, amount: number, dock: Dock, port: Port): number {
@@ -230,6 +226,16 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
         }
       });
     }
+  }
+
+  public override checkMasteryLevelBonusFilter(action: SailingAction, filter: string): boolean {
+    switch (filter) {
+      case 'Port':
+        return action instanceof Port;
+      case 'Dock':
+        return action instanceof Dock;
+    }
+    return true;
   }
 
   private updateNotification(quantity: number) {

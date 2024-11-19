@@ -1,5 +1,5 @@
 import { Port } from '../../ts/port';
-import { Ship, ShipState } from '../../ts/ship';
+import { LockState, Ship, ShipState } from '../../ts/ship';
 import { formatTime, getElementByIdAndRemoveId, tickToTime } from '../../ts/util';
 import { PortComponent } from '../port.component';
 
@@ -8,6 +8,7 @@ export function ExploreComponent(ship: Ship) {
     $template: '#sailing-explore-template',
     ship,
     selectedPort: ship.selectedPort,
+    isLocked: true,
     readyToSail: true,
     onTrip: false,
     hasReturned: false,
@@ -28,15 +29,7 @@ export function ExploreComponent(ship: Ship) {
       }, 1000);
 
       this.ship.registerOnUpdate(() => {
-          this.readyToSail = this.ship.state == ShipState.ReadyToSail;
-          this.onTrip = this.ship.state == ShipState.OnTrip;
-          this.hasReturned = this.ship.state == ShipState.HasReturned;
-          this.returnTimer = tickToTime(this.ship.sailTimer.ticksLeft);
-          if (this.ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
-          this.selectedPort = this.ship.selectedPort;
-
-          this.updateGrants();
-          this.updateProgressBar();
+        this.update();
       });
 
       const grantsContainer = getElementByIdAndRemoveId('grants-container', parent);
@@ -48,6 +41,14 @@ export function ExploreComponent(ship: Ship) {
       this.progressBar = getElementByIdAndRemoveId('sailing-progress-bar', parent);
     },
     update() {
+      this.isLocked = ship.lockState == LockState.Locked;
+      this.readyToSail = this.ship.state == ShipState.ReadyToSail;
+      this.onTrip = this.ship.state == ShipState.OnTrip;
+      this.hasReturned = this.ship.state == ShipState.HasReturned;
+      this.returnTimer = tickToTime(this.ship.sailTimer.ticksLeft);
+      if (this.ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
+      this.selectedPort = this.ship.selectedPort;
+
       game.sailing.updateActionMasteries();
       this.updateGrants();
       this.updateProgressBar();

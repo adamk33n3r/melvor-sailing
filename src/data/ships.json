@@ -9,7 +9,11 @@
           "masteryLevelUnlocks": [
             {
               "level": 1,
-              "description": "Each level provides +1% GP acquired and +10 Combat."
+              "description": "(Dock) Each level provides +10 Combat."
+            },
+            {
+              "level": 1,
+              "description": "(Port) Each level provides +1% GP acquired."
             }
           ],
           "masteryLevelBonuses": [
@@ -22,7 +26,15 @@
                     "actionID": "sailing:Dock1",
                     "value": 1
                   }
-                ],
+                ]
+              },
+              "filter": "Port",
+              "level": 1,
+              "levelScalingMax": 99,
+              "levelScalingSlope": 1
+            },
+            {
+              "modifiers": {
                 "sailing:Combat": [
                   {
                     "skillID": "sailing:Sailing",
@@ -31,6 +43,7 @@
                   }
                 ]
               },
+              "filter": "Dock",
               "level": 1,
               "levelScalingMax": 99,
               "levelScalingSlope": 1
@@ -104,8 +117,9 @@
               "realm": "melvorD:Melvor",
               "media": "img/submarine.png",
               "modifiers": {
-                "sailing:Combat": 15000,
-                "sailing:Speed": 1000
+                "sailing:Combat": 5000,
+                "sailing:Speed": 1000,
+                "sailing:Seafaring": -500
               },
               "currencyCosts": [
                 {
@@ -135,8 +149,9 @@
               "realm": "melvorD:Melvor",
               "media": "img/container-ship.png",
               "modifiers": {
-                "sailing:Combat": -400,
-                "sailing:Speed": -1000
+                "sailing:Combat": -500,
+                "sailing:Speed": -1000,
+                "sailing:Morale": 1000
               },
               "currencyCosts": [
                 {
