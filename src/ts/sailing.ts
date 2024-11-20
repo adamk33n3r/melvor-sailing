@@ -373,18 +373,26 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     }
   }
 
+  public setMasteryActionsAndMilestones() {
+    // Spend Mastery XP dialog
+    const unlockedActions = this.actions.filter((action) => action.isUnlocked());
+    console.log('unlockedActions:', unlockedActions);
+    this.sortedMasteryActions = unlockedActions.sort((a, b) => ((a instanceof Dock ? -1 : 1) - (b instanceof Dock ? -1 : 1)) || a.level - b.level);
+
+    // Milestones dialog
+    // Use unshift so that the skill mastery milestone is last after sort if there are lvl 99 actions or ports
+    this.milestones = [];
+    this.milestones.push(...this.sortedMasteryActions);
+    this.milestones.push(new SkillMasteryMilestone(this));
+    this.sortMilestones();
+  }
+
   public override postDataRegistration(): void {
     super.postDataRegistration();
-    const namespace = game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE);
-
-    // TODO: filter out ports that you have not unlocked so they are a secret
-    this.sortedMasteryActions = this.actions.allObjects.sort((a, b) => a.level - b.level);
-
-    // Use unshift so that the skill mastery milestone is last after sort if there are lvl 99 actions or ports
-    this.milestones.unshift(...this.actions.allObjects.filter((action) => !(action instanceof SkillPort)));
-    // this.milestones.unshift(...this.ports.filter((port) => port instanceof NormalPort).map((port) => port as NormalPort));
-    this.sortMilestones();
     this.logger.debug('postDataRegistration');
+    console.log('initial milestones:', this.milestones);
+    this.setMasteryActionsAndMilestones();
+    const namespace = game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE);
 
     const chains = this.game.shop.upgradeChains.namespaceMaps.get(Constants.MOD_NAMESPACE);
     if (chains) {
@@ -416,7 +424,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
         name: `Navigation Chart (${port.name})`,
         category: "Sailing",
         type: "Chart",
-        media: "img/navigation_chart.png",
+        media: "melvor:assets/media/bank/navigation_chart.png",
         ignoreCompletion: false,
         obtainFromItemLog: false,
         golbinRaidExclusive: false,
@@ -531,6 +539,7 @@ Port: ${ship.selectedPort.name}
     this.logger.debug('queueBankQuantityRender:', item);
     this.renderQueue.ships = true;
     this.renderQueue.ports = true;
+    this.setMasteryActionsAndMilestones();
   }
 
   public queueCurrencyQuantityRender(currency: Currency): void {

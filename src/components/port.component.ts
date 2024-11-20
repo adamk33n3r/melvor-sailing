@@ -63,7 +63,7 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
         isSelected: options?.ship?.selectedPort === port,
         update() {
             this.hasLevel = port.hasLevelRequirements();
-            this.isHidden = port.isSkillPort() && game.stats.itemFindCount(port.unlockItem) === 0;
+            this.isHidden = port.isSkillPort() && !port.isUnlocked();
             this.isLocked = !this.hasLevel || this.isHidden;
             this.hasCombat = game.sailing.getCombatModifier() >= port.sailingStats.combat;
             // self.isLocked = ship.lockState == LockState.Locked;

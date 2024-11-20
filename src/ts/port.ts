@@ -152,6 +152,11 @@ export class NormalPort extends Port {
         return this._lootTable;
     }
 
+    // All normal ports are unlocked
+    public isUnlocked(): boolean {
+        return true;
+    }
+
     constructor(namespace: DataNamespace, data: NormalPortData, game: Game) {
         super(namespace, data, game);
         this._media = data.media;
@@ -204,6 +209,10 @@ export class SkillPort extends Port {
     }
     public set unlockItem(value: Item) {
         this._unlockItem = value;
+    }
+
+    public isUnlocked() {
+        return game.stats.itemFindCount(this.unlockItem) > 0;
     }
 
     constructor(namespace: DataNamespace, data: SkillPortData, game: Game) {

@@ -80,6 +80,11 @@ export class Dock extends SailingAction {
   public get itemCosts() {
     return this._itemCosts;
   }
+
+  public isUnlocked(): boolean {
+    return true;
+  }
+
   constructor(namespace: DataNamespace, data: DockData, private game: Game) {
     super(namespace, data, game);
     this._currencyCosts = game.getCurrencyQuantities(data.currencyCosts);

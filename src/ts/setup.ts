@@ -70,6 +70,10 @@ export async function setup(ctx: Modding.ModContext) {
     await ctx.gameData.addPackage(AoDData as GameDataPackage);
   }
 
+  ctx.onCharacterLoaded(() => {
+    sailing.setMasteryActionsAndMilestones();
+  });
+
   ctx.onInterfaceAvailable(() => {
     const parent = $('#tutorial-page-Woodcutting').parent().get(0);
     const guideComponent = GuideComponent(sailing);

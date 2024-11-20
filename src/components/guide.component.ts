@@ -44,7 +44,7 @@ export function GuideComponent(sailing: Sailing) {
       },
       {
         name: 'Skill Port',
-        description: 'These ports are discovered randomly on your travels by finding Navigation Charts. They are often Skill Guilds that let you specifically target a resource type like Ore, Wood, or Cooked Food.',
+        description: 'These ports are discovered randomly on your travels by finding Navigation Charts. They are often Skill Guilds that let you specifically target a resource type like Ore, Wood, or Food. In a future update, some of these will be split into Gathering and Crafting ports.',
       },
     ],
     mounted() {
