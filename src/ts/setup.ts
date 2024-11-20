@@ -46,6 +46,7 @@ export async function setup(ctx: Modding.ModContext) {
   };
 
   const sailing = game.registerSkill(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), Sailing);
+  sailing.init(ctx);
   game.sailing = sailing;
 
   /* devblock:start */

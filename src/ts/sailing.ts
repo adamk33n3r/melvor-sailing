@@ -52,6 +52,15 @@ export class SailingNotification extends SuccessNotification {
   }
 }
 
+export enum SailingStats {
+  TripsCompleted,
+  TripsSuccessful,
+  TripsFailed,
+  TimeSpent,
+  RareDropsFound,
+  NavigationChartsFound,
+}
+
 export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public logger = new Logger('Sailing');
   /* devblock:start */
@@ -89,11 +98,14 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public ships: NamespaceRegistry<Ship>;
   public shipUpgrades: NamespaceRegistry<ShipUpgrade>;
   public ports: NamespaceRegistry<Port>;
+  public docks: NamespaceRegistry<Dock>;
 
   public hullChain?: ShopUpgradeChain;
   public deckItemsChain?: ShopUpgradeChain;
   public rudderChain?: ShopUpgradeChain;
   public ramChain?: ShopUpgradeChain;
+
+  public stats = new StatTracker();
 
   public ui?: UserInterface;
 
@@ -108,8 +120,90 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     }
     this.categories = new NamespaceRegistry(game.registeredNamespaces, SkillCategory.name);
     this.ports = new NamespaceRegistry(game.registeredNamespaces, Port.name);
+    this.docks = new NamespaceRegistry(game.registeredNamespaces, Dock.name);
     this.ships = new NamespaceRegistry(game.registeredNamespaces, Ship.name);
     this.shipUpgrades = new NamespaceRegistry(game.registeredNamespaces, ShipUpgrade.name);
+  }
+
+  public init(ctx: Modding.ModContext) {
+    ctx.onInterfaceAvailable(() => {
+      const statisticsContainer = document.querySelector('#statistics-container > .row');
+      statisticsContainer?.insertAdjacentHTML('beforeend', '<stat-table class="col-12 col-lg-10 col-xl-8 col-xxl-6 offset-lg-1 offset-xl-2 offset-xxl-3 d-none" id="sailing-stats-table"></stat-table>');
+      statsData.push({
+        tableID: 'sailing-stats-table',
+        get title() {
+          return 'Sailing';
+        },
+        borderClass: 'border-sailing',
+        trackerKey: 'General',
+        rows: [
+          {
+            get name() {
+              return 'Completed Trips';
+            },
+            get value() {
+              return game.sailing.stats.get(SailingStats.TripsCompleted);
+            },
+          },
+          {
+            get name() {
+              return 'Successful Trips';
+            },
+            get value() {
+              return game.sailing.stats.get(SailingStats.TripsSuccessful);
+            },
+          },
+          {
+            get name() {
+              return 'Failed Trips';
+            },
+            get value() {
+              return game.sailing.stats.get(SailingStats.TripsFailed);
+            },
+          },
+          {
+            get name() {
+              return 'Sailing Time';
+            },
+            get value() {
+              return game.sailing.stats.get(SailingStats.TimeSpent);
+            },
+            isTime: true,
+          },
+          {
+            get name() {
+              return 'Rare Drops Found';
+            },
+            get value() {
+              return game.sailing.stats.get(SailingStats.RareDropsFound);
+            },
+          },
+          {
+            get name() {
+              return 'Navigation Charts Found';
+            },
+            get value() {
+              return game.sailing.stats.get(SailingStats.NavigationChartsFound);
+            },
+          },
+        ],
+      });
+      const sailingStatCategory = Math.max(...Object.values(StatCategories).filter(val => typeof val === 'number')) + 1;
+      // "Register" enum to reserve the ID
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+      (StatCategories as any).Sailing = sailingStatCategory;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+      (StatCategories as any)[sailingStatCategory] = 'Sailing';
+      statisticCategories.push({
+        id: sailingStatCategory,
+        get name() {
+          return statsData[this.id].title;
+        },
+        get media() {
+          return game.sailing.media;
+        },
+      });
+    });
   }
 
   public generateLoot(ship: Ship, onClose: VoidFunction) {
@@ -156,8 +250,21 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
         const combatMod = this.getCombatModifier(ship.dock);
         const chance = Math.min(1, combatMod / ship.selectedPort.sailingStats.combat);
         if (rollPercentage(chance * 100)) {
+          this.stats.inc(SailingStats.TripsSuccessful);
+        } else {
           rewards.applyRate(0.5);
+          this.stats.inc(SailingStats.TripsFailed);
         }
+        this.stats.inc(SailingStats.TripsCompleted);
+        this.stats.add(SailingStats.TimeSpent, ship.selectedPort.interval);
+        rewards._items.forEach((quantity, item) => {
+          if (this.rareDrops.some((rare) => rare.item.id === item.id)) {
+            this.stats.add(SailingStats.RareDropsFound, quantity);
+            if (item.localID.startsWith('navigationChart_')) {
+              this.stats.add(SailingStats.NavigationChartsFound, quantity);
+            }
+          }
+        });
 
         rewards.giveRewards(true);
         this.addMasteryForAction(ship.dock, ship.scaledForMasteryInterval);
@@ -360,8 +467,10 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
 
     if (data.docks !== undefined) {
       this.logger.info(`Registering ${data.docks.length} Docks`);
-      data.docks.forEach((dock) => {
-        this.actions.registerObject(new Dock(namespace, dock, this.game));
+      data.docks.forEach((dockData) => {
+        const dock = new Dock(namespace, dockData, this.game);
+        this.docks.registerObject(dock);
+        this.actions.registerObject(dock);
       });
     }
   }
@@ -376,7 +485,6 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public setMasteryActionsAndMilestones() {
     // Spend Mastery XP dialog
     const unlockedActions = this.actions.filter((action) => action.isUnlocked());
-    console.log('unlockedActions:', unlockedActions);
     this.sortedMasteryActions = unlockedActions.sort((a, b) => ((a instanceof Dock ? -1 : 1) - (b instanceof Dock ? -1 : 1)) || a.level - b.level);
 
     // Milestones dialog
@@ -390,7 +498,6 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public override postDataRegistration(): void {
     super.postDataRegistration();
     this.logger.debug('postDataRegistration');
-    console.log('initial milestones:', this.milestones);
     this.setMasteryActionsAndMilestones();
     const namespace = game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE);
 
@@ -483,6 +590,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     for (let i = 0; i < numDummyShips; i++) {
       this.decodeShip(reader, version);
     }
+    this.stats.decode(reader, version);
   }
 
   public override encode(writer: SaveWriter): SaveWriter {
@@ -500,6 +608,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
       writer.writeNamespacedObject(ship);
       ship.encode(writer);
     });
+    this.stats.encode(writer);
 
     return writer;
   }
