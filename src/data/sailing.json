@@ -26,6 +26,28 @@
                 "includeSign": false
               }
             ]
+          },
+          {
+            "scopes": {
+              "skill": true,
+              "action": true
+            },
+            "descriptions": [
+              {
+                "text": "+${value} Sailing Speed",
+                "lang": "sailing_Speed_Positive",
+                "inverted": true,
+                "above": 0,
+                "includeSign": false
+              },
+              {
+                "text": "-${value} Speed",
+                "lang": "sailing_Speed_Negative",
+                "inverted": true,
+                "below": 0,
+                "includeSign": false
+              }
+            ]
           }
         ]
       },
@@ -92,6 +114,26 @@
                 "includeSign": false
               }
             ]
+          },
+          {
+            "scopes": {
+              "skill": true,
+              "action": true
+            },
+            "descriptions": [
+              {
+                "text": "+${value} Morale",
+                "lang": "sailing_Morale_Positive",
+                "above": 0,
+                "includeSign": false
+              },
+              {
+                "text": "-${value} Morale",
+                "lang": "sailing_Morale_Negative",
+                "below": 0,
+                "includeSign": false
+              }
+            ]
           }
         ]
       },
@@ -101,6 +143,26 @@
         "allowedScopes": [
           {
             "scopes": {},
+            "descriptions": [
+              {
+                "text": "+${value} Seafaring",
+                "lang": "sailing_Seafaring_Positive",
+                "above": 0,
+                "includeSign": false
+              },
+              {
+                "text": "-${value} Seafaring",
+                "lang": "sailing_Seafaring_Negative",
+                "below": 0,
+                "includeSign": false
+              }
+            ]
+          },
+          {
+            "scopes": {
+              "skill": true,
+              "action": true
+            },
             "descriptions": [
               {
                 "text": "+${value} Seafaring",

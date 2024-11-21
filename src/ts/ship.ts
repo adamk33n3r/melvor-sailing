@@ -202,6 +202,7 @@ export class Ship extends NamespacedObject {
         if (nextUpgrade === undefined) return;
         this.game.sailing.logger.debug(`upgradeShip: from ${this.currentUpgrade.id} to ${nextUpgrade.id}`);
         this._currentUpgrade = nextUpgrade;
+        this.game.sailing.computeProvidedStats(true);
     }
 
     public getNextUpgrade() {

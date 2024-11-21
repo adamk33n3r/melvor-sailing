@@ -345,6 +345,25 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     return true;
   }
 
+  public override addProvidedStats(): void {
+    super.addProvidedStats();
+
+    // Add ship upgrade modifiers and scope to the ship
+    for (const ship of this.ships.allObjects) {
+      const mapped = ship.currentUpgrade.stats.modifiers?.map((value) => {
+        if (value.action !== undefined) {
+          const newValue = value.clone();
+          newValue.action = ship.dock;
+          return newValue;
+        }
+        return value;
+      });
+      if (mapped) {
+        this.providedStats.modifiers.addModifiers(ship.dock, mapped);
+      }
+    }
+  }
+
   private updateNotification(quantity: number) {
     this.game.notifications.addNotification(this.returnNotification, {
       text: `Ships have returned!`,
@@ -546,7 +565,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
           chance: {
             type: 'LevelScaling',
             baseChance: 1,
-            scalingFactor: 0.5,
+            scalingFactor: 0.2,
             maxChance: 20,
           },
           requirements: port.requirements,

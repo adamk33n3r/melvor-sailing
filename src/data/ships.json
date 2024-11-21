@@ -84,10 +84,26 @@
               "realm": "melvorD:Melvor",
               "media": "img/ship.png",
               "modifiers": {
-                "sailing:Combat": 500,
-                "sailing:Morale": 500,
-                "sailing:Seafaring": 500,
-                "sailing:Speed": -500
+                "sailing:Combat": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": 500
+                }],
+                "sailing:Morale": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": 500
+                }],
+                "sailing:Seafaring": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": 500
+                }],
+                "sailing:Speed": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": -500
+                }]
               },
               "currencyCosts": [
                 {
@@ -117,9 +133,21 @@
               "realm": "melvorD:Melvor",
               "media": "img/submarine.png",
               "modifiers": {
-                "sailing:Combat": 5000,
-                "sailing:Speed": 1000,
-                "sailing:Seafaring": -500
+                "sailing:Combat": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": 5000
+                }],
+                "sailing:Speed": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": 1000
+                }],
+                "sailing:Seafaring": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": -500
+                }]
               },
               "currencyCosts": [
                 {
@@ -149,9 +177,21 @@
               "realm": "melvorD:Melvor",
               "media": "img/container-ship.png",
               "modifiers": {
-                "sailing:Combat": -500,
-                "sailing:Speed": -1000,
-                "sailing:Morale": 1000
+                "sailing:Combat": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": -500
+                }],
+                "sailing:Speed": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": -1000
+                }],
+                "sailing:Morale": [{
+                  "skillID": "sailing:Sailing",
+                  "actionID": "sailing:Dock1",
+                  "value": 1000
+                }]
               },
               "currencyCosts": [
                 {
