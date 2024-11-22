@@ -8,6 +8,7 @@ import { ShipComponent } from './ship.component';
 export function SailingPageComponent(sailing: Sailing) {
   return {
     $template: '#sailing-page-template',
+    infoAlert: null as unknown as HTMLElement,
     exploreImg: sailing.getMediaURL('img/pirate.png'),
     shipsImg: sailing.getMediaURL('img/sailing-boat.png'),
     portsImg: sailing.getMediaURL('img/port.png'),
@@ -23,6 +24,11 @@ export function SailingPageComponent(sailing: Sailing) {
     portContainer: null as unknown as HTMLElement,
     mounted() {
       const parent = document.getElementById('sailing-container')!;
+
+      this.infoAlert = getElementByIdAndRemoveId('sailing-info-alert', parent);
+      if (localStorage.getItem('sailing:infoAlertDismissed')) {
+        this.infoAlert.classList.add('d-none');
+      }
 
       this.exploreMenu = getElementByIdAndRemoveId('sailing-explore-menu', parent);
       this.shipMenu = getElementByIdAndRemoveId('sailing-ship-menu', parent);
@@ -76,6 +82,10 @@ export function SailingPageComponent(sailing: Sailing) {
       this.shipContainer.classList.add('d-none');
       this.portContainer.classList.add('d-none');
       category.classList.remove('d-none');
+    },
+    dismissInfoAlert() {
+      localStorage.setItem('sailing:infoAlertDismissed', 'true');
+      this.infoAlert.classList.add('d-none');
     },
   };
 }

@@ -1,3 +1,4 @@
+import { Instance } from 'tippy.js';
 import { Port } from '../../ts/port';
 import { LockState, Ship, ShipState } from '../../ts/ship';
 import { formatTime, getElementByIdAndRemoveId, tickToTime } from '../../ts/util';
@@ -19,6 +20,8 @@ export function ExploreComponent(ship: Ship) {
     masteryPoolIcon: null as unknown as MasteryPoolIconElement,
     intervalIcon: null as unknown as IntervalIconElement,
     progressBar: null as unknown as ProgressBarElement,
+    shipInfo: null as unknown as Instance,
+    portInfo: null as unknown as Instance,
     mounted() {
       const parent = document.getElementById(`explore:${ship.localID}`);
       if (!parent) throw new Error(`Could not find parent element with id: ${ship.localID}`);
@@ -40,6 +43,50 @@ export function ExploreComponent(ship: Ship) {
       this.masteryPoolIcon = getElementByIdAndRemoveId('sailing-pool-xp', grantsContainer);
       this.intervalIcon = getElementByIdAndRemoveId('sailing-interval', grantsContainer);
       this.progressBar = getElementByIdAndRemoveId('sailing-progress-bar', parent);
+      const shipInfo = getElementByIdAndRemoveId('ship-info', parent);
+      this.shipInfo = tippy(shipInfo, {
+        placement: 'top',
+        allowHTML: true,
+        interactive: false,
+        animation: false,
+        popperOptions: {
+            strategy: 'fixed',
+            modifiers: [{
+                name: 'flip',
+                options: {
+                    fallbackPlacements: ['top'],
+                },
+            }, {
+                name: 'preventOverflow',
+                options: {
+                    altAxis: true,
+                    tether: false,
+                },
+            }],
+        },
+      });
+      const portInfo = getElementByIdAndRemoveId('port-info', parent);
+      this.portInfo = tippy(portInfo, {
+        placement: 'top',
+        allowHTML: true,
+        interactive: false,
+        animation: false,
+        popperOptions: {
+            strategy: 'fixed',
+            modifiers: [{
+                name: 'flip',
+                options: {
+                    fallbackPlacements: ['top'],
+                },
+            }, {
+                name: 'preventOverflow',
+                options: {
+                    altAxis: true,
+                    tether: false,
+                },
+            }],
+        },
+      });
     },
     update() {
       this.isLocked = ship.lockState == LockState.Locked;
@@ -54,6 +101,12 @@ export function ExploreComponent(ship: Ship) {
       game.sailing.updateActionMasteries();
       this.updateGrants();
       this.updateProgressBar();
+      this.updateInfoTooltips();
+    },
+    updateInfoTooltips() {
+      const shipStats = ship.currentUpgrade.stats.describeAsSpanHTML();
+      this.shipInfo.setContent(shipStats.length > 0 ? shipStats : 'No Bonuses');
+      this.portInfo.setContent(`${ship.selectedPort.sailingStats.combat} Combat`);
     },
     updateGrants() {
       const baseMasteryXPToAdd = game.sailing.getBaseMasteryXPToAddForAction(ship.dock, ship.scaledForMasteryInterval);

@@ -3,6 +3,19 @@
     <div class="skill-info">
       <skill-header data-skill-id="sailing:Sailing"></skill-header>
     </div>
+    <div id="sailing-info-alert">
+      <div class="alert alert-info d-flex align-items-center p-1 font-size-sm" role="alert">
+        <div class="flex-00-auto">
+            <i class="fa fa-fw fa-exclamation-circle"></i>
+        </div>
+        <div class="flex-fill ml-3 font-w600">
+          Check the Game Guide for more information on Sailing Modifiers, Ship Upgrades, and Port Types.
+        </div>
+        <button type="button" class="close" aria-label="Close" @click="dismissInfoAlert()">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+    </div>
     <div class="row row-deck">
       <div class="col-12 sticky-category-menu-mobile" id="SAILING_CATEGORY_MENU">
         <div class="bg-white p-1 push content-justify-center" style="width: 100%;">
