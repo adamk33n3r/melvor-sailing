@@ -514,11 +514,11 @@
               "id": "miningGuild",
               "name": "Mining Guild",
               "description": "The Dwarves of the Mining Guild welcome trade for their precious ores.",
-              "distance": 1,
+              "distance": 180,
               "type": "skill",
               "skillID": "melvorD:Mining",
               "sailingStats": {
-                "combat": 100
+                "combat": 1500
               },
               "requirements": [
                 {
@@ -535,8 +535,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 10000,
+                  "max": 12500
                 }
               ],
               "minRolls": 200,
@@ -546,11 +546,11 @@
               "id": "woodcuttingGuild",
               "name": "Woodcutting Guild",
               "description": "The Woodcutting Guild is a prestigious guild dedicated to the art of murdering trees.",
-              "distance": 1,
+              "distance": 180,
               "type": "skill",
               "skillID": "melvorD:Woodcutting",
               "sailingStats": {
-                "combat": 100
+                "combat": 1500
               },
               "requirements": [
                 {
@@ -567,8 +567,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 10000,
+                  "max": 12500
                 }
               ],
               "minRolls": 200,
@@ -578,11 +578,11 @@
               "id": "fletchingGuild",
               "name": "Fletching Guild",
               "description": "The Fletching Guild has a reputation for being the best at whittling their logs.",
-              "distance": 1,
+              "distance": 300,
               "type": "skill",
               "skillID": "melvorD:Fletching",
               "sailingStats": {
-                "combat": 100
+                "combat": 5000
               },
               "requirements": [
                 {
@@ -609,8 +609,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 10000,
+                  "max": 12500
                 }
               ],
               "minRolls": 200,
@@ -620,11 +620,11 @@
               "id": "fishingGuild",
               "name": "Fishing Guild",
               "description": "The Fishing Guild has the best fishermen on the open sea.",
-              "distance": 1,
+              "distance": 180,
               "type": "skill",
               "skillID": "melvorD:Fishing",
               "sailingStats": {
-                "combat": 100
+                "combat": 1500
               },
               "requirements": [
                 {
@@ -641,8 +641,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 10000,
+                  "max": 12500
                 }
               ],
               "minRolls": 200,
@@ -652,11 +652,11 @@
               "id": "cookingGuild",
               "name": "Cooking Guild",
               "description": "The Cooking Guild has chefs that cook for royalty.",
-              "distance": 1,
+              "distance": 180,
               "type": "skill",
               "skillID": "melvorD:Cooking",
               "sailingStats": {
-                "combat": 100
+                "combat": 1500
               },
               "requirements": [
                 {
@@ -673,8 +673,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 10000,
+                  "max": 12500
                 }
               ],
               "minRolls": 100,
@@ -684,11 +684,11 @@
               "id": "farmingGuild",
               "name": "Farming Guild",
               "description": "The Farming Guild has many plots to grow a variety of crops, herbs, and trees.",
-              "distance": 1,
+              "distance": 180,
               "type": "skill",
               "skillID": "melvorD:Cooking",
               "sailingStats": {
-                "combat": 100
+                "combat": 1000
               },
               "requirements": [
                 {
@@ -705,8 +705,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 10000,
+                  "max": 12500
                 }
               ],
               "minRolls": 100,
@@ -716,11 +716,11 @@
               "id": "craftingGuild",
               "name": "Crafting Guild",
               "description": "The Crafting Guild prides itself on the high quality arts and crafts its members can make with glue sticks.",
-              "distance": 1,
+              "distance": 180,
               "type": "skill",
               "skillID": "melvorD:Crafting",
               "sailingStats": {
-                "combat": 100
+                "combat": 1500
               },
               "requirements": [
                 {
@@ -737,8 +737,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 10000,
+                  "max": 12500
                 }
               ],
               "minRolls": 100,
@@ -748,11 +748,11 @@
               "id": "runecraftingGuild",
               "name": "Runecrafting Guild",
               "description": "The Runecrafting Guild is your one stop shop for Runes and Magic Gear.",
-              "distance": 1,
+              "distance": 120,
               "type": "skill",
               "skillID": "melvorD:Runecrafting",
               "sailingStats": {
-                "combat": 100
+                "combat": 500
               },
               "requirements": [
                 {
@@ -769,18 +769,18 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 10000,
+                  "max": 12500
                 }
               ],
-              "minRolls": 100,
-              "maxRolls": 150
+              "minRolls": 500,
+              "maxRolls": 1000
             },
             {
               "id": "herbloreGuild",
               "name": "Herblore Guild",
               "description": "The Herblore Guild is where you go to get your fix.",
-              "distance": 1,
+              "distance": 600,
               "type": "skill",
               "skillID": "melvorD:Herblore",
               "sailingStats": {
@@ -801,12 +801,12 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 75000,
+                  "max": 150000
                 }
               ],
-              "minRolls": 100,
-              "maxRolls": 150
+              "minRolls": 200,
+              "maxRolls": 300
             }
           ]
         }
