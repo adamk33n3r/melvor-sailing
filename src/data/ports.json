@@ -519,6 +519,11 @@
                   "type": "SkillLevel",
                   "skillID": "melvorD:Mining",
                   "level": 30
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
+                  "level": 30
                 }
               ],
               "currencyDrops": [
@@ -545,6 +550,11 @@
                 {
                   "type": "SkillLevel",
                   "skillID": "melvorD:Woodcutting",
+                  "level": 30
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
                   "level": 30
                 }
               ],
@@ -583,6 +593,11 @@
                   "type": "SkillLevel",
                   "skillID": "melvorD:Mining",
                   "level": 30
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
+                  "level": 50
                 }
               ],
               "currencyDrops": [
@@ -609,6 +624,11 @@
                 {
                   "type": "SkillLevel",
                   "skillID": "melvorD:Fishing",
+                  "level": 30
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
                   "level": 30
                 }
               ],
@@ -637,6 +657,139 @@
                   "type": "SkillLevel",
                   "skillID": "melvorD:Cooking",
                   "level": 20
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
+                  "level": 30
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 1000,
+                  "max": 2000
+                }
+              ],
+              "minRolls": 100,
+              "maxRolls": 150
+            },
+            {
+              "id": "farmingGuild",
+              "name": "Farming Guild",
+              "description": "The Farming Guild has many plots to grow a variety of crops, herbs, and trees.",
+              "distance": 1,
+              "type": "skill",
+              "skillID": "melvorD:Cooking",
+              "sailingStats": {
+                "combat": 100
+              },
+              "requirements": [
+                {
+                  "type": "SkillLevel",
+                  "skillID": "melvorD:Farming",
+                  "level": 5
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
+                  "level": 20
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 1000,
+                  "max": 2000
+                }
+              ],
+              "minRolls": 100,
+              "maxRolls": 150
+            },
+            {
+              "id": "craftingGuild",
+              "name": "Crafting Guild",
+              "description": "The Crafting Guild prides itself on the high quality arts and crafts its members can make with glue sticks.",
+              "distance": 1,
+              "type": "skill",
+              "skillID": "melvorD:Crafting",
+              "sailingStats": {
+                "combat": 100
+              },
+              "requirements": [
+                {
+                  "type": "SkillLevel",
+                  "skillID": "melvorD:Crafting",
+                  "level": 10
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
+                  "level": 30
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 1000,
+                  "max": 2000
+                }
+              ],
+              "minRolls": 100,
+              "maxRolls": 150
+            },
+            {
+              "id": "runecraftingGuild",
+              "name": "Runecrafting Guild",
+              "description": "The Runecrafting Guild is your one stop shop for Runes and Magic Gear.",
+              "distance": 1,
+              "type": "skill",
+              "skillID": "melvorD:Runecrafting",
+              "sailingStats": {
+                "combat": 100
+              },
+              "requirements": [
+                {
+                  "type": "SkillLevel",
+                  "skillID": "melvorD:Runecrafting",
+                  "level": 1
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
+                  "level": 10
+                }
+              ],
+              "currencyDrops": [
+                {
+                  "currencyID": "melvorD:GP",
+                  "min": 1000,
+                  "max": 2000
+                }
+              ],
+              "minRolls": 100,
+              "maxRolls": 150
+            },
+            {
+              "id": "herbloreGuild",
+              "name": "Herblore Guild",
+              "description": "The Herblore Guild is where you go to get your fix.",
+              "distance": 1,
+              "type": "skill",
+              "skillID": "melvorD:Herblore",
+              "sailingStats": {
+                "combat": 10000
+              },
+              "requirements": [
+                {
+                  "type": "SkillLevel",
+                  "skillID": "melvorD:Herblore",
+                  "level": 5
+                },
+                {
+                  "type": "SkillLevel",
+                  "skillID": "sailing:Sailing",
+                  "level": 70
                 }
               ],
               "currencyDrops": [
