@@ -8,7 +8,7 @@
           <div
             class="block block-content block-content-full block-rounded block-link-pop border-top border-sailing border-4x text-center d-flex flex-column"
           >
-            <img class="bank-img-detail" style="max-width: 250px;" :src="ship.currentUpgrade.media"/>
+            <img class="bank-img-detail" style="max-width: 250px;" :src="currentUpgrade.media" />
             <div class="mt-2">
               <button class="btn btn-primary btn-block btn-lg" @click="setSail()" v-if="readyToSail">
                 Set Sail

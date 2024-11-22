@@ -8,6 +8,7 @@ export function ExploreComponent(ship: Ship) {
     $template: '#sailing-explore-template',
     ship,
     selectedPort: ship.selectedPort,
+    currentUpgrade: ship.currentUpgrade,
     isLocked: true,
     readyToSail: true,
     onTrip: false,
@@ -23,12 +24,12 @@ export function ExploreComponent(ship: Ship) {
       if (!parent) throw new Error(`Could not find parent element with id: ${ship.localID}`);
 
       setInterval(() => {
-          this.returnTimer = tickToTime(this.ship.sailTimer.ticksLeft);
-          if (this.ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
-          this.updateProgressBar();
+        this.returnTimer = tickToTime(ship.sailTimer.ticksLeft);
+        if (ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
+        this.updateProgressBar();
       }, 1000);
 
-      this.ship.registerOnUpdate(() => {
+      ship.registerOnUpdate(() => {
         this.update();
       });
 
@@ -42,12 +43,13 @@ export function ExploreComponent(ship: Ship) {
     },
     update() {
       this.isLocked = ship.lockState == LockState.Locked;
-      this.readyToSail = this.ship.state == ShipState.ReadyToSail;
-      this.onTrip = this.ship.state == ShipState.OnTrip;
-      this.hasReturned = this.ship.state == ShipState.HasReturned;
-      this.returnTimer = tickToTime(this.ship.sailTimer.ticksLeft);
-      if (this.ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
-      this.selectedPort = this.ship.selectedPort;
+      this.readyToSail = ship.state == ShipState.ReadyToSail;
+      this.onTrip = ship.state == ShipState.OnTrip;
+      this.hasReturned = ship.state == ShipState.HasReturned;
+      this.returnTimer = tickToTime(ship.sailTimer.ticksLeft);
+      if (ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
+      this.selectedPort = ship.selectedPort;
+      this.currentUpgrade = ship.currentUpgrade;
 
       game.sailing.updateActionMasteries();
       this.updateGrants();
@@ -67,7 +69,10 @@ export function ExploreComponent(ship: Ship) {
       } else {
         this.masteryPoolIcon.hideRealms();
       }
-      this.intervalIcon.setCustomInterval(formatTime(ship.modifiedInterval/1000), game.sailing.getIntervalSources(ship.dock));
+      this.intervalIcon.setCustomInterval(
+        formatTime(ship.modifiedInterval / 1000),
+        game.sailing.getIntervalSources(ship.dock),
+      );
     },
     updateProgressBar() {
       if (ship.onTrip) {
