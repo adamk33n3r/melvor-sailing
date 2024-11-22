@@ -78,6 +78,8 @@ export function ShipComponent(ship: Ship) {
             costs.consumeCosts();
             self.isLocked = false;
             ship.lockState = LockState.Unlocked;
+            // To clear buy button
+            game.sailing.page.update();
         },
         currentUpgrade: ship.currentUpgrade,
         nextUpgrade: ship.getNextUpgrade(),

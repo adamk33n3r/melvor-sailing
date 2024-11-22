@@ -28,8 +28,7 @@
         </div>
         <img class="bank-img-detail" style="max-width: 250px;" :src="currentUpgrade.media"/>
         <div class="col-12" v-if="nextUpgrade">
-          <span class="p-2 font-w600">Upgrades</span>
-          <div class="col-12 justify-content-center icon-size-48">
+          <div class="col-12 justify-content-center icon-size-48 mb-2">
             <quantity-icons id="upgradeCosts"></quantity-icons>
           </div>
           <button class="btn btn-primary btn-block btn-lg" @click="upgradeShip()" :disabled="!canUpgrade">

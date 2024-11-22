@@ -133,3 +133,11 @@ export function cascadeInterp(bounds: ChanceData<unknown>[], level: number, inde
         }
     }
 }
+
+export function setSkillToLevel(skill: AnySkill, level: number) {
+    skill.setXP(exp.levelToXP(level) + 1);
+}
+
+export function giveItem(itemID: string, quantity: number) {
+    game.bank.addItemByID(itemID, quantity, false, false, true, true, 'Sailing:Util');
+}

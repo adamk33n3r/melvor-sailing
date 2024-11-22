@@ -1,11 +1,17 @@
+import { Sailing } from '../ts/sailing';
+import { LockState } from '../ts/ship';
 import { getElementByIdAndRemoveId } from '../ts/util';
 import { ExploreComponent } from './explore/explore.component';
 import { PortComponent } from './port.component';
 import { ShipComponent } from './ship.component';
 
-export function SailingPageComponent() {
+export function SailingPageComponent(sailing: Sailing) {
   return {
     $template: '#sailing-page-template',
+    exploreImg: sailing.getMediaURL('img/pirate.png'),
+    shipsImg: sailing.getMediaURL('img/sailing-boat.png'),
+    portsImg: sailing.getMediaURL('img/port.png'),
+    showShipsButton: true,
     exploreComponents: [] as ReturnType<typeof ExploreComponent>[],
     shipComponents: [] as ReturnType<typeof ShipComponent>[],
     portComponents: [] as ReturnType<typeof PortComponent>[],
@@ -49,6 +55,7 @@ export function SailingPageComponent() {
       // this.changeCategory(this.portMenu, this.portContainer);
     },
     update() {
+      this.showShipsButton = sailing.ships.every((ship) => ship.lockState == LockState.Locked);
       game.sailing.logger.debug('SailingPageComponent.update');
       this.exploreComponents.forEach((exploreComponent) => {
         exploreComponent.update();

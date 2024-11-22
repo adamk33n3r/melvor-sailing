@@ -93,7 +93,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public saveVersion = -1;
   public _media = 'img/sailing-boat.png';
   public renderQueue = new SailingRenderQueue();
-  public page = SailingPageComponent();
+  public page = SailingPageComponent(this);
   public categories: NamespaceRegistry<SkillCategory>;
   public ships: NamespaceRegistry<Ship>;
   public shipUpgrades: NamespaceRegistry<ShipUpgrade>;

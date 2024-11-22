@@ -46,7 +46,11 @@ export async function setup(ctx: Modding.ModContext) {
   };
 
   const sailing = game.registerSkill(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), Sailing);
-  sailing.logger.info(`Loading Sailing v${pkg.version}`);
+  if (process.env.NODE_ENV === 'production') {
+    sailing.logger.info(`Loading Sailing v${pkg.version}`);
+  } else {
+    sailing.logger.info(`Loading Sailing v${pkg.version} (Debug)`);
+  }
   sailing.init(ctx);
   game.sailing = sailing;
 

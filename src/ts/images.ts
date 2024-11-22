@@ -1,4 +1,6 @@
 import '../img/sailing-boat.png';
+import '../img/pirate.png';
+import '../img/port.png';
 import '../img/ship.png';
 import '../img/submarine.png';
 import '../img/container-ship.png';

@@ -16,19 +16,19 @@
             <ul class="nav-main nav-main-horizontal nav-main-hover nav-main-horizontal-center">
               <li class="nav-main-item">
                 <a @click="changeCategory($el, exploreContainer)" class="nav-main-link active township-tab-selected" data-toggle="class-toggle" data-target="#horizontal-navigation-sailing" data-class="d-none" id="sailing-explore-menu">
-                  <img class="skill-icon-sm m-0 mr-2" data-src="assets/media/skills/archaeology/digsites.png">
+                  <img class="skill-icon-sm m-0 mr-2" :src="exploreImg">
                   <span class="nav-main-link-name font-w600"><lang-string lang-id="SAILING_MENU_EXPLORE">Explore</lang-string></span>
                 </a>
               </li>
               <li class="nav-main-item">
                 <a @click="changeCategory($el, shipContainer)" class="nav-main-link active township-tab-selected" data-toggle="class-toggle" data-target="#horizontal-navigation-sailing" data-class="d-none" id="sailing-ship-menu">
-                  <img class="skill-icon-sm m-0 mr-2" data-src="assets/media/skills/archaeology/digsites.png">
+                  <img class="skill-icon-sm m-0 mr-2" :src="shipsImg">
                   <span class="nav-main-link-name font-w600"><lang-string lang-id="SAILING_MENU_SHIPS">Ships</lang-string></span>
                 </a>
               </li>
               <li class="nav-main-item">
                 <a @click="changeCategory($el, portContainer)" class="nav-main-link" data-toggle="class-toggle" data-target="#horizontal-navigation-sailing" data-class="d-none" id="sailing-port-menu">
-                  <img class="skill-icon-sm m-0 mr-2" data-src="assets/media/skills/archaeology/museum.png">
+                  <img class="skill-icon-sm m-0 mr-2" :src="portsImg">
                   <span class="nav-main-link-name font-w600"><lang-string lang-id="SAILING_MENU_PORTS">Ports</lang-string></span>
                 </a>
               </li>
@@ -37,7 +37,11 @@
         </div>
       </div>
     </div>
-    <div class="row row-deck" id="explore-container"></div>
+    <div class="row row-deck" id="explore-container">
+      <div class="col-12" v-show="showShipsButton">
+        <button class="btn btn-primary btn-block btn-lg" @click="changeCategory(shipMenu, shipContainer)">Unlock your first ship!</button>
+      </div>
+    </div>
     <div class="row row-deck gutters-tiny" id="ship-container"></div>
     <div class="row row-deck gutters-tiny row-cols-1 row-cols-md-2 row-cols-xl-4 row-cols-xxl-6" id="port-container"></div>
   </div>
