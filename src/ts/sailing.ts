@@ -88,6 +88,13 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
       this.logger.log(reward.quantity, reward.item.name);
     }
   }
+  public giveUpgradeMaterials() {
+    const rewards = new Rewards(this.game);
+    this.shipUpgrades.forEach((upgrade) => {
+      rewards.addItemsAndCurrency({ items: upgrade.itemCosts, currencies: upgrade.currencyCosts });
+    });
+    rewards.giveRewards(true);
+  }
   /* devblock:end */
 
   public saveVersion = -1;

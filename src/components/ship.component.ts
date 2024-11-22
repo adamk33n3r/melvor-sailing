@@ -60,6 +60,7 @@ export function ShipComponent(ship: Ship) {
         }),
         unlockCosts: null as unknown as QuantityIconsElement,
         upgradeCosts: null as unknown as QuantityIconsElement,
+        hasLevelForUpgrade: (ship.getNextUpgrade()?.level ?? Infinity) <= game.sailing.level,
         itemCosts: ship.dock.itemCosts,
         currencyCosts: ship.dock.currencyCosts,
         _canUnlock() {
@@ -105,6 +106,9 @@ export function ShipComponent(ship: Ship) {
         },
         update() {
             self.hasLevel = game.sailing.level >= ship.dock.level;
+            self.currentUpgrade = ship.currentUpgrade;
+            self.nextUpgrade = ship.getNextUpgrade();
+            self.hasLevelForUpgrade = (self.nextUpgrade?.level ?? Infinity) <= game.sailing.level;
             self.isLocked = ship.lockState == LockState.Locked;
             self.canUnlock = self._canUnlock();
             self.unlockCosts.updateQuantities(game);
@@ -114,8 +118,6 @@ export function ShipComponent(ship: Ship) {
             self.deckItems.update();
             self.rudder.update();
             self.ram.update();
-            self.currentUpgrade = ship.currentUpgrade;
-            self.nextUpgrade = ship.getNextUpgrade();
             // self.port.setEnabled(this.readyToSail);
             self.returnTime = tickToTime(ship.modifiedInterval / TICK_INTERVAL, true);
             // self.port.setData({

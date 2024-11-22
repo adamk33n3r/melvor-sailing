@@ -44,7 +44,7 @@
                 <img class="m-2" height="48px" :src="upgrade.media">
               </div>
               <div class="media-body text-left">
-                <div class="font-w600">{{ upgrade.name }}</div>
+                <div class="font-w600">{{ upgrade.name }}<div class="font-size-2sm ml-2 badge badge-pill badge-info">Level {{ upgrade.level }}</div></div>
                 <div class="font-w400 font-size-sm" v-html="upgrade.description"></div>
                 <div class="font-w400 font-size-sm" v-html="upgrade.stats"></div>
               </div>

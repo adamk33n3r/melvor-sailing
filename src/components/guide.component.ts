@@ -33,6 +33,7 @@ export function GuideComponent(sailing: Sailing) {
     ],
     upgrades: sailing.shipUpgrades.allObjects.map((upgrade) => ({
       name: upgrade.localID,
+      level: upgrade.level,
       media: upgrade.media,
       description: upgrade.description,
       stats: upgrade.stats.describeAsSpanHTML(),

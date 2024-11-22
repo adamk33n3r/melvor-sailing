@@ -28,8 +28,10 @@
         </div>
         <img class="bank-img-detail" style="max-width: 250px;" :src="currentUpgrade.media"/>
         <div class="col-12" v-if="nextUpgrade">
+          <div class="mt-2 font-w600">Upgrade</div>
           <div class="col-12 justify-content-center icon-size-48 mb-2">
             <quantity-icons id="upgradeCosts"></quantity-icons>
+            <div class="badge badge-pill mt-2" :class="{ 'badge-success': hasLevelForUpgrade, 'badge-danger': !hasLevelForUpgrade }">Level {{ nextUpgrade?.level }}</div>
           </div>
           <button class="btn btn-primary btn-block btn-lg" @click="upgradeShip()" :disabled="!canUpgrade">
             Upgrade to
