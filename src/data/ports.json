@@ -71,7 +71,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 250,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -132,7 +132,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 500,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -175,7 +175,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 1000,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -224,7 +224,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 2500,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -267,7 +267,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 4000,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -304,7 +304,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 6000,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -341,7 +341,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 8000,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -378,7 +378,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 10000,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -415,7 +415,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 100,
+                "combat": 12500,
                 "morale": 100,
                 "seafaring": 100
               },
@@ -470,7 +470,7 @@
                 }
               ],
               "sailingStats": {
-                "combat": 14000,
+                "combat": 15000,
                 "morale": 14000,
                 "seafaring": 14000
               },

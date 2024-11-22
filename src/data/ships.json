@@ -79,7 +79,7 @@
             },
             {
               "id": "Frigate",
-              "level": 30,
+              "level": 40,
               "description": "The Frigate is a large, slower ship that can carry more cargo, has more firepower, and is better suited for traveling to distant islands.",
               "realm": "melvorD:Melvor",
               "media": "img/ship.png",
@@ -128,7 +128,7 @@
             },
             {
               "id": "Submarine",
-              "level": 50,
+              "level": 60,
               "description": "The Submarine is a large submersible that can usually go undetected by enemies.",
               "realm": "melvorD:Melvor",
               "media": "img/submarine.png",
@@ -172,7 +172,7 @@
             },
             {
               "id": "Container",
-              "level": 70,
+              "level": 85,
               "description": "The Container is a very large, very slow ship that can carry more cargo than you would ever need as a single person.",
               "realm": "melvorD:Melvor",
               "media": "img/container-ship.png",
