@@ -26,33 +26,33 @@
                 "morale": 100,
                 "seafaring": 100
               },
-              "minRolls": 3,
+              "minRolls": 2,
               "maxRolls": 3,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Normal_Logs",
-                  "minQuantity": 100,
-                  "maxQuantity": 1000,
-                  "weight": 10
+                  "itemID": "melvorF:Pile_Of_Logs",
+                  "minQuantity": 5,
+                  "maxQuantity": 10,
+                  "weight": 1
                 },
                 {
-                  "itemID": "melvorD:Raw_Shrimp",
-                  "minQuantity": 100,
-                  "maxQuantity": 1000,
-                  "weight": 5
+                  "itemID": "melvorF:Crate_Of_Basic_Supplies",
+                  "minQuantity": 5,
+                  "maxQuantity": 10,
+                  "weight": 1
                 },
                 {
                   "itemID": "melvorD:Treasure_Chest",
-                  "minQuantity": 1,
-                  "maxQuantity": 1,
+                  "minQuantity": 2,
+                  "maxQuantity": 5,
                   "weight": 1
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 100,
-                  "max": 500
+                  "min": 1000,
+                  "max": 5000
                 }
               ]
             },
@@ -76,38 +76,44 @@
                 "seafaring": 100
               },
               "minRolls": 3,
-              "maxRolls": 3,
+              "maxRolls": 4,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Oak_Logs",
-                  "minQuantity": 100,
-                  "maxQuantity": 1000,
-                  "weight": 10
+                  "itemID": "melvorF:Pile_Of_Logs",
+                  "minQuantity": 5,
+                  "maxQuantity": 10,
+                  "weight": 1
                 },
                 {
-                  "itemID": "melvorD:Raw_Shrimp",
-                  "minQuantity": 100,
-                  "maxQuantity": 1000,
-                  "weight": 5
+                  "itemID": "melvorF:Pile_Of_Ores",
+                  "minQuantity": 5,
+                  "maxQuantity": 10,
+                  "weight": 1
                 },
                 {
-                  "itemID": "melvorD:Raw_Sardine",
-                  "minQuantity": 100,
-                  "maxQuantity": 1000,
-                  "weight": 5
+                  "itemID": "melvorF:Crate_Of_Basic_Supplies",
+                  "minQuantity": 5,
+                  "maxQuantity": 10,
+                  "weight": 1
                 },
                 {
                   "itemID": "melvorD:Treasure_Chest",
+                  "minQuantity": 2,
+                  "maxQuantity": 5,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorD:Standard_Chest",
                   "minQuantity": 1,
-                  "maxQuantity": 1,
-                  "weight": 2
+                  "maxQuantity": 2,
+                  "weight": 1
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 500,
-                  "max": 1000
+                  "min": 5000,
+                  "max": 7500
                 }
               ]
             },
@@ -130,8 +136,8 @@
                 "morale": 100,
                 "seafaring": 100
               },
-              "minRolls": 1,
-              "maxRolls": 2,
+              "minRolls": 5,
+              "maxRolls": 10,
               "lootTable": [
                 {
                   "itemID": "melvorD:Egg_Chest",
@@ -141,16 +147,16 @@
                 },
                 {
                   "itemID": "melvorD:Bird_Nest",
-                  "minQuantity": 1,
-                  "maxQuantity": 3,
+                  "minQuantity": 10,
+                  "maxQuantity": 30,
                   "weight": 1
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 1000,
-                  "max": 2000
+                  "min": 7500,
+                  "max": 10000
                 }
               ]
             },
@@ -173,21 +179,33 @@
                 "morale": 100,
                 "seafaring": 100
               },
-              "minRolls": 1,
-              "maxRolls": 2,
+              "minRolls": 3,
+              "maxRolls": 5,
               "lootTable": [
+                {
+                  "itemID": "melvorD:Standard_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 2
+                },
                 {
                   "itemID": "melvorD:Bandit_Chest",
                   "minQuantity": 1,
-                  "maxQuantity": 1,
+                  "maxQuantity": 2,
+                  "weight": 2
+                },
+                {
+                  "itemID": "melvorD:Magic_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 2,
                   "weight": 1
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 2000,
-                  "max": 5000
+                  "min": 10000,
+                  "max": 12500
                 }
               ]
             },
@@ -210,21 +228,27 @@
                 "morale": 100,
                 "seafaring": 100
               },
-              "minRolls": 1,
-              "maxRolls": 2,
+              "minRolls": 3,
+              "maxRolls": 5,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Pirate_Booty",
+                  "itemID": "melvorD:Spider_Chest",
                   "minQuantity": 1,
-                  "maxQuantity": 1,
+                  "maxQuantity": 2,
+                  "weight": 2
+                },
+                {
+                  "itemID": "melvorF:Miolite_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 2,
                   "weight": 1
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 5000,
-                  "max": 10000
+                  "min": 12500,
+                  "max": 15000
                 }
               ]
             },
@@ -247,20 +271,20 @@
                 "morale": 100,
                 "seafaring": 100
               },
-              "minRolls": 1,
-              "maxRolls": 3,
+              "minRolls": 3,
+              "maxRolls": 5,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Magic_Chest",
+                  "itemID": "melvorD:Pirate_Booty",
                   "minQuantity": 1,
-                  "maxQuantity": 1,
+                  "maxQuantity": 2,
                   "weight": 1
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 10000,
+                  "min": 15000,
                   "max": 50000
                 }
               ]
@@ -288,7 +312,7 @@
               "maxRolls": 3,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Spider_Chest",
+                  "itemID": "melvorF:Elder_Chest",
                   "minQuantity": 1,
                   "maxQuantity": 1,
                   "weight": 1
@@ -322,19 +346,19 @@
                 "seafaring": 100
               },
               "minRolls": 1,
-              "maxRolls": 2,
+              "maxRolls": 3,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Standard_Chest",
+                  "itemID": "melvorF:Elder_Chest",
                   "minQuantity": 1,
-                  "maxQuantity": 1,
+                  "maxQuantity": 2,
                   "weight": 1
                 }
               ],
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 50000,
+                  "min": 75000,
                   "max": 150000
                 }
               ]
@@ -371,7 +395,7 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 75000,
+                  "min": 100000,
                   "max": 250000
                 }
               ]
@@ -396,10 +420,28 @@
                 "seafaring": 100
               },
               "minRolls": 1,
-              "maxRolls": 3,
+              "maxRolls": 5,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Chest_of_Witwix",
+                  "itemID": "melvorF:Air_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorF:Water_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorF:Earth_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 1
+                },
+                {
+                  "itemID": "melvorF:Fire_Chest",
                   "minQuantity": 1,
                   "maxQuantity": 1,
                   "weight": 1
@@ -408,8 +450,8 @@
               "currencyDrops": [
                 {
                   "currencyID": "melvorD:GP",
-                  "min": 100000,
-                  "max": 1000000
+                  "min": 150000,
+                  "max": 500000
                 }
               ]
             },
@@ -432,67 +474,31 @@
                 "morale": 14000,
                 "seafaring": 14000
               },
-              "minRolls": 3,
+              "minRolls": 1,
               "maxRolls": 5,
               "lootTable": [
                 {
-                  "itemID": "melvorD:Treasure_Chest",
+                  "itemID": "melvorF:Scroll_of_Aeris",
                   "minQuantity": 1,
-                  "maxQuantity": 3,
+                  "maxQuantity": 1,
                   "weight": 1
                 },
                 {
-                  "itemID": "melvorD:Egg_Chest",
-                  "minQuantity": 3,
-                  "maxQuantity": 10,
-                  "weight": 1
-                },
-                {
-                  "itemID": "melvorD:Bird_Nest",
-                  "minQuantity": 3,
-                  "maxQuantity": 10,
-                  "weight": 1
-                },
-                {
-                  "itemID": "melvorD:Bandit_Chest",
+                  "itemID": "melvorF:Scroll_of_Glacia",
                   "minQuantity": 1,
-                  "maxQuantity": 3,
+                  "maxQuantity": 1,
                   "weight": 1
                 },
                 {
-                  "itemID": "melvorD:Pirate_Booty",
+                  "itemID": "melvorF:Scroll_of_Terran",
                   "minQuantity": 1,
-                  "maxQuantity": 3,
+                  "maxQuantity": 1,
                   "weight": 1
                 },
                 {
-                  "itemID": "melvorD:Magic_Chest",
+                  "itemID": "melvorF:Scroll_of_Ragnar",
                   "minQuantity": 1,
-                  "maxQuantity": 3,
-                  "weight": 1
-                },
-                {
-                  "itemID": "melvorD:Spider_Chest",
-                  "minQuantity": 1,
-                  "maxQuantity": 3,
-                  "weight": 1
-                },
-                {
-                  "itemID": "melvorD:Standard_Chest",
-                  "minQuantity": 1,
-                  "maxQuantity": 3,
-                  "weight": 1
-                },
-                {
-                  "itemID": "melvorD:Chest_of_Witwix",
-                  "minQuantity": 1,
-                  "maxQuantity": 3,
-                  "weight": 1
-                },
-                {
-                  "itemID": "melvorD:Elite_Chest",
-                  "minQuantity": 1,
-                  "maxQuantity": 3,
+                  "maxQuantity": 1,
                   "weight": 1
                 }
               ],

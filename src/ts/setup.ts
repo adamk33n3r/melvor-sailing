@@ -1,4 +1,4 @@
-// Data
+import pkg from '../../package.json';
 // Game data for registration
 import ModData from '../data/sailing.json';
 import AoDData from '../data/sailing-aod.json';
@@ -46,6 +46,7 @@ export async function setup(ctx: Modding.ModContext) {
   };
 
   const sailing = game.registerSkill(game.registeredNamespaces.getNamespaceSafe(Constants.MOD_NAMESPACE), Sailing);
+  sailing.logger.info(`Loading Sailing v${pkg.version}`);
   sailing.init(ctx);
   game.sailing = sailing;
 
