@@ -238,8 +238,26 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     this.rollForAncientRelics(ship.dock.level, ship.dock.realm);
     this.rollForPets(ship.interval, ship.dock);
 
+    const combatMod = this.getCombatModifier(ship.dock);
+    const chance = Math.min(1, combatMod / ship.selectedPort.sailingStats.combat);
+    const success = rollPercentage(chance * 100);
+    if (success) {
+      this.stats.inc(SailingStats.TripsSuccessful);
+    } else {
+      rewards.applyRate(0.5);
+      this.stats.inc(SailingStats.TripsFailed);
+    }
+
     const dummyHost = document.createElement('div');
-    ui.create(LootComponent(ship.dock, ship.selectedPort, rewards, masteryXPToAdd, portMasteryXPToAdd, masteryPoolXPToAdd), dummyHost);
+    ui.create(LootComponent(
+      ship.dock,
+      ship.selectedPort,
+      rewards,
+      masteryXPToAdd,
+      portMasteryXPToAdd,
+      masteryPoolXPToAdd,
+      success,
+    ), dummyHost);
     addModalToQueue({
       iconHtml: `<img class="mbts__logo-img" src="${game.sailing.media}" />`,
       title: ship.selectedPort.name,
@@ -254,14 +272,6 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
         // }
         rewards.setSource('Sailing.Loot');
 
-        const combatMod = this.getCombatModifier(ship.dock);
-        const chance = Math.min(1, combatMod / ship.selectedPort.sailingStats.combat);
-        if (rollPercentage(chance * 100)) {
-          this.stats.inc(SailingStats.TripsSuccessful);
-        } else {
-          rewards.applyRate(0.5);
-          this.stats.inc(SailingStats.TripsFailed);
-        }
         this.stats.inc(SailingStats.TripsCompleted);
         this.stats.add(SailingStats.TimeSpent, ship.selectedPort.interval);
         rewards._items.forEach((quantity, item) => {

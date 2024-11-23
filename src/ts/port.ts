@@ -257,7 +257,7 @@ export class SkillPort extends Port {
                 },
             );
         }
-        return chanceData.concat(recipes.slice(0, this.skill instanceof Cooking ? 5 : 10).map((recipe, idx) => {
+        return chanceData.concat(recipes.slice(0, this.getRecipeCount()).map((recipe, idx) => {
             lowChance += 5;
             // Last recipe is always 100% so that you always get an item
             const isLast = idx === recipes.length - 1;
@@ -268,6 +268,17 @@ export class SkillPort extends Port {
                 high: isLast ? 100 : lowChance * 2,
             };
         }));
+    }
+
+    private getRecipeCount(): number {
+        if (
+            this.skill instanceof Cooking ||
+            this.skill instanceof Runecrafting
+        ) {
+            return 5;
+        }
+
+        return 10;
     }
 
     public getProductRecipes(minLevel?: number, maxLevel?: number): SingleProductRecipe[] {

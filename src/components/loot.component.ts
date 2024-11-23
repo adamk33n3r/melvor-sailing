@@ -8,6 +8,7 @@ export function LootComponent(
   masteryXP: number,
   portMasteryXP: number,
   masteryPoolXP: number,
+  success: boolean,
 ) {
   return {
     $template: '#sailing-loot-template',
@@ -20,5 +21,6 @@ export function LootComponent(
     portMasteryXP: formatFixed(portMasteryXP, 0),
     masteryPoolXP: formatFixed(masteryPoolXP, 0),
     skillIcon: game.sailing.media,
+    success,
   };
 }

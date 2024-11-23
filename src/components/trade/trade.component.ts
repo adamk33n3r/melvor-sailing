@@ -14,6 +14,7 @@ export function TradeComponent(ship: Ship) {
     readyToSail: true,
     onTrip: false,
     hasReturned: false,
+    successChance: 0,
     returnTimer: 'Done',
     xpIcon: null as unknown as XpIconElement,
     masteryIcon: null as unknown as MasteryXpIconElement,
@@ -97,6 +98,8 @@ export function TradeComponent(ship: Ship) {
       if (ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
       this.selectedPort = ship.selectedPort;
       this.currentUpgrade = ship.currentUpgrade;
+      const combatMod = game.sailing.getCombatModifier(ship.dock);
+      this.successChance = Math.round(Math.min(1, combatMod / ship.selectedPort.sailingStats.combat) * 100);
 
       game.sailing.updateActionMasteries();
       this.updateGrants();
