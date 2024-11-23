@@ -1,8 +1,8 @@
 <template id="sailing-port-template">
-  <div class="col" :id="port.localID" @vue:mounted="mounted" v-show="!isHidden">
+  <div class="col sailing-port mt-2" :id="port.localID" @vue:mounted="mounted" v-show="!isHidden">
     <div
       @click="selectPort()"
-      class="block block-content block-content-full block-rounded block-link-pop border-top border-sailing border-4x text-center"
+      class="sailing-port-block block block-content block-content-full block-rounded block-link-pop border-top border-sailing border-4x text-center"
       :class="selectMode && { 'selected-port': isSelected, 'unselected-port': !isSelected, 'pointer-enabled': !isLocked }"
     >
 

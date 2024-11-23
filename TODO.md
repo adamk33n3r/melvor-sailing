@@ -5,6 +5,7 @@
 + dont show locked ships in the explore tab
 + filter out locked skill ports from sorted mastery actions
 + make docks show ship upgrade media
++ change port selection to be like the new item bank glow
 - make a pass at upgrade costs
 - make a pass at port stats and skill ports distance
 

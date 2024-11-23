@@ -14,19 +14,18 @@
   border-color: #0077cc !important;
 }
 
-.selected-port {
+/* Grr melvor likes !important, so I gotta have a lot of specificity */
+.sailing-port > .sailing-port-block.selected-port {
   border-left-style: solid;
   border-bottom-style: solid;
   border-right-style: solid;
   border-color: #6ebef7 !important;
+  box-shadow: 0 0 10px #6ebef7 !important;
+  transition: box-shadow 0.1s linear;
 }
-.unselected-port {
-  border-left-style: solid;
-  border-bottom-style: solid;
-  border-right-style: solid;
-  border-left-color: transparent !important;
-  border-bottom-color: transparent !important;
-  border-right-color: transparent !important;
+.sailing-port > .sailing-port-block.unselected-port {
+  padding-left: calc(1.25rem + 4px);
+  padding-right: calc(1.25rem + 4px);
 }
 
 .port-loot-btn {
