@@ -6,11 +6,11 @@
 + filter out locked skill ports from sorted mastery actions
 + make docks show ship upgrade media
 + change port selection to be like the new item bank glow
-- add a message for when you fail the trip
-- add combat percentage chance to port on trade page
++ add a message for when you fail the trip
++ add combat percentage chance to port on trade page
 + change the combat badge to yellow on the ports page instead of red
-- make a pass at upgrade costs
-- make a pass at port stats and skill ports distance
++ make a pass at upgrade costs
++ make a pass at port stats and skill ports distance
 
 # Things to do before v2 release
 
@@ -18,4 +18,4 @@
   - specifically make sure the locked status, upgrades, and the mastery level/xp are transfered
 
 # v2.1
-- crafting skill ports
+- crafting skill ports (herblore, crafting, smithing, etc)
