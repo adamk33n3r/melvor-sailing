@@ -210,10 +210,10 @@
               ]
             },
             {
-              "id": "piratesCove",
-              "name": "Pirate's Cove",
-              "description": "A hidden cove known for its pirate activity and secret treasures.",
-              "media": "melvor:assets/media/bank/pirate_booty.png",
+              "id": "corsairsRetreat",
+              "name": "Corsair's Retreat",
+              "description": "A secluded retreat favored by corsairs for its strategic location.",
+              "media": "melvor:assets/media/bank/spider_chest.png",
               "distance": 240,
               "type": "normal",
               "requirements": [
@@ -253,10 +253,10 @@
               ]
             },
             {
-              "id": "corsairsRetreat",
-              "name": "Corsair's Retreat",
-              "description": "A secluded retreat favored by corsairs for its strategic location.",
-              "media": "melvor:assets/media/bank/magic_chest.png",
+              "id": "piratesCove",
+              "name": "Pirate's Cove",
+              "description": "A hidden cove known for its pirate activity and secret treasures.",
+              "media": "melvor:assets/media/bank/pirate_booty.png",
               "distance": 360,
               "type": "normal",
               "requirements": [
@@ -293,7 +293,7 @@
               "id": "navigatorsNook",
               "name": "Navigator's Nook",
               "description": "A well-charted port where navigators gather to share maps and tales.",
-              "media": "melvor:assets/media/bank/spider_chest.png",
+              "media": "melvor:assets/media/bank/ice_chest.png",
               "distance": 480,
               "type": "normal",
               "requirements": [
@@ -311,6 +311,12 @@
               "minRolls": 1,
               "maxRolls": 3,
               "lootTable": [
+                {
+                  "itemID": "melvorD:Frozen_Chest",
+                  "minQuantity": 1,
+                  "maxQuantity": 1,
+                  "weight": 3
+                },
                 {
                   "itemID": "melvorF:Elder_Chest",
                   "minQuantity": 1,
@@ -404,7 +410,7 @@
               "id": "roguesRefuge",
               "name": "Rogue's Refuge",
               "description": "A hidden port where rogues gather to plan their next heist.",
-              "media": "melvor:assets/media/bank/chest_of_witwix.png",
+              "media": "melvor:assets/media/bank/fire_chest.png",
               "distance": 1080,
               "type": "normal",
               "requirements": [
