@@ -26,6 +26,7 @@
 .sailing-port > .sailing-port-block.unselected-port {
   padding-left: calc(1.25rem + 4px);
   padding-right: calc(1.25rem + 4px);
+  padding-bottom: calc(1.25rem + 4px);
 }
 
 .port-loot-btn {
