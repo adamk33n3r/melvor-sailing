@@ -162,8 +162,7 @@ export class Ship extends NamespacedObject {
     }
 
     get modifiedInterval() {
-        return this.selectedPort.modifiedInterval;
-        // return this.game.sailing.modifyInterval(this.interval, this.action);
+        return this.game.sailing.modifyInterval(this.interval, this.dock);
     }
 
     get scaledForMasteryInterval() {

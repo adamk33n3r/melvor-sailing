@@ -3,30 +3,6 @@ import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
 import { formatTime, getElementByIdAndRemoveId } from '../ts/util';
 import { TradeComponent } from './trade/trade.component';
-// import { DropdownComponent } from './dropdown/dropdown.component';
-
-// function getShipOptions() {
-//     return game.sailing.ships.allObjects.map((s: Ship) => {
-//         // Make hover show equipment?
-
-//         // const hasLevel = s.hasLevelRequirements();
-//         // const levelReqs = s.getLevelRequirements();
-//         // const hoverEle = createElement('div');
-//         // for (const req of levelReqs) {
-//         //     const reqSpan = createElement('span', { className: 'font-size-sm' });
-//         //     reqSpan.append(...req.getNodes('skill-icon-xs mr-1'));
-//         //     toggleDangerSuccess(reqSpan, req.isMet());
-//         //     hoverEle.append(reqSpan, createElement('br'));
-//         // }
-//         return {
-//             name: s.name,
-//             value: s,
-//             media: s.media,
-//             disabled: s.lockState === LockState.Locked || s.state !== ShipState.ReadyToSail,
-//             // hover: hoverEle,
-//         };
-//     });
-// }
 
 interface PortComponentOptions {
     onSelect?: () => void;
@@ -66,14 +42,7 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
             this.isHidden = port.isSkillPort() && !port.isUnlocked();
             this.isLocked = !this.hasLevel || this.isHidden;
             this.hasCombat = game.sailing.getCombatModifier() >= port.sailingStats.combat;
-            // self.isLocked = ship.lockState == LockState.Locked;
-            // self.ship.setData({
-            //     selected: { name: self.selectedShip.name, value: self.selectedShip, media: self.selectedShip.media },
-            //     options: getShipOptions(),
-            // });
             this.updateGrants();
-            // self.updateProgressBar();
-            // self.updateUpgradeCosts();
         },
         updateGrants() {
             if (options?.ship) {
@@ -96,24 +65,10 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
             }
             this.xpIcon.setXP(game.sailing.modifyXP(port.baseExperience, options?.ship?.dock), port.baseExperience);
             this.xpIcon.setSources(game.sailing.getXPSources(options?.ship?.dock));
-            this.intervalIcon.setCustomInterval(formatTime(port.modifiedInterval/1000), game.sailing.getIntervalSources(port));
+            this.intervalIcon.setCustomInterval(formatTime((options?.ship?.modifiedInterval ?? Infinity) / 1000), game.sailing.getIntervalSources(port));
         },
-        // updateProgressBar() {
-        //     if (ship.onTrip) {
-        //         self.progressBar.animateProgressFromTimer(ship.sailTimer);
-        //     } else {
-        //         self.progressBar.stopAnimation();
-        //     }
-        // },
         mounted() {
-            // HACK: This is so we can reference the reactive proxy object `this` in the dropdown callback
-            // self = this;
             const parent = getElementByIdAndRemoveId(port.localID, host);
-            // ui.create(self.hull, getElementByIdAndRemoveId('hull-grid', parent));
-            // ui.create(self.deckItems, getElementByIdAndRemoveId('deck-grid', parent));
-            // ui.create(self.rudder, getElementByIdAndRemoveId('rudder-grid', parent));
-            // ui.create(self.ram, getElementByIdAndRemoveId('ram-grid', parent));
-            // ui.create(this.ship, getElementByIdAndRemoveId('dropdown', parent));
 
             const grantsContainer = getElementByIdAndRemoveId('grants-container', parent);
 
@@ -124,14 +79,6 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
 
             this.update();
         },
-
-        // setSail() {
-        //     ship.setSail();
-        //     self.updateProgressBar();
-        // },
-        // collectLoot() {
-        //     ship.collectLoot();
-        // },
         async viewLoot() {
             const rollMod = game.sailing.getRollModifier();
             return SwalLocale.fire({

@@ -87,10 +87,6 @@ export abstract class Port extends SailingAction {
         return this.distance * 60 * 1000;
     }
 
-    get modifiedInterval() {
-        return this.game.sailing.modifyInterval(this.interval, this);
-    }
-
     get scaledForMasteryInterval() {
         return this.distance * 1000;
     }
