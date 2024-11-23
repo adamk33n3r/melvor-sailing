@@ -775,38 +775,6 @@
               ],
               "minRolls": 1000,
               "maxRolls": 1600
-            },
-            {
-              "id": "herbloreGuild",
-              "name": "Herblore Guild",
-              "description": "The Herblore Guild is where you go to get your fix.",
-              "distance": 600,
-              "type": "skill",
-              "skillID": "melvorD:Herblore",
-              "sailingStats": {
-                "combat": 10000
-              },
-              "requirements": [
-                {
-                  "type": "SkillLevel",
-                  "skillID": "melvorD:Herblore",
-                  "level": 5
-                },
-                {
-                  "type": "SkillLevel",
-                  "skillID": "sailing:Sailing",
-                  "level": 70
-                }
-              ],
-              "currencyDrops": [
-                {
-                  "currencyID": "melvorD:GP",
-                  "min": 75000,
-                  "max": 150000
-                }
-              ],
-              "minRolls": 200,
-              "maxRolls": 300
             }
           ]
         }
