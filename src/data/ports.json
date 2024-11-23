@@ -539,8 +539,8 @@
                   "max": 12500
                 }
               ],
-              "minRolls": 200,
-              "maxRolls": 300
+              "minRolls": 500,
+              "maxRolls": 1000
             },
             {
               "id": "woodcuttingGuild",
@@ -613,7 +613,7 @@
                   "max": 12500
                 }
               ],
-              "minRolls": 200,
+              "minRolls": 100,
               "maxRolls": 300
             },
             {
@@ -645,8 +645,8 @@
                   "max": 12500
                 }
               ],
-              "minRolls": 200,
-              "maxRolls": 300
+              "minRolls": 500,
+              "maxRolls": 1000
             },
             {
               "id": "cookingGuild",
@@ -677,8 +677,8 @@
                   "max": 12500
                 }
               ],
-              "minRolls": 100,
-              "maxRolls": 150
+              "minRolls": 500,
+              "maxRolls": 1000
             },
             {
               "id": "farmingGuild",
@@ -686,7 +686,7 @@
               "description": "The Farming Guild has many plots to grow a variety of crops, herbs, and trees.",
               "distance": 180,
               "type": "skill",
-              "skillID": "melvorD:Cooking",
+              "skillID": "melvorD:Farming",
               "sailingStats": {
                 "combat": 1000
               },
@@ -709,8 +709,8 @@
                   "max": 12500
                 }
               ],
-              "minRolls": 100,
-              "maxRolls": 150
+              "minRolls": 500,
+              "maxRolls": 1000
             },
             {
               "id": "craftingGuild",
@@ -742,7 +742,7 @@
                 }
               ],
               "minRolls": 100,
-              "maxRolls": 150
+              "maxRolls": 300
             },
             {
               "id": "runecraftingGuild",
