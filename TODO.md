@@ -6,6 +6,9 @@
 + filter out locked skill ports from sorted mastery actions
 + make docks show ship upgrade media
 + change port selection to be like the new item bank glow
+- add a message for when you fail the trip
+- add combat percentage chance to port on trade page
++ change the combat badge to yellow on the ports page instead of red
 - make a pass at upgrade costs
 - make a pass at port stats and skill ports distance
 

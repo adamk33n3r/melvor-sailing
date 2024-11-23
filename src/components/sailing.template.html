@@ -28,9 +28,9 @@
           <div class="d-lg-block mt-2 mt-lg-0 d-none" id="horizontal-navigation-sailing">
             <ul class="nav-main nav-main-horizontal nav-main-hover nav-main-horizontal-center">
               <li class="nav-main-item">
-                <a @click="changeCategory($el, exploreContainer)" class="nav-main-link active township-tab-selected" data-toggle="class-toggle" data-target="#horizontal-navigation-sailing" data-class="d-none" id="sailing-explore-menu">
-                  <img class="skill-icon-sm m-0 mr-2" :src="exploreImg">
-                  <span class="nav-main-link-name font-w600"><lang-string lang-id="SAILING_MENU_EXPLORE">Explore</lang-string></span>
+                <a @click="changeCategory($el, tradeContainer)" class="nav-main-link active township-tab-selected" data-toggle="class-toggle" data-target="#horizontal-navigation-sailing" data-class="d-none" id="sailing-trade-menu">
+                  <img class="skill-icon-sm m-0 mr-2" :src="tradeImg">
+                  <span class="nav-main-link-name font-w600"><lang-string lang-id="SAILING_MENU_TRADE">Trade</lang-string></span>
                 </a>
               </li>
               <li class="nav-main-item">
@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <div class="row row-deck" id="explore-container">
+    <div class="row row-deck" id="trade-container">
       <div class="col-12" v-show="showShipsButton">
         <button class="btn btn-primary btn-block btn-lg" @click="changeCategory(shipMenu, shipContainer)">Unlock your first ship!</button>
       </div>

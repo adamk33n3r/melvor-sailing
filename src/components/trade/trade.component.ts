@@ -4,9 +4,9 @@ import { LockState, Ship, ShipState } from '../../ts/ship';
 import { formatTime, getElementByIdAndRemoveId, tickToTime } from '../../ts/util';
 import { PortComponent } from '../port.component';
 
-export function ExploreComponent(ship: Ship) {
+export function TradeComponent(ship: Ship) {
   return {
-    $template: '#sailing-explore-template',
+    $template: '#sailing-trade-template',
     ship,
     selectedPort: ship.selectedPort,
     currentUpgrade: ship.currentUpgrade,
@@ -23,7 +23,7 @@ export function ExploreComponent(ship: Ship) {
     shipInfo: null as unknown as Instance,
     portInfo: null as unknown as Instance,
     mounted() {
-      const parent = document.getElementById(`explore:${ship.localID}`);
+      const parent = document.getElementById(`trade:${ship.localID}`);
       if (!parent) throw new Error(`Could not find parent element with id: ${ship.localID}`);
 
       setInterval(() => {
@@ -162,7 +162,7 @@ export function ExploreComponent(ship: Ship) {
             }
           },
           ship,
-          exploreComponent: this,
+          tradeComponent: this,
         });
         portComponents.push(portComponent);
         ui.create(portComponent, html);

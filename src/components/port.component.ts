@@ -2,7 +2,7 @@ import { Ship } from '../ts/ship';
 import { Constants } from '../ts/Constants';
 import { Port } from '../ts/port';
 import { formatTime, getElementByIdAndRemoveId } from '../ts/util';
-import { ExploreComponent } from './explore/explore.component';
+import { TradeComponent } from './trade/trade.component';
 // import { DropdownComponent } from './dropdown/dropdown.component';
 
 // function getShipOptions() {
@@ -31,7 +31,7 @@ import { ExploreComponent } from './explore/explore.component';
 interface PortComponentOptions {
     onSelect?: () => void;
     ship?: Ship;
-    exploreComponent?: ReturnType<typeof ExploreComponent>;
+    tradeComponent?: ReturnType<typeof TradeComponent>;
     showLoot?: boolean;
 }
 
@@ -141,8 +141,8 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
                     `${Math.round(port.minRolls * rollMod)} - ${Math.round(port.maxRolls * rollMod)} Rolls<br>` +
                     port.getPossibleLoot(),
             }).then(async () => {
-                if (options?.exploreComponent) {
-                    await options.exploreComponent.selectPort();
+                if (options?.tradeComponent) {
+                    await options.tradeComponent.selectPort();
                 }
             });
         },

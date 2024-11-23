@@ -1,7 +1,7 @@
 import { Sailing } from '../ts/sailing';
 import { LockState } from '../ts/ship';
 import { getElementByIdAndRemoveId } from '../ts/util';
-import { ExploreComponent } from './explore/explore.component';
+import { TradeComponent } from './trade/trade.component';
 import { PortComponent } from './port.component';
 import { ShipComponent } from './ship.component';
 
@@ -9,17 +9,17 @@ export function SailingPageComponent(sailing: Sailing) {
   return {
     $template: '#sailing-page-template',
     infoAlert: null as unknown as HTMLElement,
-    exploreImg: sailing.getMediaURL('img/pirate.png'),
+    tradeImg: sailing.getMediaURL('melvor:assets/media/main/coins.png'),
     shipsImg: sailing.getMediaURL('img/sailing-boat.png'),
     portsImg: sailing.getMediaURL('img/port.png'),
     showShipsButton: true,
-    exploreComponents: [] as ReturnType<typeof ExploreComponent>[],
+    tradeComponents: [] as ReturnType<typeof TradeComponent>[],
     shipComponents: [] as ReturnType<typeof ShipComponent>[],
     portComponents: [] as ReturnType<typeof PortComponent>[],
-    exploreMenu: null as unknown as HTMLElement,
+    tradeMenu: null as unknown as HTMLElement,
     shipMenu: null as unknown as HTMLElement,
     portMenu: null as unknown as HTMLElement,
-    exploreContainer: null as unknown as HTMLElement,
+    tradeContainer: null as unknown as HTMLElement,
     shipContainer: null as unknown as HTMLElement,
     portContainer: null as unknown as HTMLElement,
     mounted() {
@@ -30,11 +30,11 @@ export function SailingPageComponent(sailing: Sailing) {
         this.infoAlert.classList.add('d-none');
       }
 
-      this.exploreMenu = getElementByIdAndRemoveId('sailing-explore-menu', parent);
+      this.tradeMenu = getElementByIdAndRemoveId('sailing-trade-menu', parent);
       this.shipMenu = getElementByIdAndRemoveId('sailing-ship-menu', parent);
       this.portMenu = getElementByIdAndRemoveId('sailing-port-menu', parent);
 
-      this.exploreContainer = getElementByIdAndRemoveId('explore-container', parent);
+      this.tradeContainer = getElementByIdAndRemoveId('trade-container', parent);
       this.shipContainer = getElementByIdAndRemoveId('ship-container', parent);
       this.portContainer = getElementByIdAndRemoveId('port-container', parent);
 
@@ -43,9 +43,9 @@ export function SailingPageComponent(sailing: Sailing) {
         this.shipComponents.push(shipComponent);
         ui.create(shipComponent, this.shipContainer);
 
-        const exploreComponent = ExploreComponent(ship);
-        this.exploreComponents.push(exploreComponent);
-        ui.create(exploreComponent, this.exploreContainer);
+        const tradeComponent = TradeComponent(ship);
+        this.tradeComponents.push(tradeComponent);
+        ui.create(tradeComponent, this.tradeContainer);
       });
 
       game.sailing.ports.forEach((port) => {
@@ -56,15 +56,15 @@ export function SailingPageComponent(sailing: Sailing) {
         ui.create(portComponent, this.portContainer);
       });
 
-      this.changeCategory(this.exploreMenu, this.exploreContainer);
+      this.changeCategory(this.tradeMenu, this.tradeContainer);
       // this.changeCategory(this.shipMenu, this.shipContainer);
       // this.changeCategory(this.portMenu, this.portContainer);
     },
     update() {
       this.showShipsButton = sailing.ships.every((ship) => ship.lockState == LockState.Locked);
       game.sailing.logger.debug('SailingPageComponent.update');
-      this.exploreComponents.forEach((exploreComponent) => {
-        exploreComponent.update();
+      this.tradeComponents.forEach((tradeComponent) => {
+        tradeComponent.update();
       });
       this.shipComponents.forEach((shipComponent) => {
         shipComponent.update();
@@ -74,11 +74,11 @@ export function SailingPageComponent(sailing: Sailing) {
       });
     },
     changeCategory(ele: HTMLElement, category: HTMLElement) {
-      this.exploreMenu.classList.remove('township-tab-selected');
+      this.tradeMenu.classList.remove('township-tab-selected');
       this.shipMenu.classList.remove('township-tab-selected');
       this.portMenu.classList.remove('township-tab-selected');
       ele.classList.add('township-tab-selected');
-      this.exploreContainer.classList.add('d-none');
+      this.tradeContainer.classList.add('d-none');
       this.shipContainer.classList.add('d-none');
       this.portContainer.classList.add('d-none');
       category.classList.remove('d-none');

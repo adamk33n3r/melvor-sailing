@@ -14,5 +14,4 @@ Set wood textures of hulls
 <p><a title="container ship icons" href="https://www.flaticon.com/free-icons/container-ship">Container ship icons created by Freepik - Flaticon</a></p>
 <p><a title="cannon icons" href="https://www.flaticon.com/free-icons/cannon">Cannon icons created by Freepik - Flaticon</a></p>
 <p><a title="anchor icons" href="https://www.flaticon.com/free-icons/anchor">Anchor icons created by Smashicons - Flaticon</a></p>
-<p><a href="https://www.flaticon.com/free-icons/shipping-and-delivery" title="shipping and delivery icons">Shipping and delivery icons created by Paul J. - Flaticon</a></p>
-<p><a href="https://www.flaticon.com/free-icons/pirate" title="pirate icons">Pirate icons created by max.icons - Flaticon</a></p>
+<p><a href="https://www.flaticon.com/free-icons/harbor" title="harbor icons">Harbor icons created by Flat Icons - Flaticon</a></p>
