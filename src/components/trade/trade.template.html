@@ -9,11 +9,8 @@
             class="block block-content block-content-full block-rounded block-link-pop border-top border-sailing border-4x text-center d-flex flex-column"
           >
             <i class="port-loot-btn fa fa-fw fa-info-circle" id="ship-info"></i>
-            <img class="bank-img-detail" style="max-width: 250px;" :src="currentUpgrade.media" />
-            <div class="mt-2 badge badge-pill" :class="{ 'badge-success': successChance >= 100, 'badge-warning': successChance < 100 }">
-              Success Chance: {{ successChance }}%
-            </div>
-            <div class="mt-2">
+            <img class="shop-img align-self-center" :src="currentUpgrade.media" />
+            <div>
               <button class="btn btn-primary btn-block btn-lg" @click="setSail()" v-if="readyToSail">
                 Set Sail
               </button>
@@ -23,6 +20,9 @@
               <button class="btn btn-success btn-block btn-lg" @click="collectLoot()" v-if="hasReturned">
                 Collect Loot
               </button>
+            </div>
+            <div class="mt-2 badge badge-pill" :class="{ 'badge-success': successChance >= 100, 'badge-warning': successChance < 100 }">
+              Success Chance: {{ successChance }}%
             </div>
             <progress-bar class="mt-3 progress-height-5" id="sailing-progress-bar"></progress-bar>
             <div>{{ returnTimer }}</div>
