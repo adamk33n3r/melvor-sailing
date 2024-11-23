@@ -325,3 +325,15 @@ export class DummyShip extends Ship {
         );
     }
 }
+
+export class DummyDock extends Dock {
+    constructor(namespace: DataNamespace, localID: string, game: Game) {
+        super(namespace, {
+            id: localID,
+            baseExperience: 0,
+            level: 1,
+            currencyCosts: [],
+            itemCosts: [],
+        }, game);
+    }
+}

@@ -1,5 +1,5 @@
 import { SailingPageComponent } from '../components/sailing';
-import { Ship, Dock, ShipState, DummyShip, DockData, ShipUpgrade, ShipUpgradeData } from './ship';
+import { Ship, Dock, ShipState, DummyShip, DockData, ShipUpgrade, ShipUpgradeData, DummyDock } from './ship';
 import { Constants } from './Constants';
 import { UserInterface } from './ui';
 import { NormalPort, Port, PortData, SkillPort } from './port';
@@ -472,7 +472,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   }
 
   public updateActionMasteries() {
-    for (const action of this.actions.registeredObjects.values()) {
+    for (const action of this.actions.allObjects) {
       this.renderQueue.actionMastery.add(action);
     }
   }
@@ -606,6 +606,12 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
       this.rareDrops.push(rareDrop);
     }
 
+    // for upgrading v1 data to v2
+    this.actions.registerObject(new DummyDock(namespace, 'Boat1', this.game));
+    this.actions.registerObject(new DummyDock(namespace, 'Boat2', this.game));
+    this.actions.registerObject(new DummyDock(namespace, 'Boat3', this.game));
+    this.actions.registerObject(new DummyDock(namespace, 'Boat4', this.game));
+
     this.logger.debug('end of postDataRegistration');
   }
 
@@ -646,6 +652,18 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     if (this.saveVersion >= 2) {
       this.stats.decode(reader, version);
     }
+
+    // Transfer ship action mastery to docks
+    this.actions.filter((action) => action instanceof DummyDock).forEach((action) => {
+      this.actions.registeredObjects.delete(action.id);
+      if (this.saveVersion === 1) {
+        const actionMastery = this.actionMastery.get(action);
+        if (actionMastery === undefined) return;
+        const num = action.localID.charAt(action.localID.length - 1);
+        this.actionMastery.set(this.docks.getObjectSafe(`sailing:Dock${num}`), actionMastery);
+        this.actionMastery.delete(action);
+      }
+    });
   }
 
   public override encode(writer: SaveWriter): SaveWriter {
