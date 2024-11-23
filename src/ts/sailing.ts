@@ -120,16 +120,31 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
 
   constructor(namespace: DataNamespace, game: Game) {
     super(namespace, 'Sailing', game);
-    if (process.env.NODE_ENV === 'production') {
-      this.logger.setLevel(LogLevel.Info);
-    } else {
-      this.logger.setLevel(LogLevel.Debug);
+    if (!this.trySetCustomLogLevel()) {
+      if (process.env.NODE_ENV === 'production') {
+        this.logger.setLevel(LogLevel.Info);
+      } else {
+        this.logger.setLevel(LogLevel.Debug);
+      }
     }
     this.categories = new NamespaceRegistry(game.registeredNamespaces, SkillCategory.name);
     this.ports = new NamespaceRegistry(game.registeredNamespaces, Port.name);
     this.docks = new NamespaceRegistry(game.registeredNamespaces, Dock.name);
     this.ships = new NamespaceRegistry(game.registeredNamespaces, Ship.name);
     this.shipUpgrades = new NamespaceRegistry(game.registeredNamespaces, ShipUpgrade.name);
+  }
+
+  private trySetCustomLogLevel(): boolean {
+    const logLevel = localStorage.getItem('sailing:loglevel');
+    if (logLevel) {
+      // @ts-expect-error getting enum from any string
+      const logLevelEnum = LogLevel[logLevel] as LogLevel | undefined;
+      if (logLevelEnum !== undefined) {
+        this.logger.setLevel(logLevelEnum);
+        return true;
+      }
+    }
+    return false;
   }
 
   public init(ctx: Modding.ModContext) {
@@ -615,8 +630,10 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
 
   public override decode(reader: SaveWriter, version: number): void {
     super.decode(reader, version);
+    this.logger.debug('Decoding sailing save data');
 
     this.saveVersion = reader.getUint32();
+    this.logger.debug('saveVersion:', this.saveVersion);
 
     const numShips = reader.getUint32();
     for (let i = 0; i < numShips; i++) {
@@ -626,7 +643,9 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     for (let i = 0; i < numDummyShips; i++) {
       this.decodeShip(reader, version);
     }
-    this.stats.decode(reader, version);
+    if (this.saveVersion >= 2) {
+      this.stats.decode(reader, version);
+    }
   }
 
   public override encode(writer: SaveWriter): SaveWriter {

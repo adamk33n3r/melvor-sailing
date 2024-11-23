@@ -261,6 +261,7 @@ export class Ship extends NamespacedObject {
 
     private decodePort(reader: SaveWriter, _version: number): Port {
         let port = reader.getNamespacedObject(game.sailing.ports);
+        this.game.sailing.logger.debug('decode port:', port);
         if (typeof port === 'string') {
             if (port.startsWith('sailing')) {
                 port = game.sailing.ports.getDummyObject(port, DummyPort, this.game);
@@ -283,12 +284,15 @@ export class Ship extends NamespacedObject {
     public decode(reader: SaveWriter, version: number): void {
         this._state = reader.getUint32();
         this._sailTimer = new Timer('Skill', () => this.onReturn());
+        this.game.sailing.logger.debug('decode sailTimer');
         this._sailTimer.decode(reader, version);
         if (this.game.sailing.saveVersion >= 2) {
+            this.game.sailing.logger.debug('version >= 2: decode lockState and currentUpgrade');
             this._lockState = reader.getUint32();
             this._currentUpgrade = this.decodeUpgrade(reader, version);
         }
 
+        this.game.sailing.logger.debug('decode selectedPort');
         this.selectedPort = this.decodePort(reader, version);
 
         this.callBackCallbacks();

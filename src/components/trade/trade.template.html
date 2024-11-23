@@ -50,7 +50,7 @@
                 {{ selectedPort.name }}
               </div>
             </div>
-            <button class="btn btn-primary btn-block btn-lg" @click="selectPort()">Select Port</button>
+            <button class="btn btn-primary btn-block btn-lg" @click="selectPort()" :disabled="!readyToSail">Select Port</button>
             <div
               class="row gutters-tiny icon-size-48 mt-2"
               id="grants-container"

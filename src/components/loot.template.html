@@ -21,7 +21,7 @@
       <span>Mastery Pool XP</span>
     </div>
     <hr>
-    <div class="col-12 mb-2">
+    <div class="col-12 mb-2" v-show="!success">
       <span class="font-size-sm text-danger">You were attacked by pirates and lost half of your loot!</span>
     </div>
     <div v-for="currencyQ in currencies" class="col-12">
