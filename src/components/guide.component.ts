@@ -10,7 +10,7 @@ export function GuideComponent(sailing: Sailing) {
         name: 'Combat',
         media: sailing.getMediaURL('img/cannon_bronze.png'),
         description:
-          `Generally provided by <img class="skill-icon-xs" src="${sailing.getMediaURL('img/cannon_bronze.png')}"> <strong>Cannons</strong>, Combat provides you with INSERT_BENEFIT_HERE.`,
+          `Generally provided by <img class="skill-icon-xs" src="${sailing.getMediaURL('img/cannon_bronze.png')}"> <strong>Cannons</strong>, Combat provides you with success chance.`,
       },
       {
         name: 'Morale',
