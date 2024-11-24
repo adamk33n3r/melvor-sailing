@@ -8,6 +8,7 @@ import { Logger, LogLevel } from './logger';
 import { SailingAction } from './sailingaction';
 
 class SailingRenderQueue extends MasterySkillRenderQueue<SailingAction> {
+  trade = true;
   ships = true;
   ports = true;
 }
@@ -148,6 +149,11 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   }
 
   public init(ctx: Modding.ModContext) {
+    this.game.combat.player.on('itemEquipped', (equipment) => {
+      if (equipment.item.id === 'sailing:Sailing_Skillcape') {
+        this.renderQueue.trade = true;
+      }
+    });
     ctx.onInterfaceAvailable(() => {
       const statisticsContainer = document.querySelector('#statistics-container > .row');
       statisticsContainer?.insertAdjacentHTML('beforeend', '<stat-table class="col-12 col-lg-10 col-xl-8 col-xxl-6 offset-lg-1 offset-xl-2 offset-xxl-3 d-none" id="sailing-stats-table"></stat-table>');
@@ -434,8 +440,19 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public override render() {
     super.render();
 
+    this.renderTrade();
     this.renderShips();
     this.renderPorts();
+  }
+
+  public renderTrade() {
+    if (!this.renderQueue.trade) {
+      return;
+    }
+
+    this.page.tradeComponents.forEach((tradeComponent) => {
+      tradeComponent.update();
+    });
   }
 
   public renderShips() {
@@ -714,6 +731,7 @@ Port: ${ship.selectedPort.name}
     this.logger.debug('onPageChange');
     this.renderQueue.ships = true;
     this.renderQueue.ports = true;
+    this.renderQueue.trade = true;
     super.onPageChange();
   }
 
@@ -721,6 +739,7 @@ Port: ${ship.selectedPort.name}
     this.logger.debug('queueBankQuantityRender:', item);
     this.renderQueue.ships = true;
     this.renderQueue.ports = true;
+    this.renderQueue.trade = true;
     this.setMasteryActionsAndMilestones();
   }
 
@@ -728,6 +747,7 @@ Port: ${ship.selectedPort.name}
     this.logger.debug('queueCurrencyQuantityRender:', currency);
     this.renderQueue.ships = true;
     this.renderQueue.ports = true;
+    this.renderQueue.trade = true;
   }
 }
 
