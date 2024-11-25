@@ -263,7 +263,7 @@
               "currencyCosts": [
                 {
                   "id": "melvorD:GP",
-                  "quantity": 100000000
+                  "quantity": 50000000
                 }
               ],
               "itemCosts": []

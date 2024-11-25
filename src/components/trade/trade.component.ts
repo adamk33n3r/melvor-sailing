@@ -27,12 +27,6 @@ export function TradeComponent(ship: Ship) {
       const parent = document.getElementById(`trade:${ship.localID}`);
       if (!parent) throw new Error(`Could not find parent element with id: ${ship.localID}`);
 
-      setInterval(() => {
-        this.returnTimer = tickToTime(ship.sailTimer.ticksLeft);
-        if (ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
-        this.updateProgressBar();
-      }, 1000);
-
       ship.registerOnUpdate(() => {
         this.update();
       });
@@ -94,8 +88,6 @@ export function TradeComponent(ship: Ship) {
       this.readyToSail = ship.state == ShipState.ReadyToSail;
       this.onTrip = ship.state == ShipState.OnTrip;
       this.hasReturned = ship.state == ShipState.HasReturned;
-      this.returnTimer = tickToTime(ship.sailTimer.ticksLeft);
-      if (ship.sailTimer.ticksLeft <= 0) this.returnTimer = 'Done';
       this.selectedPort = ship.selectedPort;
       this.currentUpgrade = ship.currentUpgrade;
       const combatMod = game.sailing.getCombatModifier(ship.dock);
@@ -105,6 +97,13 @@ export function TradeComponent(ship: Ship) {
       this.updateGrants();
       this.updateProgressBar();
       this.updateInfoTooltips();
+    },
+    updateReturnTimer() {
+        if (ship.sailTimer.ticksLeft <= 0) {
+          if (this.returnTimer !== 'Done') this.returnTimer = 'Done';
+        } else {
+          this.returnTimer = tickToTime(ship.sailTimer.ticksLeft);
+        }
     },
     updateInfoTooltips() {
       const shipStats = ship.currentUpgrade.stats.describeAsSpanHTML();

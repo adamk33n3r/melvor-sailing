@@ -11,6 +11,7 @@ class SailingRenderQueue extends MasterySkillRenderQueue<SailingAction> {
   trade = true;
   ships = true;
   ports = true;
+  sailTimers = new Set();
 }
 
 interface SailingSkillData extends BaseSkillData {
@@ -440,25 +441,34 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public override render() {
     super.render();
 
+    this.renderSailTimers();
     this.renderTrade();
     this.renderShips();
     this.renderPorts();
   }
 
+  public renderSailTimers() {
+    if (this.renderQueue.sailTimers.size === 0) return;
+
+    this.renderQueue.sailTimers.forEach((timer) => {
+      this.page.tradeComponents.find((tc) => tc.ship.sailTimer === timer)?.updateReturnTimer();
+    });
+
+    this.renderQueue.sailTimers.clear();
+  }
+
   public renderTrade() {
-    if (!this.renderQueue.trade) {
-      return;
-    }
+    if (!this.renderQueue.trade) return;
 
     this.page.tradeComponents.forEach((tradeComponent) => {
       tradeComponent.update();
     });
+
+    this.renderQueue.trade = false;
   }
 
   public renderShips() {
-    if (!this.renderQueue.ships) {
-      return;
-    }
+    if (!this.renderQueue.ships) return;
 
     this.page.shipComponents.forEach((shipComponent) => {
       shipComponent.update();
@@ -468,9 +478,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   }
 
   public renderPorts() {
-    if (!this.renderQueue.ports) {
-      return;
-    }
+    if (!this.renderQueue.ports) return;
 
     this.page.portComponents.forEach((portComponent) => {
       portComponent.update();
@@ -706,6 +714,9 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public passiveTick() {
     this.ships.forEach(ship => {
       ship.sailTimer.tick();
+      if (ship.sailTimer.ticksLeft % TICKS_PER_SECOND === 0 && ship.sailTimer.ticksLeft > 0) {
+        this.renderQueue.sailTimers.add(ship.sailTimer);
+      }
     });
   }
 
