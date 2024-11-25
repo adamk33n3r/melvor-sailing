@@ -51,7 +51,9 @@ export function formatTime(seconds: number, truncate = false) {
  */
 export function interp(level: number, lowChance: number, highChance: number, req: number = 1) {
     if (level < req) return 0;
-    return Math.min(Math.max((Math.floor(lowChance * ((99 - level) / (99-req)) + highChance * ((level - req) / (99 - req)) + 0.5) + 1) / 256, 0), 1);
+    const lowNum = req === 99 ? 1 : (99 - level);
+    const denom = req === 99 ? 1 : (99 - req);
+    return Math.min(Math.max((Math.floor(lowChance * (lowNum / denom) + highChance * ((level - req) / denom) + 0.5) + 1) / 256, 0), 1);
 }
 
 /**
@@ -63,7 +65,8 @@ export function interp(level: number, lowChance: number, highChance: number, req
  * @returns The interpolated chance
  */
 export function interp2(level: number, lowChance: number, highChance: number, req: number) {
-    return Math.min(Math.max(lowChance + (highChance - lowChance) * ((level - req) / (99 - req)), 0), 100);
+    const denom = req === 99 ? 1 : (99 - req);
+    return Math.min(Math.max(lowChance + (highChance - lowChance) * ((level - req) / denom), 0), 100);
 }
 
 /**

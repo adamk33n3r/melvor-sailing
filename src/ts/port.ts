@@ -292,7 +292,7 @@ export class SkillPort extends Port {
 
     public getPossibleLoot(): string {
         const chances = this.getProductChances(this.level, this.skill.level);
-        return chances.map((chance, idx) => `%${formatFixed(cascadeInterp2(chances, this.skill.level, idx), 2)} - <img class="skill-icon-xs" src="${chance.product.media}"/> ${chance.product.name}`).join('<br>');
+        return chances.map((chance, idx) => `${formatFixed(cascadeInterp2(chances, this.skill.level, idx), 2)}% - <img class="skill-icon-xs" src="${chance.product.media}"/> ${chance.product.name}`).join('<br>');
     }
 
     public hasLevelRequirements(): boolean {
