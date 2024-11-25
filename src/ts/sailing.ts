@@ -254,11 +254,11 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     const portMasteryXPToAdd = this.getMasteryXPToAddForAction(ship.selectedPort, ship.scaledForMasteryInterval);
     const masteryPoolXPToAdd = this.getMasteryXPToAddToPool(masteryXPToAdd + portMasteryXPToAdd);
 
-    this.rollForMasteryTokens(rewards, ship.dock.realm);
-    this.rollForRareDrops(ship.dock.level, rewards, ship.dock);
+    this.rollForMasteryTokens(rewards, ship.selectedPort.realm);
+    this.rollForRareDrops(ship.selectedPort.level, rewards, ship.selectedPort);
     this.rollForAdditionalItems(rewards, ship.interval);
-    this.rollForAncientRelics(ship.dock.level, ship.dock.realm);
-    this.rollForPets(ship.interval, ship.dock);
+    this.rollForAncientRelics(ship.selectedPort.level, ship.selectedPort.realm);
+    this.rollForPets(ship.interval, ship.selectedPort);
 
     const combatMod = this.getCombatModifier(ship.dock);
     const chance = Math.min(1, combatMod / ship.selectedPort.sailingStats.combat);
@@ -353,7 +353,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
     return builder;
   }
 
-  public override rollForPets(interval: number, action: Dock) {
+  public override rollForPets(interval: number, action: SailingAction) {
     super.rollForPets(interval / 100, action);
   }
 
@@ -623,7 +623,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
             type: 'LevelScaling',
             baseChance: 1,
             scalingFactor: 0.2,
-            maxChance: 20,
+            maxChance: 10,
           },
           requirements: port.requirements,
           realms: new Set(),
