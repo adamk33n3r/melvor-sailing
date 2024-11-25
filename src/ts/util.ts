@@ -49,10 +49,10 @@ export function formatTime(seconds: number, truncate = false) {
  * Instead of low being "chance at level 1", it is "chance at level req"
  * @deprecated
  */
-export function interp(level: number, lowChance: number, highChance: number, req: number = 1) {
+export function interp(level: number, maxLevel: number, lowChance: number, highChance: number, req: number = 1) {
     if (level < req) return 0;
-    const lowNum = req === 99 ? 1 : (99 - level);
-    const denom = req === 99 ? 1 : (99 - req);
+    const lowNum = req === maxLevel ? 1 : (maxLevel - level);
+    const denom = req === maxLevel ? 1 : (maxLevel - req);
     return Math.min(Math.max((Math.floor(lowChance * (lowNum / denom) + highChance * ((level - req) / denom) + 0.5) + 1) / 256, 0), 1);
 }
 
@@ -64,8 +64,8 @@ export function interp(level: number, lowChance: number, highChance: number, req
  * @param req The requirement level of the product
  * @returns The interpolated chance
  */
-export function interp2(level: number, lowChance: number, highChance: number, req: number) {
-    const denom = req === 99 ? 1 : (99 - req);
+export function interp2(level: number, maxLevel: number, lowChance: number, highChance: number, req: number) {
+    const denom = req === maxLevel ? 1 : (maxLevel - req);
     return Math.min(Math.max(lowChance + (highChance - lowChance) * ((level - req) / denom), 0), 100);
 }
 
@@ -99,40 +99,40 @@ export interface ChanceData<T> {
  * @param index The index of the obj you're calculating the chance for in `bounds`
  * @returns The cascaded chance
  */
-export function cascadeInterp2(bounds: ChanceData<unknown>[], level: number, index: number) {
+export function cascadeInterp2(bounds: ChanceData<unknown>[], level: number, maxLevel: number, index: number) {
     let rate = 1;
     for (let i = 0; i < bounds.length; i++) {
         const v = bounds[i];
         if (i === index) {
-            rate = rate * interp2(level, v.low, v.high, v.req) / 100;
+            rate = rate * interp2(level, maxLevel, v.low, v.high, v.req) / 100;
             return rate * 100;
         }
         if (level >= v.req) {
-            rate = rate * (1 - interp2(level, v.low, v.high, v.req)/100);
+            rate = rate * (1 - interp2(level, maxLevel, v.low, v.high, v.req)/100);
         }
     }
     return rate;
 }
 
-export function getChance(chanceData: ChanceData<unknown>, level: number) {
-    return interp2(level, chanceData.low, chanceData.high, chanceData.req);
+export function getChance(chanceData: ChanceData<unknown>, level: number, maxLevel: number) {
+    return interp2(level, maxLevel, chanceData.low, chanceData.high, chanceData.req);
 }
 
 /**
  * @deprecated 
  */
-export function cascadeInterp(bounds: ChanceData<unknown>[], level: number, index: number) {
+export function cascadeInterp(bounds: ChanceData<unknown>[], level: number, maxLevel: number, index: number) {
     let rate = 1;
     for (let i = 0; i < bounds.length; i++) {
         const v = bounds[i];
         if (i === index) {
             // eslint-disable-next-line @typescript-eslint/no-deprecated
-            rate = rate * interp(level, v.low, v.high);
+            rate = rate * interp(level, maxLevel, v.low, v.high);
             return rate;
         }
         if (level >= v.req) {
             // eslint-disable-next-line @typescript-eslint/no-deprecated
-            rate = rate * (1 - interp(level, v.low, v.high));
+            rate = rate * (1 - interp(level, maxLevel, v.low, v.high));
         }
     }
 }

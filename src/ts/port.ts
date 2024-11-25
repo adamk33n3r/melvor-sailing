@@ -230,7 +230,7 @@ export class SkillPort extends Port {
                 if (i === chanceData.length - 1) {
                     this.logger.debug(`failed all rolls, so adding lowest chance item as default: ${data.product.name}`);
                     rewards.addItem(data.product, 1);
-                } else if (rollPercentage(getChance(data, this.skill.level))) {
+                } else if (rollPercentage(getChance(data, this.skill.level, this.skill.maxLevelCap))) {
                     this.logger.debug(`success roll for ${data.product.name}`);
                     rewards.addItem(data.product, 1);
                 }
@@ -253,10 +253,10 @@ export class SkillPort extends Port {
                 },
             );
         }
-        return chanceData.concat(recipes.slice(0, this.getRecipeCount()).map((recipe, idx) => {
+        return chanceData.concat(recipes.slice(0, this.getRecipeCount()).map((recipe, idx, slicedArr) => {
             lowChance += 5;
             // Last recipe is always 100% so that you always get an item
-            const isLast = idx === recipes.length - 1;
+            const isLast = idx === slicedArr.length - 1;
             return {
                 product: recipe.product,
                 req: recipe.level,
@@ -292,7 +292,7 @@ export class SkillPort extends Port {
 
     public getPossibleLoot(): string {
         const chances = this.getProductChances(this.level, this.skill.level);
-        return chances.map((chance, idx) => `${formatFixed(cascadeInterp2(chances, this.skill.level, idx), 2)}% - <img class="skill-icon-xs" src="${chance.product.media}"/> ${chance.product.name}`).join('<br>');
+        return chances.map((chance, idx) => `${formatFixed(cascadeInterp2(chances, this.skill.level, this.skill.maxLevelCap, idx), 2)}% - <img class="skill-icon-xs" src="${chance.product.media}"/> ${chance.product.name}`).join('<br>');
     }
 
     public hasLevelRequirements(): boolean {
