@@ -139,6 +139,7 @@ export function TradeComponent(ship: Ship) {
     setSail() {
       ship.setSail();
       this.updateProgressBar();
+      this.updateReturnTimer();
     },
     collectLoot() {
       ship.collectLoot();

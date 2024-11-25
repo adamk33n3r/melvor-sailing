@@ -714,7 +714,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
   public passiveTick() {
     this.ships.forEach(ship => {
       ship.sailTimer.tick();
-      if (ship.sailTimer.ticksLeft % TICKS_PER_SECOND === 0 && ship.sailTimer.ticksLeft > 0) {
+      if (ship.sailTimer.ticksLeft % TICKS_PER_SECOND === 0 && ship.sailTimer.ticksLeft >= 0) {
         this.renderQueue.sailTimers.add(ship.sailTimer);
       }
     });
