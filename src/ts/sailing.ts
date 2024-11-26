@@ -605,6 +605,7 @@ export class Sailing extends SkillWithMastery<SailingAction, SailingSkillData> {
       const unlockItem = new Item(namespace, {
         id: `navigationChart_${port.localID}`,
         name: `Navigation Chart (${port.name})`,
+        customDescription: `A chart detailing the location of the ${port.name} in Sailing. You can now send trade ships to this port. You can sell this item.`,
         category: "Sailing",
         type: "Chart",
         media: "melvor:assets/media/bank/navigation_chart.png",

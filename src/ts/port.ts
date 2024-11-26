@@ -282,6 +282,7 @@ export class SkillPort extends Port {
             return this.skill.actions
                 .filter((action) => action instanceof SingleProductRecipe || action instanceof SingleProductArtisanSkillRecipe)
                 .map((action) => action as SingleProductRecipe | SingleProductArtisanSkillRecipe<SkillCategory>)
+                .filter((action) => action.realm === this.realm)
                 .filter((action) => minLevel === undefined || action.level >= minLevel)
                 .filter((action) => maxLevel === undefined || action.level <= maxLevel)
                 .sort((a, b) => b.level - a.level || b.uid - a.uid);

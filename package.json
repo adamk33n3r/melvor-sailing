@@ -1,6 +1,6 @@
 {
   "name": "sailing",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "sailing",
   "main": "index.js",
   "scripts": {
@@ -36,7 +36,7 @@
     "fflate": "^0.7.3",
     "fuse.js": "^3.4.6",
     "html-minifier-terser": "^7.0.0",
-    "melvor-types": "https://github.com/GamesByMalcsPtyLtd/Melvor-Typing-Project/tarball/8b96869",
+    "melvor-types": "https://github.com/GamesByMalcsPtyLtd/Melvor-Typing-Project/tarball/dd9e1d9",
     "mitt": "^3.0.0",
     "petite-vue": "^0.4.1",
     "prettier": "^3.3.3",
