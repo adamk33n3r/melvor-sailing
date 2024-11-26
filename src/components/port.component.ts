@@ -65,7 +65,7 @@ export function PortComponent(port: Port, host: HTMLElement, options?: PortCompo
             }
             this.xpIcon.setXP(game.sailing.modifyXP(port.baseExperience, options?.ship?.dock), port.baseExperience);
             this.xpIcon.setSources(game.sailing.getXPSources(options?.ship?.dock));
-            this.intervalIcon.setCustomInterval(formatTime((options?.ship?.modifiedInterval ?? port.interval) / 1000), game.sailing.getIntervalSources(port));
+            this.intervalIcon.setCustomInterval(formatTime(port.modifyInterval(options?.ship) / 1000), game.sailing.getIntervalSources(port));
         },
         mounted() {
             const parent = getElementByIdAndRemoveId(port.localID, host);

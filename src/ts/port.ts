@@ -1,5 +1,5 @@
 import { SailingAction } from './sailingaction';
-import { Dock } from './ship';
+import { Dock, Ship } from './ship';
 import { cascadeInterp2, ChanceData, getChance } from './util';
 
 interface BasePortData extends BasicSkillRecipeData {
@@ -106,6 +106,10 @@ export abstract class Port extends SailingAction {
         this._currencyDrops = data.currencyDrops.map(({ currencyID, min, max }) => {
             return { currency: game.currencies.getObjectSafe(currencyID), min, max };
         });
+    }
+
+    public modifyInterval(ship?: Ship): number {
+        return this.game.sailing.modifyInterval(this.interval, ship);
     }
 
     public abstract generateLoot(numRolls: number, rewards: Rewards, action: Dock): void;
@@ -239,7 +243,7 @@ export class SkillPort extends Port {
     }
 
     public getProductChances(minLevel?: number, maxLevel?: number): ChanceData<AnyItem>[] {
-        const recipes = this.getProductRecipes(minLevel, maxLevel);
+        let recipes = this.getProductRecipes(minLevel, maxLevel);
         let lowChance = 0;
         const chanceData = [] as ChanceData<AnyItem>[];
         if (this.skill instanceof Mining) {
@@ -252,6 +256,8 @@ export class SkillPort extends Port {
                     high: 50,
                 },
             );
+        } else if (this.skill instanceof Runecrafting) {
+            recipes = recipes.filter((recipe) => recipe.product instanceof RuneItem);
         }
         return chanceData.concat(recipes.slice(0, this.getRecipeCount()).map((recipe, idx, slicedArr) => {
             lowChance += 5;
