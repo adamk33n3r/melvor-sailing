@@ -17,7 +17,7 @@
               <button class="btn btn-info btn-block btn-lg" disabled v-if="onTrip">
                 On a trip...
               </button>
-              <button class="btn btn-success btn-block btn-lg" @click="collectLoot()" v-if="hasReturned">
+              <button class="btn btn-success btn-block btn-lg" @click="collectLoot()" v-if="hasReturned" :disabled="disableCollectLoot">
                 Collect Loot
               </button>
             </div>

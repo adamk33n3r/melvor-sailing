@@ -141,8 +141,12 @@ export function TradeComponent(ship: Ship) {
       this.updateProgressBar();
       this.updateReturnTimer();
     },
+    disableCollectLoot: false,
     collectLoot() {
-      ship.collectLoot();
+      this.disableCollectLoot = true;
+      ship.collectLoot(() => {
+        this.disableCollectLoot = false;
+      });
     },
     async selectPort() {
       const html = document.createElement('div');

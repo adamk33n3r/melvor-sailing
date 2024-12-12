@@ -224,10 +224,11 @@ export class Ship extends NamespacedObject {
         this.callBackCallbacks();
     }
     
-    public collectLoot() {
+    public collectLoot(cb: VoidFunction) {
         game.sailing.generateLoot(this, () => {
             this._state = ShipState.ReadyToSail;
             this.callBackCallbacks();
+            cb();
         });
     }
 
